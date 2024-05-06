@@ -4,7 +4,6 @@
 #include "messagebox.h"
 #include <QDialog>
 #include "ioverlaybutton.h"
-#include "ihistoryitem.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,16 +16,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->newChatButton->setIcon(QIcon("://icon/logo.png"));
 
     ui->upgradeButton->setIcon(QIcon("://icon/sparkles.svg"));
-    ui->userButton->setIcon(QIcon("://icon/earth.svg"));
+    ui->userButton->setIcon(QIcon("://icon/uranus.svg"));
 
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->setObjectName("historyList");
-    auto item = new IHistoryItem("history", ui->historyList);
+    // auto item = new IHistoryItem("history", ui->historyList);
+ ui->historyList->addItem("item");
 
-    ui->historyList->addItem(item);
-    ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
-    ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
-    ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
+    // ui->historyList->addItem(item);
+    // ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
+    // ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
+    // ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
 
 }
 

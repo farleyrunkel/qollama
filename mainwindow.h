@@ -21,7 +21,7 @@ private slots:
 
     void on_inputLine_returnPressed();
 
-private:
+public:
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

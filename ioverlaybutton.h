@@ -10,16 +10,32 @@ class IOverlayButton : public QPushButton
 {
     Q_OBJECT
 public:
-    IOverlayButton(QWidget* parent = nullptr) : QPushButton(parent) {}
-    IOverlayButton(const QIcon& icon, const QString &text, QWidget *parent = nullptr)
-        : QPushButton(icon, text, parent) { }
+    explicit IOverlayButton(QWidget* parent = nullptr) : QPushButton(parent) {
+        setObjectName("ioverlaybutton");
+    }
+    explicit IOverlayButton(const QString &text, QWidget *parent = nullptr)
+        : QPushButton(text, parent) {
+        setObjectName("ioverlaybutton");
+    }
+    explicit IOverlayButton(const QIcon& icon, const QString &text, QWidget *parent = nullptr)
+        : QPushButton(icon, text, parent) {
+        setObjectName("ioverlaybutton");
+    }
 public:
     void resizeEvent(QResizeEvent* event) override {
-
         for (int i = 1 ; i<= mSubButtons.size(); i++) {
             setSubGeometry(i);
         }
         update();
+
+        // 获取MainWindow内部组件的大小
+        QSize wSize = size();
+        int wWidth = wSize.width();
+        int wHeight = wSize.height();
+
+        // 输出MainWindow内部组件的大小信息
+        qDebug() << this->objectName() << "Width:" << wWidth;
+        qDebug() << this->objectName() << "Height:" << wHeight;
     }
 
 public:
@@ -27,7 +43,6 @@ public:
     void addSubButton(const QIcon& icon, const QString &text = "") {
         auto sub = new QPushButton(icon, text, this->parentWidget());
         sub->setFlat(true);
-        sub->setToolTip("New chat");
         sub->setFocusPolicy(Qt::NoFocus);
 
         mSubButtons.push_back(sub);
@@ -83,6 +98,7 @@ public:
         IOverlayButton(parent)
     {
         addSubButton(QIcon("://icon/create-new.svg"));
+        getSubButton(1)->setToolTip("New chat");
     };
 };
 
@@ -90,14 +106,19 @@ class IHistoryButton : public IOverlayButton
 {
     Q_OBJECT
 public:
-    IHistoryButton(QWidget* parent):
-        IOverlayButton(parent)
+
+    explicit IHistoryButton(const QString &text, QWidget* parent = nullptr)
+        :
+        IOverlayButton(text, parent)
     {
+        setObjectName("ihistorybutton");
         addSubButton(QIcon("://icon/archive-book.svg"));
         addSubButton(QIcon("://icon/more-horiz.svg"));
 
         getSubButton(1)->setToolTip("Archive");
         getSubButton(2)->setToolTip("More");
+
+        this->setFixedHeight(36);
     };
 };
 
