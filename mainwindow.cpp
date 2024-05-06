@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->historyList->setObjectName("historyList");
 
     connect(ui->newChatButton, &INewChatButton::pressed, [&](){ui->historyList->addItem("history item");});
+    connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
 }
 
 MainWindow::~MainWindow()
