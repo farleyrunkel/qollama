@@ -20,14 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->setObjectName("historyList");
-    // auto item = new IHistoryItem("history", ui->historyList);
- ui->historyList->addItem("item");
 
-    // ui->historyList->addItem(item);
-    // ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
-    // ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
-    // ui->historyList->addItem(new IHistoryItem("history", ui->historyList));
-
+    connect(ui->newChatButton, &INewChatButton::pressed, [&](){ui->historyList->addItem("history item");});
 }
 
 MainWindow::~MainWindow()

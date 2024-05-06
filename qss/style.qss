@@ -1,3 +1,7 @@
+QPushButton { padding: 0px; }
+QPushButton::menu-indicator {
+ width: 0px;
+ image: none; }
 
 INewChatButton{
     border: 1px hidden gray;
