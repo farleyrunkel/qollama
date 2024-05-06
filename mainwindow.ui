@@ -231,11 +231,6 @@
              <property name="textElideMode">
               <enum>Qt::ElideLeft</enum>
              </property>
-             <item>
-              <property name="text">
-               <string>New Item</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
