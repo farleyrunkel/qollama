@@ -151,3 +151,26 @@ QFrame#inputFrame{
 }
 
 
+QScrollBar:vertical {
+    width: 8px;
+    border-radius:5px;
+    background-color:#f7f7f5;
+}
+QScrollBar:horizontal {
+    height: 8px;
+    background: #DDD;
+}
+QScrollBar::handle:vertical,
+QScrollBar::handle:horizontal {
+    background: #AAA;
+    border-radius:4px;
+}
+QScrollBar::handle:vertical:hover,
+QScrollBar::handle:horizontal:hover {
+    background: #888;
+}
+QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical,
+QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal {
+    width: 0;
+    height: 0;
+}
