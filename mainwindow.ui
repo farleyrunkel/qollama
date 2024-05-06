@@ -23,7 +23,7 @@
    <enum>Qt::ActionsContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>CharGPT</string>
+   <string>ChatGPT</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resouces.qrc">
@@ -98,6 +98,12 @@
        <bool>false</bool>
       </property>
       <widget class="QFrame" name="frameleft">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="maximumSize">
         <size>
          <width>200</width>
@@ -134,6 +140,12 @@
         </property>
         <item>
          <widget class="QWidget" name="sideWidget" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="sideBar">
            <item>
             <widget class="INewChatButton" name="newChatButton">
@@ -188,7 +200,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="historyList">
+            <widget class="IHistoryList" name="historyList">
              <property name="mouseTracking">
               <bool>false</bool>
              </property>
@@ -219,6 +231,11 @@
              <property name="textElideMode">
               <enum>Qt::ElideLeft</enum>
              </property>
+             <item>
+              <property name="text">
+               <string>New Item</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -391,6 +408,38 @@
         <item row="0" column="0" colspan="4">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
+           <widget class="QComboBox" name="comboBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>119</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="minimumContentsLength">
+             <number>0</number>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>ChatGPT-3.5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>ChatGPT-4</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -413,14 +462,14 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>24</width>
-              <height>24</height>
+              <width>30</width>
+              <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>24</width>
-              <height>24</height>
+              <width>30</width>
+              <height>30</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -551,6 +600,11 @@
    <extends>QPushButton</extends>
    <header location="global">C:/Users/95439/Documents/Documents/QML-Lessons/untitled1/ioverlaybutton.h
 </header>
+  </customwidget>
+  <customwidget>
+   <class>IHistoryList</class>
+   <extends>QListWidget</extends>
+   <header location="global">C:/Users/95439/Documents/Github/chatgpt/ihistorylist.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -1,3 +1,4 @@
+
 INewChatButton{
     border: 1px hidden gray;
     border-radius:6px;
@@ -12,6 +13,21 @@ INewChatButton:hover {
 INewChatButton:pressed {
     background-color:#ececec;
     border-style: hidden;
+}
+
+
+QComboBox { /* 编辑框的样式 */
+    border: 1px hidden black;
+    border-radius: 5px;
+}
+QComboBox:hover {
+    border: 1px solid black;
+}
+QComboBox::drop-down { /* 下拉按钮样式，默认在编辑框右上角 */
+    border: hidden;
+}
+QComboBox::down-arrow { /* 下拉按钮中的箭头样式，默认在下拉按钮的居中位置 */
+    image: url(:/icon/down.svg); /* 箭头png为8x8大小，不要超过下拉按钮宽度 */
 }
 
 
