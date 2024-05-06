@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icon/ChatGPT.ico</file>
+        <file>icon/share.svg</file>
+        <file>icon/download.svg</file>
+        <file>icon/add.svg</file>
+        <file>icon/pencil.png</file>
+        <file>icon/edit.svg</file>
+        <file>icon/logo.png</file>
+        <file>icon/earth.svg</file>
+        <file>icon/jupiter.svg</file>
+        <file>icon/mars.svg</file>
+        <file>icon/mercury.svg</file>
+        <file>icon/neptune.svg</file>
+        <file>icon/pluto.svg</file>
+        <file>icon/saturn.svg</file>
+        <file>icon/uranus.svg</file>
+        <file>icon/venus.svg</file>
+        <file>qss/style.qss</file>
+        <file>icon/archive-book.svg</file>
+        <file>icon/create-new.svg</file>
+        <file>icon/more-horiz.svg</file>
+        <file>icon/sparkles.svg</file>
+        <file>icon/send.svg</file>
+    </qresource>
+</RCC>

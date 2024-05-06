@@ -1,0 +1,130 @@
+INewChatButton{
+    border: 1px hidden gray;
+    border-radius:6px;
+    padding-left: 10px; /* 设置左边距 */
+    text-align: left; /* 设置文本左对齐 */
+}
+INewChatButton:hover {
+    background-color: #ececec;
+    color: black;
+
+}
+INewChatButton:pressed {
+    background-color:#ececec;
+    border-style: hidden;
+}
+
+
+IHistoryButton {
+    border: 1px hidden gray;
+    border-radius:6px;
+    padding-left: 10px; /* 设置左边距 */
+    text-align: left; /* 设置文本左对齐 */
+}
+IHistoryButton:hover {
+    background-color: #ececec;
+    color: black;
+    border-style: hidden;
+}
+IHistoryButton:pressed {
+    background-color: #ececec;
+    color: black;
+    border-style: hidden;
+}
+
+QListWidget#historyList::item {
+    border: 1px hidden gray;
+    border-style: hidden;
+}
+QListWidget#historyList::item::selected {
+    border: 1px hidden gray;
+    border-radius:6px;
+    background-color: #ececec;
+    border-style: hidden;
+}
+
+
+QPushButton#upgradeButton {
+    border: none;
+    border-radius: 6px;
+    padding: 2px 4px;
+    color: #000000; /* 设置文本颜色 */
+    text-align: left;
+    padding-left: 10;
+}
+QPushButton#upgradeButton:hover {
+    background-color:#ececec;
+    color: black;
+}
+QPushButton#upgradeButton:pressed {
+    background-color:#ececec;
+    border-style: inset;
+}
+
+
+QPushButton#userButton {
+    border: none;
+    border-radius: 6px;
+    padding: 2px 4px;
+    color: #000000; /* 设置文本颜色 */
+    text-align: left;
+    padding-left: 10;
+}
+QPushButton#userButton:hover {
+    background-color:#ececec;
+    color: black;
+}
+QPushButton#userButton:pressed {
+    background-color:#ececec;
+    border-style: inset;
+}
+
+
+
+QPushButton#shareButton {
+    border: 1px solid gray;
+    image: url(:/icon/share.svg);
+    border-radius:6px;
+}
+QPushButton#shareButton:hover {
+        background-color: rgb(225, 225, 225);
+    color: black;
+}
+QPushButton#shareButton:pressed {
+    background-color:rgb(225, 225, 225);
+    border-style: inset;
+}
+
+QWidget#centralwidget {
+    background-color:white;
+}
+QWidget#sideWidget {
+    background-color:#f7f7f5;
+    border: 1px hidden;
+    border-radius: 10px;
+}
+QListWidget#historyList {
+    background-color:#f7f7f5;
+}
+
+QFrame#inputFrame{
+    background-color:white;
+    border: 1px solid #a6a6a6;
+    border-radius: 10px;
+}
+
+
+QPushButton#inputButton {
+    background-color: rgb(225, 225, 225);
+    border: 1px solid gray;
+    image: url(:/icon/send.svg);
+    border-radius:6px;
+}
+QPushButton#inputButton:hover {
+        background-color: rgb(225, 225, 225);
+    color: black;
+}
+QPushButton#inputButton:pressed {
+    background-color:rgb(225, 225, 225);
+    border-style: inset;
+}
