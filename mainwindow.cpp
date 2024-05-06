@@ -15,9 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->newChatButton->setIcon(QIcon("://icon/logo.png"));
 
-    ui->upgradeButton->setIcon(QIcon("://icon/sparkles.svg"));
-    ui->userButton->setIcon(QIcon("://icon/uranus.svg"));
-
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->setObjectName("historyList");
 

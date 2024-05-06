@@ -191,6 +191,10 @@
              <property name="text">
               <string>New chat</string>
              </property>
+             <property name="icon">
+              <iconset resource="resouces.qrc">
+               <normaloff>:/icon/logo.png</normaloff>:/icon/logo.png</iconset>
+             </property>
              <property name="autoRepeat">
               <bool>false</bool>
              </property>
@@ -202,7 +206,7 @@
            <item>
             <widget class="IHistoryList" name="historyList">
              <property name="mouseTracking">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="focusPolicy">
               <enum>Qt::NoFocus</enum>
@@ -260,7 +264,8 @@
               <string>Upgrade plan</string>
              </property>
              <property name="icon">
-              <iconset theme="application-exit"/>
+              <iconset resource="resouces.qrc">
+               <normaloff>:/icon/sparkles.svg</normaloff>:/icon/sparkles.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -304,7 +309,8 @@
               <string>Farley runkel</string>
              </property>
              <property name="icon">
-              <iconset theme="application-exit"/>
+              <iconset resource="resouces.qrc">
+               <normaloff>:/icon/uranus.svg</normaloff>:/icon/uranus.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -467,11 +473,25 @@
               <height>30</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Microsoft YaHei UI</family>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
             <property name="styleSheet">
              <string notr="true"/>
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resouces.qrc">
+              <normaloff>:/icon/share-box.svg</normaloff>:/icon/share-box.svg</iconset>
             </property>
             <property name="checkable">
              <bool>false</bool>
@@ -483,7 +503,7 @@
              <bool>false</bool>
             </property>
             <property name="flat">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -561,12 +581,15 @@
                <height>30</height>
               </size>
              </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
              <property name="text">
               <string/>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>icon/send.svg</normaloff>icon/send.svg</iconset>
+              <iconset resource="resouces.qrc">
+               <normaloff>:/icon/send.svg</normaloff>:/icon/send.svg</iconset>
              </property>
              <property name="iconSize">
               <size>

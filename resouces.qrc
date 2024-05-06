@@ -23,5 +23,6 @@
         <file>icon/sparkles.svg</file>
         <file>icon/send.svg</file>
         <file>icon/down.svg</file>
+        <file>icon/share-box.svg</file>
     </qresource>
 </RCC>

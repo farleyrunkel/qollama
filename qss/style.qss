@@ -1,7 +1,20 @@
-QPushButton { padding: 0px; }
+
+QPushButton{
+    border: 1px hidden gray;
+    text-align: left; /* 设置文本左对齐 */
+}
+QPushButton:hover {
+    background-color: #ececec;
+    color: black;
+}
+QPushButton:pressed {
+    background-color:#ececec;
+    border-style: hidden;
+}
 QPushButton::menu-indicator {
- width: 0px;
- image: none; }
+    width: 0px;
+    image: none;
+}
 
 INewChatButton{
     border: 1px hidden gray;
@@ -12,7 +25,6 @@ INewChatButton{
 INewChatButton:hover {
     background-color: #ececec;
     color: black;
-
 }
 INewChatButton:pressed {
     background-color:#ececec;
@@ -33,27 +45,17 @@ QComboBox::drop-down { /* 下拉按钮样式，默认在编辑框右上角 */
 QComboBox::down-arrow { /* 下拉按钮中的箭头样式，默认在下拉按钮的居中位置 */
     image: url(:/icon/down.svg); /* 箭头png为8x8大小，不要超过下拉按钮宽度 */
 }
-
-
-IHistoryButton {
-    border: 1px hidden gray;
-    border-radius:6px;
-    padding-left: 10px; /* 设置左边距 */
-    text-align: left; /* 设置文本左对齐 */
-}
-IHistoryButton:hover {
-    background-color: #ececec;
-    color: black;
-    border-style: hidden;
-}
-IHistoryButton:pressed {
-    background-color: #ececec;
-    color: black;
-    border-style: hidden;
+QComboBox::menu-indicator {
+    width: 0px;
 }
 
 QListWidget#historyList::item {
     border: 1px hidden gray;
+    border-style: hidden;
+}
+QListWidget#historyList::item:hover {
+    background-color: #ececec;
+    color: black;
     border-style: hidden;
 }
 QListWidget#historyList::item::selected {
@@ -100,20 +102,35 @@ QPushButton#userButton:pressed {
 }
 
 
-
 QPushButton#shareButton {
     border: 1px solid gray;
-    image: url(:/icon/share.svg);
     border-radius:6px;
+    text-align: center;
 }
 QPushButton#shareButton:hover {
-        background-color: rgb(225, 225, 225);
+    background-color: rgb(225, 225, 225);
     color: black;
 }
 QPushButton#shareButton:pressed {
     background-color:rgb(225, 225, 225);
     border-style: inset;
 }
+
+
+QPushButton#inputButton {
+    border: 1px solid gray;
+    border-radius:6px;
+    text-align: center;
+}
+QPushButton#inputButton:hover {
+    background-color: rgb(225, 225, 225);
+    color: black;
+}
+QPushButton#inputButton:pressed {
+    background-color:rgb(225, 225, 225);
+    border-style: inset;
+}
+
 
 QWidget#centralwidget {
     background-color:white;
@@ -134,17 +151,3 @@ QFrame#inputFrame{
 }
 
 
-QPushButton#inputButton {
-    background-color: rgb(225, 225, 225);
-    border: 1px solid gray;
-    image: url(:/icon/send.svg);
-    border-radius:6px;
-}
-QPushButton#inputButton:hover {
-        background-color: rgb(225, 225, 225);
-    color: black;
-}
-QPushButton#inputButton:pressed {
-    background-color:rgb(225, 225, 225);
-    border-style: inset;
-}

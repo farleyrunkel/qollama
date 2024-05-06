@@ -102,26 +102,6 @@ public:
     };
 };
 
-class IHistoryButton : public IOverlayButton
-{
-    Q_OBJECT
-public:
-
-    explicit IHistoryButton(const QString &text, QWidget* parent = nullptr)
-        :
-        IOverlayButton(text, parent)
-    {
-        setObjectName("ihistorybutton");
-        addSubButton(QIcon("://icon/archive-book.svg"));
-        addSubButton(QIcon("://icon/more-horiz.svg"));
-
-        getSubButton(1)->setToolTip("Archive");
-        getSubButton(2)->setToolTip("More");
-
-        this->setFixedHeight(36);
-    };
-};
-
 
 
 #endif // IOVERLAYBUTTON_H
