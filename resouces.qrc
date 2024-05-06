@@ -22,5 +22,6 @@
         <file>icon/more-horiz.svg</file>
         <file>icon/sparkles.svg</file>
         <file>icon/send.svg</file>
+        <file>icon/down.svg</file>
     </qresource>
 </RCC>
