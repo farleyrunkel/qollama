@@ -9,6 +9,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "forms")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -16,23 +18,21 @@ set(PROJECT_SOURCES
         src/main.cpp
         src/mainwindow.cpp
         src/mainwindow.h
-        src/mainwindow.ui
-
+        forms/mainwindow.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(chatgpt
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
         resouces.qrc
-
-        src/messagebox.h src/messagebox.cpp src/messagebox.ui
-
+        src/messagebox.h
+        src/messagebox.cpp
         src/ioverlaybutton.h
-
         src/ihistorymodel.h
         src/ihistorylist.h
+
+        forms/messagebox.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET chatgpt APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
