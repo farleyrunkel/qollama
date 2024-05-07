@@ -14,9 +14,9 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         src/main.cpp
-        mainwindow.cpp
+        src/mainwindow.cpp
         src/mainwindow.h
-        mainwindow.ui
+        src/mainwindow.ui
 
 )
 
@@ -27,7 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         resouces.qrc
 
-        src/messagebox.h messagebox.cpp messagebox.ui
+        src/messagebox.h src/messagebox.cpp src/messagebox.ui
 
         src/ioverlaybutton.h
 

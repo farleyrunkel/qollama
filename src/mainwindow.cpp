@@ -1,9 +1,9 @@
-#include "src/mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include <QVBoxLayout>
-#include "src/messagebox.h"
+#include "messagebox.h"
 #include <QDialog>
-#include "src/ioverlaybutton.h"
+#include "ioverlaybutton.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
