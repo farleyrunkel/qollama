@@ -17,8 +17,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->setObjectName("historyList");
+     ui->historyList-> setUniformItemSizes(true);
+//ui->historyList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    connect(ui->newChatButton, &INewChatButton::pressed, [&](){ui->historyList->addItem("history item");});
+     ui->historyList->setIconSize(QSize(100, 100)); // 设置item中的图标大小
+     ui->historyList->setItemDelegate(new CustomItemDelegate);
+    connect(ui->newChatButton, &INewChatButton::pressed, [&](){ui->historyList->addItem("history  item");});
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
 }
 

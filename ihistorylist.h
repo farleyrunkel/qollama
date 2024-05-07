@@ -9,6 +9,50 @@
 #include <QObject>
 #include "ioverlaybutton.h"
 #include <QMenu>
+#include <QStyledItemDelegate>
+// 自定义委托类
+
+#include <QStyledItemDelegate>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QMenu>
+#include <QStandardItemModel>
+#include <QStandardItem>
+
+class CustomItemDelegate : public QStyledItemDelegate {
+public:
+    CustomItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
+
+    // 重写sizeHint函数，设置item的大小
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
+    {
+        QSize size = QStyledItemDelegate::sizeHint(option, index);
+        size.setHeight(32); // 设置item的高度为50像素
+        return size;
+    }
+
+    // void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+    //     QStyledItemDelegate::paint(painter, option, index);
+
+    //     // 获取单元格的矩形区域
+    //     QRect rect = option.rect;
+
+    //     // 计算第一个按钮的矩形区域
+    //     QRect buttonRect1 = QRect(rect.right() - 60, rect.top() + 2, 30, 30);
+
+    //     // 绘制第一个按钮
+    //     painter->setBrush(Qt::red);
+    //     painter->drawRect(buttonRect1);
+
+    //     // 计算第二个按钮的矩形区域
+    //     QRect buttonRect2 = QRect(rect.right() - 30, rect.top() + 2, 30, 30);
+
+    //     // 绘制第二个按钮
+    //     painter->setBrush(Qt::blue);
+    //     painter->drawRect(buttonRect2);
+    // }
+
+};
 
 class IHistoryList: public QListWidget
 {
@@ -18,12 +62,33 @@ public:
     using QListWidget::QListWidget;
 
 public:
-    // todo: fix button position not align.
-    void addItem(const QString &label)  {
-        auto item = new QListWidgetItem(label);
+
+    void mouseMoveEvent(QMouseEvent* event) override {
+
+        auto index = this->indexAt(event->pos());
+
+        if (index.isValid()) {
+            auto item_rect = this->visualRect(index);
+
+            // 设置按钮的位置
+            widget->setGeometry(item_rect);
+            widget->setVisible(true);
+        }
+    }
+
+
+public:
+
+    void showEvent(QShowEvent* event) override {
+        QListWidget::showEvent(event);
+        initButtonsWidget();
+    }
+
+    void initButtonsWidget() {
+
+        widget = new QWidget(this);
 
         QHBoxLayout *layout = new QHBoxLayout;
-
         QPushButton *moreButton = new QPushButton(QIcon("://icon/more-horiz.svg"), "");
         moreButton->setFixedSize(QSize(16, 16));
         moreButton->setToolTip("More");
@@ -34,7 +99,7 @@ public:
         moreButton->setFlat(true);
 
         // 创建菜单
-        auto menu  =  new QMenu(moreButton);
+        auto menu = new QMenu(moreButton);
         menu->addAction("Share");
         menu->addAction("Rename");
         menu->addAction("Delete chat");
@@ -47,26 +112,19 @@ public:
         layout->addWidget(moreButton);  // 添加按钮
         layout->addWidget(archButton);  // 添加按钮
 
-        QWidget *widget = new QWidget(this);
-
         widget->setLayout(layout);
-        widget->setObjectName("historyitem");
+        widget->setObjectName("buttonsWidget");
+        widget->setStyleSheet(""
+                              "background: rgba(255, 255, 255, 128);"
+                              "");
 
-        item->setSizeHint(widget->sizeHint());
 
-        QListWidget::addItem(item);
-        QListWidget::setItemWidget(item, widget);
+        widget->setVisible(false);
     }
 
-public:
+private:
 
-    // void resizeEvent(QResizeEvent * event) {
-    //     QListWidget::resizeEvent(event);
-
-    //     // for (int i = 1; i < this->count(); i++) {
-    //     //     this->itemWidget(item(2))->update();
-    //     // }
-    // }
+    QWidget* widget;
 
 };
 

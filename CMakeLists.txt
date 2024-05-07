@@ -32,6 +32,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ioverlaybutton.h
 
         ihistorylist.h
+        src/ihistorymodel.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET chatgpt APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
