@@ -6,24 +6,24 @@
 #include <QDebug>
 #include <QPainter>
 
-class IOverlayButton : public QPushButton
+class INewChatButton : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit IOverlayButton(QWidget* parent = nullptr) : QPushButton(parent) {
-        setObjectName("ioverlaybutton");
-    }
-    explicit IOverlayButton(const QString &text, QWidget *parent = nullptr)
-        : QPushButton(text, parent) {
-        setObjectName("ioverlaybutton");
-    }
-    explicit IOverlayButton(const QIcon& icon, const QString &text, QWidget *parent = nullptr)
-        : QPushButton(icon, text, parent) {
-        setObjectName("ioverlaybutton");
-    }
+    using QPushButton::QPushButton;
+
 public:
+    void showEvent(QShowEvent* event) override {
+        QPushButton::showEvent(event);
+        addSubButton(QIcon("://icon/create-new.svg"));
+        getSubButton(1)->setToolTip("New chat");
+        getSubButton(1)->show();
+
+        this->setIcon(QIcon("://icon/logo.png"));
+    }
+
     void resizeEvent(QResizeEvent* event) override {
-        for (int i = 1 ; i<= mSubButtons.size(); i++) {
+        for (int i = 1 ; i<= m_buttons.size(); i++) {
             setSubGeometry(i);
         }
         update();
@@ -45,13 +45,14 @@ public:
         sub->setFlat(true);
         sub->setFocusPolicy(Qt::NoFocus);
 
-        mSubButtons.push_back(sub);
-        setSubGeometry(mSubButtons.size());
+        m_buttons.push_back(sub);
+        setSubGeometry(m_buttons.size());
+
     }
 
     QPushButton* getSubButton(int i) {
         if (i <= 0) return nullptr;
-        return mSubButtons[i-1];
+        return m_buttons[i-1];
     }
 
     void setSubGeometry(int i) {
@@ -65,43 +66,9 @@ public:
         getSubButton(i)->setGeometry(x, y, w, h);
     }
 
-    // void paintEvent(QPaintEvent *event) override
-    // {
-    //     Q_UNUSED(event);
-
-    //     QPushButton::paintEvent(event);
-
-    //     QPainter painter(this);
-
-    //     // 指定圆形的中心点和半径
-    //     QPoint p1(this->x(), this->y());
-    //     int radius = 1;
-    //     QPoint p2(getSubButton(1)->x(), getSubButton(1)->y());
-    //     // 绘制圆形
-    //     painter.setBrush(Qt::red); // 设置画刷颜色为红色
-    //    painter.drawEllipse(p1, radius, radius);
-    //     painter.drawEllipse(p2, radius, radius);
-    // }
-
 private:
-
-    std::vector<QPushButton*> mSubButtons;
+    std::vector<QPushButton*> m_buttons;
 };
-
-
-
-class INewChatButton : public IOverlayButton
-{
-    Q_OBJECT
-public:
-    INewChatButton(QWidget* parent):
-        IOverlayButton(parent)
-    {
-        addSubButton(QIcon("://icon/create-new.svg"));
-        getSubButton(1)->setToolTip("New chat");
-    };
-};
-
 
 
 #endif // IOVERLAYBUTTON_H

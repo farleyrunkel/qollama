@@ -26,7 +26,7 @@
    <string>ChatGPT</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resouces.qrc">
+   <iconset resource="../resouces.qrc">
     <normaloff>:/icon/ChatGPT.ico</normaloff>:/icon/ChatGPT.ico</iconset>
   </property>
   <property name="windowOpacity">
@@ -192,7 +192,7 @@
               <string>New chat</string>
              </property>
              <property name="icon">
-              <iconset resource="resouces.qrc">
+              <iconset resource="../resouces.qrc">
                <normaloff>:/icon/logo.png</normaloff>:/icon/logo.png</iconset>
              </property>
              <property name="autoRepeat">
@@ -267,7 +267,7 @@
               <string>Upgrade plan</string>
              </property>
              <property name="icon">
-              <iconset resource="resouces.qrc">
+              <iconset resource="../resouces.qrc">
                <normaloff>:/icon/sparkles.svg</normaloff>:/icon/sparkles.svg</iconset>
              </property>
              <property name="iconSize">
@@ -312,7 +312,7 @@
               <string>Farley runkel</string>
              </property>
              <property name="icon">
-              <iconset resource="resouces.qrc">
+              <iconset resource="../resouces.qrc">
                <normaloff>:/icon/uranus.svg</normaloff>:/icon/uranus.svg</iconset>
              </property>
              <property name="iconSize">
@@ -493,7 +493,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="resouces.qrc">
+             <iconset resource="../resouces.qrc">
               <normaloff>:/icon/share-box.svg</normaloff>:/icon/share-box.svg</iconset>
             </property>
             <property name="checkable">
@@ -591,7 +591,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="resouces.qrc">
+              <iconset resource="../resouces.qrc">
                <normaloff>:/icon/send.svg</normaloff>:/icon/send.svg</iconset>
              </property>
              <property name="iconSize">
@@ -629,7 +629,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="resouces.qrc"/>
+  <include location="../resouces.qrc"/>
  </resources>
  <connections/>
 </ui>

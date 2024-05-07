@@ -2,28 +2,18 @@
 #define IHISTORYLIST_H
 
 #include <QWidget>
-#include <QListWidgetItem >
-#include <QPushButton>
+#include <QListWidget>
 #include <QHBoxLayout>
-#include <QLabel>
-#include <QObject>
-#include "ioverlaybutton.h"
-#include <QMenu>
-#include <QStyledItemDelegate>
-// 自定义委托类
-
-#include <QStyledItemDelegate>
 #include <QPushButton>
-#include <QHBoxLayout>
 #include <QMenu>
-#include <QStandardItemModel>
-#include <QStandardItem>
+#include <QSpacerItem>
+#include <QShowEvent>
+#include <QStyledItemDelegate>
 
 class CustomItemDelegate : public QStyledItemDelegate {
 public:
     CustomItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
 
-    // 重写sizeHint函数，设置item的大小
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
@@ -34,35 +24,34 @@ public:
     // void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
     //     QStyledItemDelegate::paint(painter, option, index);
 
-    //     // 获取单元格的矩形区域
     //     QRect rect = option.rect;
 
-    //     // 计算第一个按钮的矩形区域
     //     QRect buttonRect1 = QRect(rect.right() - 60, rect.top() + 2, 30, 30);
 
-    //     // 绘制第一个按钮
     //     painter->setBrush(Qt::red);
     //     painter->drawRect(buttonRect1);
 
-    //     // 计算第二个按钮的矩形区域
     //     QRect buttonRect2 = QRect(rect.right() - 30, rect.top() + 2, 30, 30);
 
-    //     // 绘制第二个按钮
     //     painter->setBrush(Qt::blue);
     //     painter->drawRect(buttonRect2);
     // }
-
 };
 
-class IHistoryList: public QListWidget
-{
 
+class IHistoryList : public QListWidget {
 public:
+    IHistoryList(QWidget *parent = nullptr) : QListWidget(parent) {}
 
-    using QListWidget::QListWidget;
-
-public:
-
+protected:
+    void showEvent(QShowEvent *event) override {
+        QListWidget::showEvent(event);
+        initButtonsWidget();
+        setIconSize(QSize(100, 100)); // 设置item中的图标大小
+        setItemDelegate(new CustomItemDelegate);
+        setObjectName("historyList");
+        setUniformItemSizes(true);
+    }
     void mouseMoveEvent(QMouseEvent* event) override {
 
         auto index = this->indexAt(event->pos());
@@ -75,58 +64,39 @@ public:
             widget->setVisible(true);
         }
     }
-
-
-public:
-
-    void showEvent(QShowEvent* event) override {
-        QListWidget::showEvent(event);
-        initButtonsWidget();
-    }
-
+private:
     void initButtonsWidget() {
-
         widget = new QWidget(this);
+        QHBoxLayout *layout = new QHBoxLayout(widget);
 
-        QHBoxLayout *layout = new QHBoxLayout;
-        QPushButton *moreButton = new QPushButton(QIcon("://icon/more-horiz.svg"), "");
-        moreButton->setFixedSize(QSize(16, 16));
-        moreButton->setToolTip("More");
-        QPushButton *archButton = new QPushButton(QIcon("://icon/archive-book.svg"), "");
-        archButton->setFixedSize(QSize(16, 16));
-        archButton->setToolTip("Archive");
-        archButton->setFlat(true);
-        moreButton->setFlat(true);
+        QPushButton *moreButton = createButton(":/icon/more-horiz.svg", "More");
+        QPushButton *archButton = createButton(":/icon/archive-book.svg", "Archive");
 
-        // 创建菜单
-        auto menu = new QMenu(moreButton);
+        QMenu *menu = new QMenu(moreButton);
         menu->addAction("Share");
         menu->addAction("Rename");
         menu->addAction("Delete chat");
-        menu->setVisible(false);
-        // 将菜单关联到按钮
         moreButton->setMenu(menu);
 
-        // 设置布局
-        layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));  // 添加按钮
-        layout->addWidget(moreButton);  // 添加按钮
-        layout->addWidget(archButton);  // 添加按钮
+        layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+        layout->addWidget(moreButton);
+        layout->addWidget(archButton);
 
         widget->setLayout(layout);
         widget->setObjectName("buttonsWidget");
-        widget->setStyleSheet(""
-                              "background: rgba(255, 255, 255, 128);"
-                              "");
-
-
+        widget->setStyleSheet("background: rgba(255, 255, 255, 128);");
         widget->setVisible(false);
     }
 
+    QPushButton *createButton(const QString &iconPath, const QString &tooltip) {
+        QPushButton *button = new QPushButton(QIcon(iconPath), "");
+        button->setFixedSize(QSize(16, 16));
+        button->setToolTip(tooltip);
+        button->setFlat(true);
+        return button;
+    }
 private:
-
-    QWidget* widget;
-
+    QWidget *widget;
 };
-
 
 #endif // IHISTORYLIST_H

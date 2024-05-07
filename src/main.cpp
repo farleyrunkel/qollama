@@ -8,9 +8,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
-
-    // 从样式表文件加载样式并设置给应用程序
-    QString stylePath = ":/qss/style.qss";  // 样式表文件在资源文件中的路径
+    QString stylePath = ":/qss/style.qss";
     QFile styleFile(stylePath);
     if (styleFile.open(QFile::ReadOnly)) {
         QString styleSheet = QLatin1String(styleFile.readAll());
