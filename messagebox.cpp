@@ -1,4 +1,4 @@
-#include "messagebox.h"
+#include "src/messagebox.h"
 #include "ui_messagebox.h"
 
 MessageBox::MessageBox(QWidget *parent)

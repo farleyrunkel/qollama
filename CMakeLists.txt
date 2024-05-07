@@ -27,7 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         resouces.qrc
 
-        messagebox.h messagebox.cpp messagebox.ui
+        src/messagebox.h messagebox.cpp messagebox.ui
 
         src/ioverlaybutton.h
 
