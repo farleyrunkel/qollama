@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "src/mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QVBoxLayout>
 #include "messagebox.h"
