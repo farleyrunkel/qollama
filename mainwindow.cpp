@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include "messagebox.h"
 #include <QDialog>
-#include "ioverlaybutton.h"
+#include "src/ioverlaybutton.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

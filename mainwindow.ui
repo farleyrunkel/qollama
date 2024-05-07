@@ -619,13 +619,13 @@
   <customwidget>
    <class>INewChatButton</class>
    <extends>QPushButton</extends>
-   <header location="global">C:/Users/95439/Documents/Documents/QML-Lessons/untitled1/ioverlaybutton.h
+   <header location="global">C:/Users/95439/Documents/Github/chatgpt/src/ioverlaybutton.h
 </header>
   </customwidget>
   <customwidget>
    <class>IHistoryList</class>
    <extends>QListWidget</extends>
-   <header location="global">C:/Users/95439/Documents/Github/chatgpt/ihistorylist.h</header>
+   <header location="global">C:/Users/95439/Documents/Github/chatgpt/src/ihistorylist.h</header>
   </customwidget>
  </customwidgets>
  <resources>

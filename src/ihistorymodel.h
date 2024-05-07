@@ -2,7 +2,7 @@
 #define IHISTORYMODEL_H
 
 #include <QAbstractItemModel>
-#include <QStringList >
+#include <QStringList>
 #include <QStandardItemModel>
 
 class IHistoryModel : public QAbstractItemModel
