@@ -26,13 +26,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resouces.qrc
-        src/messagebox.h
-        src/messagebox.cpp
+
+
         src/ioverlaybutton.h
         src/ihistorymodel.h
         src/ihistorylist.h
 
-        forms/messagebox.ui
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET chatgpt APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
