@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowIcon(QIcon("://icon/ChatGPT.ico"));
 
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
+    // 设置样式表隐藏选项卡标题
+    ui->tabWidget->setStyleSheet("QTabBar::tab { width: 0px; }");
 
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();});
@@ -33,8 +35,14 @@ void MainWindow::addNewChat() {
     }
     curr_doc = new Document();
     m_docus.emplace_back(curr_doc);
+
     ui->chatList->clear();
-    ui->historyList->addItem("history item");
+
+    auto item = new QListWidgetItem("history item",ui->historyList );
+    ui->historyList->addItem(item);
+
+    QVariant addressVar = QVariant::fromValue<Document*>(curr_doc);
+    item->setData(Qt::UserRole, addressVar);
 }
 
 void MainWindow::on_inputLine_returnPressed()
