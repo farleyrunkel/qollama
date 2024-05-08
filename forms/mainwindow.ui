@@ -268,7 +268,7 @@
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
-               <normaloff>:/icon/sparkles.svg</normaloff>:/icon/sparkles.svg</iconset>
+               <normaloff>:/icon/sparkles.png</normaloff>:/icon/sparkles.png</iconset>
              </property>
              <property name="iconSize">
               <size>
