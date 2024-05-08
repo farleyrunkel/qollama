@@ -27,7 +27,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::vector<Document> m_docus;
-    ChatBot chatbot;
+    std::vector<Document*> m_docus;
+    Document* curr_doc;
+    ChatBot* chatbot;
 };
 #endif // MAINWINDOW_H

@@ -11,13 +11,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    chatbot = ChatBot();
+    chatbot = new ChatBot();
 
     this->setWindowIcon(QIcon("://icon/ChatGPT.ico"));
 
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
 
-    connect(ui->newChatButton, &INewChatButton::pressed, [&](){ui->historyList->addItem("history item");});
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();});
 }
@@ -28,9 +27,14 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::addNewChat() {
-    Document docu;
-    m_docus.emplace_back(docu);
+    auto a = ui->chatList->count();
+    if (ui->chatList->count() == 0) {
+        return;
+    }
+    curr_doc = new Document();
+    m_docus.emplace_back(curr_doc);
     ui->chatList->clear();
+    ui->historyList->addItem("history item");
 }
 
 void MainWindow::on_inputLine_returnPressed()
@@ -59,8 +63,7 @@ void MainWindow::on_inputLine_returnPressed()
     ui->chatList->setItemWidget(messageItem, message);
     ui->chatList->update();
 
-
-    auto reply = chatbot.reply(message->text().toStdString());
+    auto reply = chatbot->reply(message->text().toStdString());
 
     auto userItem1 = new QListWidgetItem(this->ui->newChatButton->icon(), "Chat GPT", ui->chatList);
     userItem1->setFlags(userItem1->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -75,6 +78,9 @@ void MainWindow::on_inputLine_returnPressed()
     auto size1 = message->sizeHint();
     messageItem1->setSizeHint(size1);
     messageItem1->setFlags(messageItem1->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+    curr_doc->addChat("user", text.toStdString());
+    curr_doc->addChat("chagpt", reply);
 
     ui->chatList->addItem(messageItem1);
     ui->chatList->setItemWidget(messageItem1, message1);
