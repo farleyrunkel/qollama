@@ -21,6 +21,7 @@ public:
     ~MainWindow();
 
 
+    QListWidget *getCurrentChatList();
 private slots:
 
     void addNewChat();

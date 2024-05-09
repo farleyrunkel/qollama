@@ -16,19 +16,15 @@ MainWindow::MainWindow(QWidget *parent)
     curr = 0;
     this->setWindowIcon(QIcon("://icon/ChatGPT.ico"));
 
-
     ui->historyList->addItem("first item");
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     // 设置样式表隐藏选项卡标题
     ui->tabWidget->setStyleSheet("QTabBar::tab { width: 0px; }");
 
-
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();} );
     connect(ui->historyList, &QListWidget::itemClicked, [&](QListWidgetItem *item){
-        auto curr = ui->historyList->currentIndex().row();
-        ui->tabWidget->setCurrentIndex(curr);
-    ;});
+        ui->tabWidget->setCurrentIndex(ui->historyList->currentIndex().row());;});
 }
 
 MainWindow::~MainWindow()
@@ -36,16 +32,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::addNewChat() {
+    QListWidget *uniqueListWidget = getCurrentChatList();
 
-    // auto currChat = ui->tabWidget->currentWidget()->->metaObject()->className();
-    // qDebug() << currChat;
-    // // if (static_cast<QListWidget*>(currChat)->count() == 0) {
-    // //     return;
-    // // }
-
-
+    if (uniqueListWidget->count() == 0) {
+        return;
+    }
     auto tab = new QWidget();
     tab->setObjectName("tab");
     auto verticalLayout = new QVBoxLayout(tab);
@@ -72,16 +64,8 @@ void MainWindow::addNewChat() {
     ui->historyList->addItem(item);
 }
 
-
-void MainWindow::on_inputLine_returnPressed()
+QListWidget* MainWindow::getCurrentChatList()
 {
-    QString text = ui->inputLine->text();
-
-    if (text.trimmed().isEmpty()) {
-        return;
-    }
-
-
     QWidget *currentTabWidget = ui->tabWidget->currentWidget();
     QListWidget * uniqueListWidget = nullptr;
     // 确保当前选项卡非空
@@ -99,7 +83,18 @@ void MainWindow::on_inputLine_returnPressed()
     } else {
         qDebug() << "Error: Current tab widget is null.";
     }
+    return uniqueListWidget;
+}
 
+void MainWindow::on_inputLine_returnPressed()
+{
+    QString text = ui->inputLine->text();
+
+    if (text.trimmed().isEmpty()) {
+        return;
+    }
+
+    QListWidget *uniqueListWidget = getCurrentChatList();
 
     auto userMessage = new IMessagebox(uniqueListWidget);
     userMessage->setIcon(ui->userButton->icon());
