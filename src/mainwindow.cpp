@@ -11,24 +11,25 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
     chatbot = new ChatBot();
     curr = 0;
+
     this->setWindowIcon(QIcon("://icon/ChatGPT.ico"));
 
+    ui->setupUi(this);
+    ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->addItem("first item");
-    // 设置样式表隐藏选项卡标题
-    ui->tabWidget->setStyleSheet("QTabBar::tab { width: 0px; }");
 
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();} );
     connect(ui->historyList, &QListWidget::itemClicked, [&](QListWidgetItem *item){
-        ui->tabWidget->setCurrentIndex(ui->historyList->currentIndex().row());;});
+        ui->chatTabs->setCurrentIndex(ui->historyList->currentIndex().row());;});
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete chatbot;
 }
 
 void MainWindow::addNewChat() {
@@ -49,10 +50,10 @@ void MainWindow::addNewChat() {
 
     verticalLayout->addWidget(chatList);
 
-    ui->tabWidget->addTab(tab, QString());
+    ui->chatTabs->addTab(tab, QString());
 
-    curr = ui->tabWidget->indexOf(tab);
-    ui->tabWidget->setCurrentIndex(curr);
+    curr = ui->chatTabs->indexOf(tab);
+    ui->chatTabs->setCurrentIndex(curr);
 
     // todo: save chat
 
@@ -65,7 +66,7 @@ void MainWindow::addNewChat() {
 
 QListWidget* MainWindow::getCurrentChatList()
 {
-    QWidget *currentTabWidget = ui->tabWidget->currentWidget();
+    QWidget *currentTabWidget = ui->chatTabs->currentWidget();
     QListWidget * uniqueListWidget = nullptr;
     // 确保当前选项卡非空
     if (currentTabWidget) {

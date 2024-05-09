@@ -27,15 +27,6 @@ public:
             setSubGeometry(i);
         }
         update();
-
-        // 获取MainWindow内部组件的大小
-        QSize wSize = size();
-        int wWidth = wSize.width();
-        int wHeight = wSize.height();
-
-        // 输出MainWindow内部组件的大小信息
-        qDebug() << this->objectName() << "Width:" << wWidth;
-        qDebug() << this->objectName() << "Height:" << wHeight;
     }
 
 public:
@@ -47,7 +38,6 @@ public:
 
         m_buttons.push_back(sub);
         setSubGeometry(m_buttons.size());
-
     }
 
     QPushButton* getSubButton(int i) {

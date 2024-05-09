@@ -6,13 +6,20 @@ QWidget#sideWidget {
     border: 1px hidden;
     border-radius: 10px;
 }
-QListWidget#historyList {
-    background-color:#f7f7f5;
-}
 QFrame#inputFrame{
     background-color:white;
     border: 1px solid #a6a6a6;
     border-radius: 10px;
+}
+
+
+QTabWidget::pane {
+    border: none;
+}
+
+
+QTabBar::tab {
+    width: 0px;
 }
 
 
@@ -68,6 +75,9 @@ QComboBox::menu-indicator {
 }
 
 
+QListWidget#historyList {
+    background-color:#f7f7f5;
+}
 QListWidget#historyList::item {
     border: 1px hidden gray;
     border-style: hidden;
