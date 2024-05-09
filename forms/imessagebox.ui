@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">border-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="iconLabel">
@@ -29,7 +35,7 @@
       </size>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Box</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="text">
       <string>TextLabel</string>
@@ -60,7 +66,7 @@
         </size>
        </property>
        <property name="frameShape">
-        <enum>QFrame::Box</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
         <string>TextLabel</string>
@@ -70,7 +76,7 @@
      <item>
       <widget class="QLabel" name="chatLabel">
        <property name="frameShape">
-        <enum>QFrame::Box</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
         <string>TextLabel</string>
