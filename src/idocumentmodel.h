@@ -1,14 +1,14 @@
-#ifndef IHISTORYMODEL_H
-#define IHISTORYMODEL_H
+#ifndef IDOCUMENTMODEL_H
+#define IDOCUMENTMODEL_H
 
 #include <QAbstractItemModel>
 #include <QStringList>
 #include <QStandardItemModel>
 
-class IHistoryModel : public QAbstractItemModel
+class IDocumentModel : public QAbstractItemModel
 {
 public:
-    explicit IHistoryModel(QObject *parent = nullptr) {
+    explicit IDocumentModel(QObject *parent = nullptr) {
 
         m_data << "Item 1" << "Item 2" << "Item 3" << "Item 4" << "Item 5";
     }
@@ -37,4 +37,4 @@ private:
 };
 
 
-#endif // IHISTORYMODEL_H
+#endif // IDOCUMENTMODEL_H
