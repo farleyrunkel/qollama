@@ -572,7 +572,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="tabsClosable">
            <bool>false</bool>
@@ -600,16 +600,6 @@
                <enum>QFrame::Plain</enum>
               </property>
              </widget>
-            </item>
-           </layout>
-          </widget>
-          <widget class="QWidget" name="tab_2">
-           <attribute name="title">
-            <string>Tab 2</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QListWidget" name="listWidget"/>
             </item>
            </layout>
           </widget>

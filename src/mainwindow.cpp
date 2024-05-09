@@ -5,6 +5,7 @@
 #include "ioverlaybutton.h"
 #include <QLabel>
 #include <QStandardItemModel>
+#include "imessagebox.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,15 +13,22 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     chatbot = new ChatBot();
-
+    curr = 0;
     this->setWindowIcon(QIcon("://icon/ChatGPT.ico"));
 
+
+    ui->historyList->addItem("first item");
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     // 设置样式表隐藏选项卡标题
     ui->tabWidget->setStyleSheet("QTabBar::tab { width: 0px; }");
 
+
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
-    connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();});
+    connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();} );
+    connect(ui->historyList, &QListWidget::itemClicked, [&](QListWidgetItem *item){
+        auto curr = ui->historyList->currentIndex().row();
+        ui->tabWidget->setCurrentIndex(curr);
+    ;});
 }
 
 MainWindow::~MainWindow()
@@ -28,22 +36,42 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::addNewChat() {
-    auto a = ui->chatList->count();
-    if (ui->chatList->count() == 0) {
-        return;
-    }
-    curr_doc = new Document();
-    m_docus.emplace_back(curr_doc);
 
-    ui->chatList->clear();
+void MainWindow::addNewChat() {
+
+    // auto currChat = ui->tabWidget->currentWidget()->->metaObject()->className();
+    // qDebug() << currChat;
+    // // if (static_cast<QListWidget*>(currChat)->count() == 0) {
+    // //     return;
+    // // }
+
+
+    auto tab = new QWidget();
+    tab->setObjectName("tab");
+    auto verticalLayout = new QVBoxLayout(tab);
+    verticalLayout->setObjectName("verticalLayout");
+    auto chatList = new QListWidget(tab);
+    chatList->setObjectName("chatList");
+    chatList->setFocusPolicy(Qt::NoFocus);
+    chatList->setFrameShape(QFrame::NoFrame);
+    chatList->setFrameShadow(QFrame::Plain);
+
+    verticalLayout->addWidget(chatList);
+
+    ui->tabWidget->addTab(tab, QString());
+
+    curr = ui->tabWidget->indexOf(tab);
+    ui->tabWidget->setCurrentIndex(curr);
+
+    // todo: save chat
+
+    auto curr_doc = new Document();
+    m_docus.emplace_back(curr_doc);
 
     auto item = new QListWidgetItem("history item",ui->historyList );
     ui->historyList->addItem(item);
-
-    QVariant addressVar = QVariant::fromValue<Document*>(curr_doc);
-    item->setData(Qt::UserRole, addressVar);
 }
+
 
 void MainWindow::on_inputLine_returnPressed()
 {
@@ -53,46 +81,52 @@ void MainWindow::on_inputLine_returnPressed()
         return;
     }
 
-    auto userItem = new QListWidgetItem(this->ui->userButton->icon(), this->ui->userButton->text(), ui->chatList);
+
+    QWidget *currentTabWidget = ui->tabWidget->currentWidget();
+    QListWidget * uniqueListWidget = nullptr;
+    // 确保当前选项卡非空
+    if (currentTabWidget) {
+        // 在当前选项卡中查找QListWidget部件
+        QList<QListWidget *> listWidgets = currentTabWidget->findChildren<QListWidget *>();
+
+        // 确保只有一个QListWidget部件
+        if (listWidgets.size() == 1) {
+            uniqueListWidget = listWidgets.at(0);
+            // 在这里使用uniqueListWidget进行需要的操作
+        } else {
+            qDebug() << "Error: There is not exactly one QListWidget in the current tab.";
+        }
+    } else {
+        qDebug() << "Error: Current tab widget is null.";
+    }
+
+
+    auto userMessage = new IMessagebox(uniqueListWidget);
+    userMessage->setIcon(ui->userButton->icon());
+    userMessage->setUser( ui->userButton->text());
+    userMessage->setChat(text);
+
+    auto userItem = new QListWidgetItem();
     userItem->setFlags(userItem->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    userItem->setData(Qt::UserRole, ui->userButton->text());
+    userItem->setSizeHint(userMessage->sizeHint());
+    uniqueListWidget->addItem(userItem);
+    uniqueListWidget->setItemWidget(userItem, userMessage);
 
-    ui->chatList->addItem(userItem);
-
-    auto messageItem = new QListWidgetItem(ui->chatList);
-    auto message = new QLabel(text , ui->chatList);
-    message->setMargin(25);
-    message->setWordWrap(true);
-    message->setAlignment(Qt::AlignTop);
-    auto size = message->sizeHint();
-    messageItem->setSizeHint(size);
-    messageItem->setFlags(messageItem->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-    ui->chatList->addItem(messageItem);
-    ui->chatList->setItemWidget(messageItem, message);
-    ui->chatList->update();
-
-    auto reply = chatbot->reply(message->text().toStdString());
-
-    auto userItem1 = new QListWidgetItem(this->ui->newChatButton->icon(), "Chat GPT", ui->chatList);
-    userItem1->setFlags(userItem1->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-    ui->chatList->addItem(userItem1);
-
-    auto messageItem1 = new QListWidgetItem(ui->chatList);
-    auto message1 = new QLabel(reply.c_str() , ui->chatList);
-    message1->setMargin(25);
-    message1->setWordWrap(true);
-    message1->setAlignment(Qt::AlignTop);
-    auto size1 = message->sizeHint();
-    messageItem1->setSizeHint(size1);
-    messageItem1->setFlags(messageItem1->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
-    curr_doc->addChat("user", text.toStdString());
-    curr_doc->addChat("chagpt", reply);
-
-    ui->chatList->addItem(messageItem1);
-    ui->chatList->setItemWidget(messageItem1, message1);
-    ui->chatList->update();
     ui->inputLine->clear();
+
+    auto reply = chatbot->reply(userMessage->text().toStdString());
+
+    auto message = new IMessagebox(uniqueListWidget);
+    message->setIcon(ui->newChatButton->icon());
+    message->setUser( this->windowTitle());
+    message->setChat(QString::fromStdString(reply));
+
+    auto chatItem = new QListWidgetItem();
+    chatItem->setFlags(chatItem->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    chatItem->setData(Qt::UserRole,this->windowTitle());
+    chatItem->setSizeHint(message->sizeHint());
+    uniqueListWidget->addItem(chatItem);
+    uniqueListWidget->setItemWidget(chatItem, message);
 }
 

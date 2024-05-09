@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "document.h"
 #include "chatbot.h"
+#include <QListWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,7 +29,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     std::vector<Document*> m_docus;
-    Document* curr_doc;
+    int curr;
     ChatBot* chatbot;
 };
 #endif // MAINWINDOW_H

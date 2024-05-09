@@ -70,6 +70,7 @@ protected:
             }
         }
     }
+
 private:
     void initButtonsWidget() {
 
