@@ -17,7 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowIcon(QIcon("://icon/ChatGPT.ico"));
 
     ui->historyList->addItem("first item");
-    ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     // 设置样式表隐藏选项卡标题
     ui->tabWidget->setStyleSheet("QTabBar::tab { width: 0px; }");
 

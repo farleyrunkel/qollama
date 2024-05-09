@@ -1,3 +1,20 @@
+QWidget#centralwidget {
+    background-color:white;
+}
+QWidget#sideWidget {
+    background-color:#f7f7f5;
+    border: 1px hidden;
+    border-radius: 10px;
+}
+QListWidget#historyList {
+    background-color:#f7f7f5;
+}
+QFrame#inputFrame{
+    background-color:white;
+    border: 1px solid #a6a6a6;
+    border-radius: 10px;
+}
+
 
 QPushButton{
     border: 1px hidden gray;
@@ -15,6 +32,7 @@ QPushButton::menu-indicator {
     width: 0px;
     image: none;
 }
+
 
 INewChatButton{
     border: 1px hidden gray;
@@ -48,6 +66,7 @@ QComboBox::down-arrow { /* 下拉按钮中的箭头样式，默认在下拉按�
 QComboBox::menu-indicator {
     width: 0px;
 }
+
 
 QListWidget#historyList::item {
     border: 1px hidden gray;
@@ -129,25 +148,6 @@ QPushButton#inputButton:hover {
 QPushButton#inputButton:pressed {
     background-color:rgb(225, 225, 225);
     border-style: inset;
-}
-
-
-QWidget#centralwidget {
-    background-color:white;
-}
-QWidget#sideWidget {
-    background-color:#f7f7f5;
-    border: 1px hidden;
-    border-radius: 10px;
-}
-QListWidget#historyList {
-    background-color:#f7f7f5;
-}
-
-QFrame#inputFrame{
-    background-color:white;
-    border: 1px solid #a6a6a6;
-    border-radius: 10px;
 }
 
 
