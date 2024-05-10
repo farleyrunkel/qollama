@@ -23,7 +23,7 @@
    <enum>Qt::ActionsContextMenu</enum>
   </property>
   <property name="windowTitle">
-   <string>ChatGPT</string>
+   <string>QOllama</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resouces.qrc">
@@ -313,7 +313,7 @@
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
-               <normaloff>:/icon/uranus.svg</normaloff>:/icon/uranus.svg</iconset>
+               <normaloff>:/icon/farley.jpg</normaloff>:/icon/farley.jpg</iconset>
              </property>
              <property name="iconSize">
               <size>

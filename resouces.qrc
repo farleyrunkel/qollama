@@ -26,5 +26,6 @@
         <file>icon/share-box.svg</file>
         <file>icon/sparkles.png</file>
         <file>icon/ollama.png</file>
+        <file>icon/farley.jpg</file>
     </qresource>
 </RCC>
