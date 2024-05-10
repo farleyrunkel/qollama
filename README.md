@@ -1,8 +1,8 @@
 # chatgpt
-chatgpt client using qt
+
+A Qt client program mimicking the ChatGPT page.
 
 ![image](./images/chatgpt.png)
-
 
 todo:
 
