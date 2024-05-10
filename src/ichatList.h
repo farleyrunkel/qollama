@@ -4,6 +4,7 @@
 #include <QListView>
 #include <QStandardItemModel>
 #include "chatitemdelegate.h"
+#include "ichatitemmodel.h"
 
 
 class IChatList: public QListView
@@ -16,7 +17,7 @@ public:
     explicit IChatList(QWidget *parent = nullptr)
         : QListView(parent)
     {
-        setModel(new QStandardItemModel(this));
+        setModel(new IChatItemModel(this));
         setItemDelegate(new ChatItemDelegate(this));
     }
 
