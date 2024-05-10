@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QStandardItemModel>
 #include "imessagebox.h"
+#include "chatitemdelegate.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -33,9 +34,9 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::addNewChat() {
-    QListWidget *uniqueListWidget = getCurrentChatList();
+    IChatList *uniqueListWidget = getCurrentChatList();
 
-    if (uniqueListWidget->count() == 0) {
+    if (uniqueListWidget->isNew()) {
         return;
     }
     auto tab = new QWidget();
@@ -64,14 +65,14 @@ void MainWindow::addNewChat() {
     ui->historyList->addItem(item);
 }
 
-QListWidget* MainWindow::getCurrentChatList()
+IChatList* MainWindow::getCurrentChatList()
 {
     QWidget *currentTabWidget = ui->chatTabs->currentWidget();
-    QListWidget * uniqueListWidget = nullptr;
+    IChatList * uniqueListWidget = nullptr;
     // 确保当前选项卡非空
     if (currentTabWidget) {
         // 在当前选项卡中查找QListWidget部件
-        QList<QListWidget *> listWidgets = currentTabWidget->findChildren<QListWidget *>();
+        QList<IChatList *> listWidgets = currentTabWidget->findChildren<IChatList *>();
 
         // 确保只有一个QListWidget部件
         if (listWidgets.size() == 1) {
@@ -94,34 +95,58 @@ void MainWindow::on_inputLine_returnPressed()
         return;
     }
 
-    QListWidget *uniqueListWidget = getCurrentChatList();
+    auto *chatListView = getCurrentChatList();
 
-    auto userMessage = new IMessagebox(uniqueListWidget);
-    userMessage->setIcon(ui->userButton->icon());
-    userMessage->setUser( ui->userButton->text());
-    userMessage->setChat(text);
+    // auto userMessage = new IMessagebox(uniqueListWidget);
+    // userMessage->setIcon(ui->userButton->icon());
+    // userMessage->setUser( ui->userButton->text());
+    // userMessage->setChat(text);
 
-    auto userItem = new QListWidgetItem();
-    userItem->setFlags(userItem->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    userItem->setData(Qt::UserRole, ui->userButton->text());
-    userItem->setSizeHint(userMessage->sizeHint());
-    uniqueListWidget->addItem(userItem);
-    uniqueListWidget->setItemWidget(userItem, userMessage);
+    // auto userItem = new QListWidgetItem();
+    // userItem->setFlags(userItem->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    // userItem->setData(Qt::UserRole, ui->userButton->text());
+    // userItem->setSizeHint(userMessage->sizeHint());
+    // uniqueListWidget->addItem(userItem);
+    // uniqueListWidget->setItemWidget(userItem, userMessage);
 
-    ui->inputLine->clear();
+    // ui->inputLine->clear();
 
-    auto reply = chatbot->reply(userMessage->text().toStdString());
+    // auto reply = chatbot->reply(userMessage->text().toStdString());
 
-    auto message = new IMessagebox(uniqueListWidget);
-    message->setIcon(ui->newChatButton->icon());
-    message->setUser( this->windowTitle());
-    message->setChat(QString::fromStdString(reply));
+    // auto message = new IMessagebox(uniqueListWidget);
+    // message->setIcon(ui->newChatButton->icon());
+    // message->setUser( this->windowTitle());
+    // message->setChat(QString::fromStdString(reply));
 
-    auto chatItem = new QListWidgetItem();
-    chatItem->setFlags(chatItem->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    chatItem->setData(Qt::UserRole,this->windowTitle());
-    chatItem->setSizeHint(message->sizeHint());
-    uniqueListWidget->addItem(chatItem);
-    uniqueListWidget->setItemWidget(chatItem, message);
+    // auto chatItem = new QListWidgetItem();
+    // chatItem->setFlags(chatItem->flags() | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    // chatItem->setData(Qt::UserRole,this->windowTitle());
+    // chatItem->setSizeHint(message->sizeHint());
+    // uniqueListWidget->addItem(chatItem);
+    // uniqueListWidget->setItemWidget(chatItem, message);
+
+    QStandardItemModel *model = new QStandardItemModel;
+    //QListView *chatListView = new QListView;
+    ChatItemDelegate *chatDelegate = new ChatItemDelegate(chatListView);
+
+    // 添加聊天数据到模型中
+    QVariantMap chatData1, chatData2;
+    chatData1["icon"] = ui->userButton->icon();
+    chatData1["username"] = "User1";
+    chatData1["message"] = "Hello, how are you?";
+    QStandardItem *item1 = new QStandardItem;
+    item1->setData(chatData1, Qt::DisplayRole);
+    model->appendRow(item1);
+
+    chatData2["icon"] = ui->userButton->icon();
+    chatData2["username"] = "User2";
+    chatData2["message"] = "I'm fine, thank you!";
+    QStandardItem *item2 = new QStandardItem;
+    item2->setData(chatData2, Qt::DisplayRole);
+    model->appendRow(item2);
+
+    // 设置模型和委托类
+    chatListView->setModel(model);
+    chatListView->setItemDelegate(chatDelegate);
 }
 

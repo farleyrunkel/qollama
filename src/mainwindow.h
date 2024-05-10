@@ -5,6 +5,8 @@
 #include "document.h"
 #include "chatbot.h"
 #include <QListWidgetItem>
+#include "ichatList.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,7 +23,7 @@ public:
     ~MainWindow();
 
 
-    QListWidget *getCurrentChatList();
+    IChatList *getCurrentChatList();
 private slots:
 
     void addNewChat();

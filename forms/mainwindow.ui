@@ -604,7 +604,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QListWidget" name="chatList">
+             <widget class="IChatList" name="chatList">
               <property name="focusPolicy">
                <enum>Qt::NoFocus</enum>
               </property>
@@ -670,6 +670,11 @@
    <class>IHistoryList</class>
    <extends>QListWidget</extends>
    <header location="global">C:/Users/95439/Documents/Github/chatgpt/src/ihistorylist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>IChatList</class>
+   <extends>QListView</extends>
+   <header location="global">ichatlist.h</header>
   </customwidget>
  </customwidgets>
  <resources>

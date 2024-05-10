@@ -14,6 +14,7 @@ list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "forms")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+include_directories("src")
 include_directories("thirdparty/json/include")
 
 set(PROJECT_SOURCES
@@ -30,8 +31,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resouces.qrc
 
         src/ioverlaybutton.h
-        src/idocumentmodel.h
-        src/ihistorylist.h
+        src/ichatlist.h
         src/document.h
         src/document.cpp
         src/chatbot.h
@@ -40,6 +40,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/imessagebox.h
         src/imessagebox.cpp
         forms/imessagebox.ui
+        src/chatitemdelegate.h src/chatitemdelegate.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET chatgpt APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
