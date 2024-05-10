@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "document.h"
+//#include "document.h"
 #include "chatbot.h"
 #include <QListWidgetItem>
 #include "ichatList.h"
@@ -32,7 +32,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::vector<Document*> m_docus;
+    //std::vector<Document*> m_docus;
     int curr;
     ChatBot* chatbot;
 };

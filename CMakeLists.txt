@@ -41,8 +41,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/ichatitemmodel.h
         src/ichatitemmodel.cpp
 
-        src/document.h
-        src/document.cpp
+        # src/document.h
+        # src/document.cpp
         src/chatbot.h
         src/chatbot.cpp
     )

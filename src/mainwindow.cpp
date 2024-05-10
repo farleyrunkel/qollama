@@ -61,9 +61,6 @@ void MainWindow::addNewChat() {
 
     // todo: save chat
 
-    auto curr_doc = new Document();
-    m_docus.emplace_back(curr_doc);
-
     auto item = new QListWidgetItem("",ui->historyList );
     ui->historyList->addItem(item);
 }
