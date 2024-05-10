@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->addItem("");
-
+    ui->chatTabs->tabBar()->hide();
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
@@ -42,6 +42,7 @@ void MainWindow::addNewChat() {
         qDebug() << "Current chat list is null or already contains a new chat.";
         return;
     }
+
     auto tab = new QWidget();
     tab->setObjectName("tab");
     auto verticalLayout = new QVBoxLayout(tab);
@@ -52,6 +53,8 @@ void MainWindow::addNewChat() {
     chatList->setFocusPolicy(Qt::NoFocus);
     chatList->setFrameShape(QFrame::NoFrame);
     chatList->setFrameShadow(QFrame::Plain);
+    chatList->setSelectionMode(QAbstractItemView::NoSelection);
+
     verticalLayout->addWidget(chatList);
 
     ui->chatTabs->addTab(tab, QString());
