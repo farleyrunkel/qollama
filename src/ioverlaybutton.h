@@ -19,7 +19,7 @@ public:
         getSubButton(1)->setToolTip("New chat");
         getSubButton(1)->show();
 
-        this->setIcon(QIcon("://icon/logo.png"));
+        this->setIcon(QIcon("://icon/ollama.png"));
     }
 
     void resizeEvent(QResizeEvent* event) override {

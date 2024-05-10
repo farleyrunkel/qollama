@@ -25,5 +25,6 @@
         <file>icon/down.svg</file>
         <file>icon/share-box.svg</file>
         <file>icon/sparkles.png</file>
+        <file>icon/ollama.png</file>
     </qresource>
 </RCC>

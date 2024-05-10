@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     chatbot = new ChatBot();
     curr = 0;
 
-    this->setWindowIcon(QIcon("://icon/ChatGPT.ico"));
+    this->setWindowIcon(QIcon("://icon/ollama.png"));
 
     ui->setupUi(this);
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);

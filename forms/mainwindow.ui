@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resouces.qrc">
-    <normaloff>:/icon/ChatGPT.ico</normaloff>:/icon/ChatGPT.ico</iconset>
+    <normaloff>:/icon/ollama.png</normaloff>:/icon/ollama.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
