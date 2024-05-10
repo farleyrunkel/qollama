@@ -3,7 +3,7 @@
 
 #include <QListView>
 #include <QStandardItemModel>
-#include "chatitemdelegate.h"
+#include "ichatitemdelegate.h"
 #include "ichatitemmodel.h"
 
 
@@ -18,7 +18,7 @@ public:
         : QListView(parent)
     {
         setModel(new IChatItemModel(this));
-        setItemDelegate(new ChatItemDelegate(this));
+        setItemDelegate(new IChatItemDelegate(this));
     }
 
 

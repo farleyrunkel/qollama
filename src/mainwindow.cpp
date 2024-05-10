@@ -5,8 +5,6 @@
 #include "ioverlaybutton.h"
 #include <QLabel>
 #include <QStandardItemModel>
-#include "imessagebox.h"
-#include "chatitemdelegate.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

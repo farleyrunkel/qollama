@@ -29,19 +29,22 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resouces.qrc
+        forms/imessagebox.ui
 
         src/ioverlaybutton.h
+        src/imessagebox.h
+        src/imessagebox.cpp
+
         src/ichatlist.h
+        src/ichatitemdelegate.h
+        src/ichatitemdelegate.cpp
+        src/ichatitemmodel.h
+        src/ichatitemmodel.cpp
+
         src/document.h
         src/document.cpp
         src/chatbot.h
         src/chatbot.cpp
-
-        src/imessagebox.h
-        src/imessagebox.cpp
-        forms/imessagebox.ui
-        src/chatitemdelegate.h src/chatitemdelegate.cpp
-        src/ichatitemmodel.h src/ichatitemmodel.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET chatgpt APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -1,9 +1,9 @@
-#include "chatitemdelegate.h"
+#include "ichatitemdelegate.h"
 #include "ichatitemmodel.h"
 
 #include <QPainter>
 
-void ChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
     if (!painter || !index.isValid()) {
         qDebug() << "Invalid painter or model index.";
         return;
@@ -45,7 +45,7 @@ void ChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
 }
 
-QSize ChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+QSize IChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
     QSize size = QStyledItemDelegate::sizeHint(option, index);
     QRect contRect = option.rect.adjusted(10, 0, -10, 0);
     contRect.setHeight(40);
@@ -58,7 +58,7 @@ QSize ChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMode
     return size;
 }
 
-void ChatItemDelegate::drawBackground(QPainter *painter, const QRect &rect) const {
+void IChatItemDelegate::drawBackground(QPainter *painter, const QRect &rect) const {
     if (!painter) {
         qDebug() << "Invalid painter.";
         return;
@@ -71,7 +71,7 @@ void ChatItemDelegate::drawBackground(QPainter *painter, const QRect &rect) cons
     painter->restore();
 }
 
-QRect ChatItemDelegate::calculateMessageRect(const QRect &rightRect, int userHeight, const QString &message, const QFontMetrics &fontMetrics) const {
+QRect IChatItemDelegate::calculateMessageRect(const QRect &rightRect, int userHeight, const QString &message, const QFontMetrics &fontMetrics) const {
     QRect messageRect1 = rightRect.adjusted(0, userHeight, 0, 0);
     QRect messageRect = fontMetrics.boundingRect(messageRect1, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
     messageRect.setHeight(messageRect.height() + 5);

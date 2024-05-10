@@ -3,7 +3,7 @@
 
 #include <QStyledItemDelegate>
 
-class ChatItemDelegate : public QStyledItemDelegate {
+class IChatItemDelegate : public QStyledItemDelegate {
     Q_OBJECT
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
