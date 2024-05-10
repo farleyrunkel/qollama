@@ -1,6 +1,6 @@
-# chatgpt
+# QOllama
 
-A Qt client program mimicking the ChatGPT page.
+A Qt client of [ollama](https://github.com/ollama/ollama).
 
 ![image](./images/chatgpt.png)
 
