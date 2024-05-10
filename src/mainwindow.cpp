@@ -42,17 +42,16 @@ void MainWindow::addNewChat() {
         qDebug() << "Current chat list is null or already contains a new chat.";
         return;
     }
-
     auto tab = new QWidget();
     tab->setObjectName("tab");
     auto verticalLayout = new QVBoxLayout(tab);
+    verticalLayout->setSpacing(0);
     verticalLayout->setObjectName("verticalLayout");
+    verticalLayout->setContentsMargins(0, 0, 0, 0);
     auto chatList = new IChatList(tab);
-    chatList->setObjectName("chatList");
     chatList->setFocusPolicy(Qt::NoFocus);
     chatList->setFrameShape(QFrame::NoFrame);
     chatList->setFrameShadow(QFrame::Plain);
-
     verticalLayout->addWidget(chatList);
 
     ui->chatTabs->addTab(tab, QString());

@@ -23,6 +23,11 @@ QTabBar::tab {
 }
 
 
+IChatList{
+    border: 1px hidden gray
+}
+
+
 QPushButton{
     border: 1px hidden gray;
     text-align: left; /* 设置文本左对齐 */
