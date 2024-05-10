@@ -140,7 +140,7 @@ void MainWindow::on_inputLine_returnPressed()
 
     chatData2["icon"] = ui->userButton->icon();
     chatData2["username"] = "User2";
-    chatData2["message"] = "I'm fine, thank you!";
+    chatData2["message"] = text;
     QStandardItem *item2 = new QStandardItem;
     item2->setData(chatData2, Qt::DisplayRole);
     model->appendRow(item2);

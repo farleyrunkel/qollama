@@ -10,6 +10,15 @@ void ChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     painter->drawRect(option.rect);
     painter->restore();
 
+
+    QRect contRect = option.rect.adjusted(5, 5, -5, -5);
+
+    painter->drawRoundedRect(contRect, 5, 5);
+    // 计算左右两部分的矩形区域
+    int leftWidth = 30;
+    QRect leftRect = contRect.adjusted(0, 0, -contRect.width() + leftWidth, 0);
+    QRect rightRect = contRect.adjusted(leftWidth, 0, 0, 0);
+
     // 获取数据
     QVariantMap chatData = index.data(Qt::DisplayRole).toMap();
     QIcon icon = qvariant_cast<QIcon>(chatData["icon"]);
@@ -17,17 +26,26 @@ void ChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     QString message = chatData["message"].toString();
 
     // 绘制图标
-    QRect iconRect = option.rect.adjusted(5, 5, 25, 25);
-    icon.paint(painter, iconRect);
+    QPixmap iconPixmap = icon.pixmap(QSize(20, 20)); // 获取图标的 pixmap，大小为20x20
+    painter->drawPixmap(leftRect.topLeft(), iconPixmap); // 在图标区域的左上角绘制图标
 
     // 绘制用户名
-    QRect usernameRect = QRect(iconRect.right() + 5, iconRect.top(), option.rect.width() - iconRect.width() - 10, 20);
+    int userHeight = 30;
+    QRect usernameRect = rightRect.adjusted(0, 0, 0, -rightRect.height() + userHeight);
     painter->setFont(QFont("Arial", 10, QFont::Bold));  // 设置字体和字号
     painter->drawText(usernameRect, Qt::AlignLeft | Qt::AlignTop, username);
 
     // 绘制聊天内容
-    QRect messageRect = QRect(iconRect.right() + 5, usernameRect.bottom(), option.rect.width() - iconRect.width() - 10, option.rect.height() - usernameRect.height() - 10);
-    painter->setFont(QFont("Arial", 9));  // 设置字体和字号
+    QRect messageRect1 =  rightRect.adjusted(0, userHeight, 0, 0);
+
+    // 计算消息内容的实际大小
+    QFont messageFont("Arial", 9); // 设置字体和字号
+    QFontMetrics fontMetrics(messageFont);
+    QRect messageRect = fontMetrics.boundingRect(messageRect1, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
+    messageRect.setHeight(messageRect.height() + 5); // 增加一些额外的高度作为边距
+
+    // 绘制聊天内容
+    painter->setFont(messageFont);
     painter->drawText(messageRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
 }
 
