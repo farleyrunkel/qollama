@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
-    ui->historyList->addItem("first item");
+    ui->historyList->addItem("");
 
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();} );
@@ -62,7 +62,7 @@ void MainWindow::addNewChat() {
     auto curr_doc = new Document();
     m_docus.emplace_back(curr_doc);
 
-    auto item = new QListWidgetItem("history item",ui->historyList );
+    auto item = new QListWidgetItem("",ui->historyList );
     ui->historyList->addItem(item);
 }
 
@@ -116,5 +116,10 @@ void MainWindow::on_inputLine_returnPressed()
     QStandardItem *item2 = new QStandardItem;
     item2->setData(chatData2, Qt::DisplayRole);
     model->appendRow(item2);
+
+    auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
+    hisItem->setText( QString::fromStdString(reply));
+
+    ui->inputLine->clear();
 }
 
