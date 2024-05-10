@@ -663,13 +663,12 @@
   <customwidget>
    <class>INewChatButton</class>
    <extends>QPushButton</extends>
-   <header location="global">C:/Users/95439/Documents/Github/chatgpt/src/ioverlaybutton.h
-</header>
+   <header location="global">ioverlaybutton.h</header>
   </customwidget>
   <customwidget>
    <class>IHistoryList</class>
    <extends>QListWidget</extends>
-   <header location="global">C:/Users/95439/Documents/Github/chatgpt/src/ihistorylist.h</header>
+   <header location="global">ihistorylist.h</header>
   </customwidget>
   <customwidget>
    <class>IChatList</class>
