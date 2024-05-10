@@ -24,6 +24,7 @@ public:
 
 
     IChatList *getCurrentChatList();
+    void onHistoryListItemClicked(QListWidgetItem *item);
 private slots:
 
     void addNewChat();

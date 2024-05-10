@@ -7,6 +7,7 @@
 
 class IChatItemModel : public QStandardItemModel
 {
+    Q_OBJECT
 public:
     enum CustomRoles {
         ItemHeightRole = Qt::UserRole + 1, // 自定义角色，用于保存项目的高度

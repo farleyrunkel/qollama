@@ -22,9 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->historyList->addItem("");
 
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
-    connect(ui->newChatButton, &QPushButton::pressed, [&](){this->addNewChat();} );
-    connect(ui->historyList, &QListWidget::itemClicked, [&](QListWidgetItem *item){
-        ui->chatTabs->setCurrentIndex(ui->historyList->currentIndex().row());;});
+    connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
+    connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
 }
 
 MainWindow::~MainWindow()
@@ -34,9 +33,15 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::addNewChat() {
+    if (ui->chatTabs->count() >= 50) {
+        qDebug() << "Maximum chat tabs reached.";
+        return;
+    }
+
     IChatList *uniqueListWidget = getCurrentChatList();
 
-    if (uniqueListWidget->isNew()) {
+    if (!uniqueListWidget || uniqueListWidget->isNew()) {
+        qDebug() << "Current chat list is null or already contains a new chat.";
         return;
     }
 
@@ -69,30 +74,26 @@ void MainWindow::addNewChat() {
 IChatList* MainWindow::getCurrentChatList()
 {
     QWidget *currentTabWidget = ui->chatTabs->currentWidget();
-    IChatList * uniqueListWidget = nullptr;
-    // 确保当前选项卡非空
-    if (currentTabWidget) {
-        // 在当前选项卡中查找QListWidget部件
-        QList<IChatList *> listWidgets = currentTabWidget->findChildren<IChatList *>();
-
-        // 确保只有一个QListWidget部件
-        if (listWidgets.size() == 1) {
-            uniqueListWidget = listWidgets.at(0);
-            // 在这里使用uniqueListWidget进行需要的操作
-        } else {
-            qDebug() << "Error: There is not exactly one QListWidget in the current tab.";
-        }
-    } else {
-        qDebug() << "Error: Current tab widget is null.";
+    if (!currentTabWidget) {
+        qDebug() << "Current tab widget is null.";
+        return nullptr;
     }
-    return uniqueListWidget;
+
+    QList<IChatList *> listWidgets = currentTabWidget->findChildren<IChatList *>();
+    if (listWidgets.size() != 1) {
+        qDebug() << "Error: There is not exactly one IChatList widget in the current tab.";
+        return nullptr;
+    }
+
+    return listWidgets.at(0);
 }
 
 void MainWindow::on_inputLine_returnPressed()
 {
-    QString text = ui->inputLine->text();
+    QString text = ui->inputLine->text().trimmed();
 
-    if (text.trimmed().isEmpty()) {
+    if (text.isEmpty()) {
+        qDebug() << "Input text is empty.";
         return;
     }
 
@@ -100,7 +101,17 @@ void MainWindow::on_inputLine_returnPressed()
 
     auto *chatListView = getCurrentChatList();
 
-    auto model =  static_cast<QStandardItemModel*>(chatListView->model());
+    if (!chatListView) {
+        qDebug() << "Current chat list is null.";
+        return;
+    }
+
+    auto model = static_cast<QStandardItemModel*>(chatListView->model());
+    if (!model) {
+        qDebug() << "Chat list model is null.";
+        return;
+    }
+
     // 添加聊天数据到模型中
     QVariantMap chatData1, chatData2;
     chatData1["icon"] = ui->userButton->icon();
@@ -118,8 +129,20 @@ void MainWindow::on_inputLine_returnPressed()
     model->appendRow(item2);
 
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
-    hisItem->setText( QString::fromStdString(reply));
+    if (hisItem) {
+        hisItem->setText(QString::fromStdString(reply));
+    } else {
+        qDebug() << "Current history list item is null.";
+    }
 
     ui->inputLine->clear();
 }
 
+void MainWindow::onHistoryListItemClicked(QListWidgetItem *item)
+{
+    if (item) {
+        ui->chatTabs->setCurrentIndex(ui->historyList->row(item));
+    } else {
+        qDebug() << "Clicked history list item is null.";
+    }
+}
