@@ -13,6 +13,7 @@ list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "forms")
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 
 include_directories("src")
 include_directories("thirdparty/json/include")
@@ -64,7 +65,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

@@ -22,12 +22,23 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
+    connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::showReply);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete chatbot;
+}
+
+void MainWindow::showReply(std::string reply) {
+    auto *chatListView = getCurrentChatList();
+    if (!chatListView) {
+        qDebug() << "Current chat list is null.";
+        return;
+    }
+
+    chatListView->addItem(ui->newChatButton->icon(), this->windowTitle(), QString::fromStdString(reply));
 }
 
 void MainWindow::addNewChat() {
@@ -94,7 +105,7 @@ void MainWindow::on_inputLine_returnPressed()
         return;
     }
 
-    auto reply = chatbot->reply(text.toStdString());
+    chatbot->reply(text.toStdString());
 
     auto *chatListView = getCurrentChatList();
 
@@ -103,31 +114,11 @@ void MainWindow::on_inputLine_returnPressed()
         return;
     }
 
-    auto model = static_cast<QStandardItemModel*>(chatListView->model());
-    if (!model) {
-        qDebug() << "Chat list model is null.";
-        return;
-    }
-
-    // 添加聊天数据到模型中
-    QVariantMap chatData1, chatData2;
-    chatData1["icon"] = ui->userButton->icon();
-    chatData1["username"] = ui->userButton->text();
-    chatData1["message"] = text;
-    QStandardItem *item1 = new QStandardItem;
-    item1->setData(chatData1, Qt::DisplayRole);
-    model->appendRow(item1);
-
-    chatData2["icon"] = ui->newChatButton->icon();
-    chatData2["username"] = this->windowTitle();
-    chatData2["message"] = QString::fromStdString(reply);
-    QStandardItem *item2 = new QStandardItem;
-    item2->setData(chatData2, Qt::DisplayRole);
-    model->appendRow(item2);
+    chatListView->addItem(ui->userButton->icon(),  ui->userButton->text(), text);
 
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
     if (hisItem) {
-        hisItem->setText(QString::fromStdString(reply));
+        hisItem->setText(text);
     } else {
         qDebug() << "Current history list item is null.";
     }
