@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
-    connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::showReply);
+    connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
 }
 
 MainWindow::~MainWindow()
@@ -31,14 +31,14 @@ MainWindow::~MainWindow()
     delete chatbot;
 }
 
-void MainWindow::showReply(std::string reply) {
+void MainWindow::appendWordToActiveChat(QString reply) {
     auto *chatListView = getCurrentChatList();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
     }
 
-    chatListView->addItem(ui->newChatButton->icon(), this->windowTitle(), QString::fromStdString(reply));
+    chatListView->appendText(reply);
 }
 
 void MainWindow::addNewChat() {
@@ -115,6 +115,7 @@ void MainWindow::on_inputLine_returnPressed()
     }
 
     chatListView->addItem(ui->userButton->icon(),  ui->userButton->text(), text);
+    chatListView->addItem(ui->newChatButton->icon(), this->windowTitle(), "");
 
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
     if (hisItem) {

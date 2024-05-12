@@ -32,6 +32,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resouces.qrc
         forms/imessagebox.ui
 
+        src/ihistorylist.h
         src/ioverlaybutton.h
         src/imessagebox.h
         src/imessagebox.cpp
@@ -46,6 +47,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         # src/document.cpp
         src/chatbot.h
         src/chatbot.cpp
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

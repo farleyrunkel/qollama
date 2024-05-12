@@ -26,7 +26,8 @@ public:
     IChatList *getCurrentChatList();
     void onHistoryListItemClicked(QListWidgetItem *item);
 
-    void showReply(std::string reply);
+public slots:
+    void appendWordToActiveChat(QString reply);
 private slots:
 
     void addNewChat();

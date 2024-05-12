@@ -41,7 +41,8 @@ public:
 
 class IHistoryList : public QListWidget {
 public:
-    IHistoryList(QWidget *parent = nullptr) : QListWidget(parent) {}
+    IHistoryList(QWidget *parent = nullptr) : QListWidget(parent) {
+    }
 
 protected:
     void showEvent(QShowEvent *event) override {
