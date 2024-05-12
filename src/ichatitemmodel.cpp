@@ -12,11 +12,3 @@ QVariant IChatItemModel::data(const QModelIndex &index, int role) const
     }
     return QStandardItemModel::data(index, role);
 }
-
-void IChatItemModel::setItemHeight(const QModelIndex &index, int height) const
-{
-    QStandardItem *item = itemFromIndex(index);
-    if (item) {
-        item->setData(height, ItemHeightRole); // 设置项目的高度
-    }
-}

@@ -19,10 +19,12 @@ public:
     {
         setModel(new IChatItemModel(this));
         setItemDelegate(new IChatItemDelegate(this));
+    }
 
-        // 在窗口类的构造函数或者初始化函数中连接信号和槽
-        connect(this->model(), &IChatItemModel::dataChanged, this, &IChatList::onDataChanged);
+    void paintEvent(QPaintEvent *e) override {
 
+        QListView::paintEvent(e);
+        qDebug() << "    void paintEvent(QPaintEvent *e) override {";
     }
 
 public:
@@ -48,7 +50,7 @@ public:
 
 
     void appendText(QString text) {
-        qDebug() << "appendText:" << text;
+
         auto model = qobject_cast<QStandardItemModel*>(this->model());
         if (!model) {
             qDebug() << "Chat list model is null.";
@@ -73,19 +75,15 @@ public:
         QVariantMap chatData1 = itemData.toMap(); // 显式转换为 QVariantMap
         chatData1["message"] = chatData1["message"].toString() + " " + text;
         lastItem->setData(chatData1, Qt::DisplayRole);
-        this->update();
+        qDebug() << "appendText:" << text;
+        // 发出数据变化信号，通知视图刷新
+        QModelIndex topLeft = model->index(0, 0);
+        QModelIndex bottomRight = model->index(rowCount - 1, 0);
+        emit model->dataChanged(topLeft, bottomRight);
+
+        repaint();
     }
 
-    // onDataChanged 槽函数实现
-    void onDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
-                                  const QList<int> &roles = QList<int>()){
-        Q_UNUSED(topLeft);
-        Q_UNUSED(bottomRight);
-        Q_UNUSED(roles);
-
-        // 执行刷新操作
-        update(); // 或者调用你需要的刷新操作
-    }
 public:
 };
 

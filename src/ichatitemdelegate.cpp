@@ -35,14 +35,6 @@ void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
     painter->setFont(QFont("Arial", 8));
     painter->drawText(messageRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
-
-    int totalHeight = messageRect.height() + usernameRect.height();
-    auto model = qobject_cast<const IChatItemModel*>(index.model());
-    if (model) {
-        model->setItemHeight(index, totalHeight);
-    } else {
-        qDebug() << "Invalid model.";
-    }
 }
 
 QSize IChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {

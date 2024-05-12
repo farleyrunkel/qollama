@@ -84,7 +84,6 @@ inline void ChatBot::onFinished(QNetworkReply *reply) {
                     return;
                 }
 
-
                 QJsonObject jsonObject = jsonDoc.object();
 
                 // 现在可以使用 jsonObject 对象中的数据了
@@ -93,7 +92,7 @@ inline void ChatBot::onFinished(QNetworkReply *reply) {
                 emit replyReceived(prompt);
                 str.clear();
 
-                // QThread::sleep(1); // 1000 毫秒 = 1 秒
+                QThread::sleep(1); // 1000 毫秒 = 1 秒
 
             }
         }

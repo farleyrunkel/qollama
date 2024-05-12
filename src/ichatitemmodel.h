@@ -15,7 +15,6 @@ public:
 
     explicit IChatItemModel(QObject *parent = nullptr);
     QVariant data(const QModelIndex &index, int role) const override;
-    void setItemHeight(const QModelIndex &index, int height) const ;
 };
 
 
