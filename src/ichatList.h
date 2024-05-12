@@ -20,11 +20,11 @@ public:
         setModel(new IChatItemModel(this));
         setItemDelegate(new IChatItemDelegate(this));
     }
-
-    void paintEvent(QPaintEvent *e) override {
-
+    void paintEvent(QPaintEvent *e) override{
         QListView::paintEvent(e);
-        qDebug() << "    void paintEvent(QPaintEvent *e) override {";
+
+        qDebug() << "void paintEvent(QPaintEvent *e)";
+
     }
 
 public:
