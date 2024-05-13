@@ -28,22 +28,11 @@ void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
     int userHeight = 30;
     QRect usernameRect = rightRect.adjusted(0, 0, 0, -rightRect.height() + userHeight);
-    painter->setFont(QFont("Arial", 13, QFont::Bold));
+    painter->setFont(QFont("Arial", 10, QFont::Bold));
     painter->drawText(usernameRect, Qt::AlignLeft | Qt::AlignTop, username);
 
-    // Render Markdown-formatted text in messageRectF
-    QRect messageRect =  rightRect.adjusted(0, userHeight, 0, 0);
-    painter->setFont(QFont("Arial", 12));
-    QTextDocument textDoc;
-    textDoc.setDefaultFont(painter->font());
-    textDoc.setMarkdown(message);
-    QRectF messageRectF = QRectF(messageRect.topLeft(), messageRect.size());
-    painter->translate(messageRectF.topLeft());
-    textDoc.setTextWidth(messageRectF.width());
-    textDoc.drawContents(painter);
-    painter->translate(-messageRectF.topLeft());
 
-
+    QRect messageRect = calculateMessageRect(rightRect, userHeight, message, painter->fontMetrics());
     painter->setFont(QFont("Arial", 8));
     painter->drawText(messageRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
 
