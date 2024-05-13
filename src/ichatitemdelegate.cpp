@@ -1,6 +1,7 @@
 #include "ichatitemdelegate.h"
 
 #include <QPainter>
+#include <QTextDocument>
 
 void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
     if (!painter || !index.isValid()) {
@@ -13,7 +14,7 @@ void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     QRect contRect = option.rect.adjusted(10, 0, -10, 0);
     contRect.setHeight(40);
 
-    int leftWidth = 30;
+    int leftWidth = 40;
     QRect leftRect = contRect.adjusted(0, 0, -contRect.width() + leftWidth, 0);
     QRect rightRect = contRect.adjusted(leftWidth, 0, -5, 0);
 
@@ -27,14 +28,24 @@ void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
     int userHeight = 30;
     QRect usernameRect = rightRect.adjusted(0, 0, 0, -rightRect.height() + userHeight);
-    painter->setFont(QFont("Arial", 10, QFont::Bold));
+    painter->setFont(QFont("Arial", 13, QFont::Bold));
     painter->drawText(usernameRect, Qt::AlignLeft | Qt::AlignTop, username);
 
-    QRect messageRect = calculateMessageRect(rightRect, userHeight, message, painter->fontMetrics());
+    // Render Markdown-formatted text in messageRectF
+    QRect messageRect =  rightRect.adjusted(0, userHeight, 0, 0);
+    painter->setFont(QFont("Arial", 12));
+    QTextDocument textDoc;
+    textDoc.setDefaultFont(painter->font());
+    textDoc.setMarkdown(message);
+    QRectF messageRectF = QRectF(messageRect.topLeft(), messageRect.size());
+    painter->translate(messageRectF.topLeft());
+    textDoc.setTextWidth(messageRectF.width());
+    textDoc.drawContents(painter);
+    painter->translate(-messageRectF.topLeft());
 
-    painter->setFont(QFont("Arial", 8));
-    painter->drawText(messageRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
+
 }
+
 
 QSize IChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
     QSize size = QStyledItemDelegate::sizeHint(option, index);
