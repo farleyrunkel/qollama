@@ -1,5 +1,4 @@
 #include "ichatitemdelegate.h"
-#include "ichatitemmodel.h"
 
 #include <QPainter>
 

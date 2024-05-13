@@ -1,8 +1,6 @@
 #ifndef ICHATITEMMODEL_H
 #define ICHATITEMMODEL_H
 
-
-
 #include <QStandardItemModel>
 
 class IChatItemModel : public QStandardItemModel

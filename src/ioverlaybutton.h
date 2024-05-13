@@ -9,6 +9,7 @@
 class INewChatButton : public QPushButton
 {
     Q_OBJECT
+
 public:
     using QPushButton::QPushButton;
 

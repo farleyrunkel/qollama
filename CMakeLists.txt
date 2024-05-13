@@ -47,6 +47,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         # src/document.cpp
         src/chatbot.h
         src/chatbot.cpp
+        src/ichatlist.cpp
+        src/ihistorylist.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
