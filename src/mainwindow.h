@@ -29,6 +29,7 @@ public:
 
     void expandSideWidget();
     void resizeEvent(QResizeEvent *event);
+    void on_inputLine_return1Pressed(QString text);
 public slots:
     void appendWordToActiveChat(QString reply);
 private slots:

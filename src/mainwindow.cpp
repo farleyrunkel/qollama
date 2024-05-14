@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
+    connect(welcome, &IWelcomePage::send, this, &MainWindow::on_inputLine_return1Pressed);
+
 }
 // 重写 resizeEvent
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -56,6 +58,7 @@ void MainWindow::expandSideWidget() {
 }
 
 void MainWindow::appendWordToActiveChat(QString text) {
+
     auto *chatListView = getCurrentChatList();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
@@ -145,6 +148,17 @@ IChatList* MainWindow::getCurrentChatList()
 void MainWindow::on_inputLine_returnPressed()
 {
     QString text = ui->inputLine->text().trimmed();
+
+    on_inputLine_return1Pressed(text);
+}
+
+
+void MainWindow::on_inputLine_return1Pressed(QString text )
+{
+
+    if (!welcome->isHidden()) {
+        welcome->hide();
+    }
 
     if (text.isEmpty()) {
         qDebug() << "Input text is empty.";
