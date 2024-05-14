@@ -6,6 +6,7 @@
 #include "chatbot.h"
 #include <QListWidgetItem>
 #include "ichatList.h"
+#include "iwelcomepage.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -27,6 +28,7 @@ public:
     void onHistoryListItemClicked(QListWidgetItem *item);
 
     void expandSideWidget();
+    void resizeEvent(QResizeEvent *event);
 public slots:
     void appendWordToActiveChat(QString reply);
 private slots:
@@ -39,5 +41,7 @@ private:
     //std::vector<Document*> m_docus;
     int curr;
     ChatBot* chatbot;
+
+    IWelcomePage* welcome;
 };
 #endif // MAINWINDOW_H

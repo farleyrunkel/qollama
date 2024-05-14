@@ -10,20 +10,31 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
+
+    welcome = new IWelcomePage(ui->chatTabs);
     chatbot = new ChatBot();
     curr = 0;
 
     this->setWindowIcon(QIcon("://icon/ollama.png"));
 
-    ui->setupUi(this);
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->addItem("");
     ui->chatTabs->tabBar()->hide();
+
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
+}
+// 重写 resizeEvent
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    if (welcome) {
+        welcome->setGeometry(ui->chatList->geometry());
+    }
 }
 
 MainWindow::~MainWindow()
