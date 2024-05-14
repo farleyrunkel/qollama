@@ -28,5 +28,9 @@
         <file>icon/full-screen.svg</file>
         <file>icon/full-screen-zoom.svg</file>
         <file>icon/gear.svg</file>
+        <file>icon/heart-balloon.svg</file>
+        <file>icon/art-palette.svg</file>
+        <file>icon/terminal.svg</file>
+        <file>icon/electric-light-bulb.svg</file>
     </qresource>
 </RCC>
