@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
+    connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
 }
 
 MainWindow::~MainWindow()
@@ -31,14 +32,48 @@ MainWindow::~MainWindow()
     delete chatbot;
 }
 
-void MainWindow::appendWordToActiveChat(QString reply) {
+
+void MainWindow::expandSideWidget() {
+    if ( ui->frameleft->isHidden() ) {
+        ui->frameleft->show();
+        ui->expandButton->setIcon(QIcon(":/icon/full-screen.svg"));
+    }
+    else {
+        ui->frameleft->hide();
+        ui->expandButton->setIcon(QIcon(":/icon/full-screen-zoom.svg"));
+    }
+}
+
+void MainWindow::appendWordToActiveChat(QString text) {
     auto *chatListView = getCurrentChatList();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
     }
 
-    chatListView->appendText(reply);
+    QStandardItemModel* model = qobject_cast<QStandardItemModel*>(chatListView->model());
+    if (!model) {
+        qDebug() << "Chat list model is null.";
+        return;
+    }
+
+    QModelIndex lastIndex = model->index(model->rowCount() - 1, 0);
+    QStandardItem* lastItem = model->itemFromIndex(lastIndex);
+    if (!lastItem) {
+        lastItem = new QStandardItem();
+        model->appendRow(lastItem);
+    }
+
+    // Update message field of the last item
+    QVariant itemData = lastItem->data(Qt::DisplayRole);
+    QVariantMap chatData = itemData.toMap();
+    chatData["message"] = chatData["message"].toString() + text;
+    lastItem->setData(chatData, Qt::DisplayRole);
+
+    qDebug() << "appendText:" << text;
+
+    // Emit dataChanged signal to refresh the view
+    emit model->dataChanged(lastIndex, lastIndex);
 }
 
 void MainWindow::addNewChat() {
@@ -104,11 +139,7 @@ void MainWindow::on_inputLine_returnPressed()
         qDebug() << "Input text is empty.";
         return;
     }
-
-    chatbot->reply(text.toStdString());
-
     auto *chatListView = getCurrentChatList();
-
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
@@ -116,6 +147,12 @@ void MainWindow::on_inputLine_returnPressed()
 
     chatListView->addItem(ui->userButton->icon(),  ui->userButton->text(), text);
     chatListView->addItem(ui->newChatButton->icon(), this->windowTitle(), "");
+
+    QMap<QString, QString> map;
+    map["message"] = text;
+    map["model"] = ui->comboBox->currentText();
+
+    chatbot->reply(map);
 
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
     if (hisItem) {

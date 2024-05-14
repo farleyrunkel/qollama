@@ -241,44 +241,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="upgradeButton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>48</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>48</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
-             <property name="text">
-              <string>Upgrade plan</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../resouces.qrc">
-               <normaloff>:/icon/sparkles.png</normaloff>:/icon/sparkles.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="userButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -314,6 +276,47 @@
              <property name="icon">
               <iconset resource="../resouces.qrc">
                <normaloff>:/icon/farley.jpg</normaloff>:/icon/farley.jpg</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>30</width>
+               <height>30</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="settingButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>48</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>48</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string>Settings</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../resouces.qrc">
+               <normaloff>:/icon/gear.svg</normaloff>:/icon/gear.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -472,9 +475,19 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>119</width>
+              <width>88</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Microsoft YaHei UI</family>
+              <pointsize>10</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(112, 112, 112);</string>
             </property>
             <property name="minimumContentsLength">
              <number>0</number>
@@ -484,12 +497,12 @@
             </property>
             <item>
              <property name="text">
-              <string>ChatGPT-3.5</string>
+              <string>llama3</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>ChatGPT-4</string>
+              <string>ChatGPT</string>
              </property>
             </item>
            </widget>
@@ -555,6 +568,38 @@
             </property>
             <property name="default">
              <bool>false</bool>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="expandButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resouces.qrc">
+              <normaloff>:/icon/full-screen.svg</normaloff>:/icon/full-screen.svg</iconset>
             </property>
             <property name="flat">
              <bool>true</bool>

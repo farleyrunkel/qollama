@@ -12,8 +12,7 @@ class ChatBot : public QObject
 public:
     ChatBot(QObject *parent = nullptr);
 
-    void reply(std::string text = "");
-
+    void reply(const QMap<QString, QString> &map);
 signals:
     void replyReceived(QString);
 

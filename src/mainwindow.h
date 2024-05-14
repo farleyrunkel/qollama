@@ -26,6 +26,7 @@ public:
     IChatList *getCurrentChatList();
     void onHistoryListItemClicked(QListWidgetItem *item);
 
+    void expandSideWidget();
 public slots:
     void appendWordToActiveChat(QString reply);
 private slots:

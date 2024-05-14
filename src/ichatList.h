@@ -15,8 +15,6 @@ public:
 
     void addItem(const QIcon& icon, const QString& user, const QString& text);
 
-    void appendText(const QString& text);
-
 protected:
     void paintEvent(QPaintEvent* event) override;
 };

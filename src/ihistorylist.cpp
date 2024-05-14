@@ -6,10 +6,6 @@
 #include <QShowEvent>
 
 IHistoryList::IHistoryList(QWidget *parent) : QListWidget(parent) {
-}
-
-void IHistoryList::showEvent(QShowEvent *event) {
-    QListWidget::showEvent(event);
     initButtonsWidget();
     setIconSize(QSize(100, 100)); // 设置item中的图标大小
     setItemDelegate(new CustomItemDelegate);
@@ -18,10 +14,10 @@ void IHistoryList::showEvent(QShowEvent *event) {
 }
 
 void IHistoryList::mouseMoveEvent(QMouseEvent *event) {
-    QListWidget::mouseMoveEvent(event);
     auto index = this->indexAt(event->pos());
 
     if (index.isValid()) {
+
         auto item_rect = this->visualRect(index);
 
         for (int i = 1 ; i<= m_buttons.size(); i++) {

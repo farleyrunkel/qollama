@@ -8,12 +8,12 @@ ChatBot::ChatBot(QObject *parent) : QObject(parent) {
     manager = new QNetworkAccessManager(this);
 }
 
-void ChatBot::reply(std::string text) {
+void ChatBot::reply(const QMap<QString, QString>& map) {
     QUrl url("http://localhost:11434/api/generate");
 
     QJsonObject json;
-    json["model"] = "llama3";
-    json["prompt"] = QString::fromStdString(text);
+    json["model"] = map["model"]; // "llama3";
+    json["prompt"] = map["message"];
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

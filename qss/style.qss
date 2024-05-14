@@ -95,19 +95,19 @@ QListWidget#historyList::item::selected {
 }
 
 
-QPushButton#upgradeButton {
+QPushButton#settingButton {
     border: none;
     border-radius: 6px;
     padding: 2px 4px;
     color: #000000; /* 设置文本颜色 */
     text-align: left;
-    padding-left: 10;
+    padding-left: 10px;
 }
-QPushButton#upgradeButton:hover {
+QPushButton#settingButton:hover {
     background-color:#ececec;
     color: black;
 }
-QPushButton#upgradeButton:pressed {
+QPushButton#settingButton:pressed {
     background-color:#ececec;
     border-style: inset;
 }
@@ -119,7 +119,7 @@ QPushButton#userButton {
     padding: 2px 4px;
     color: #000000; /* 设置文本颜色 */
     text-align: left;
-    padding-left: 10;
+    padding-left: 10px;
 }
 QPushButton#userButton:hover {
     background-color:#ececec;
@@ -132,7 +132,7 @@ QPushButton#userButton:pressed {
 
 
 QPushButton#shareButton {
-    border: 1px solid gray;
+    border: 1px hidden gray;
     border-radius:6px;
     text-align: center;
 }
@@ -144,7 +144,19 @@ QPushButton#shareButton:pressed {
     background-color:rgb(225, 225, 225);
     border-style: inset;
 }
-
+QPushButton#expandButton {
+    border: 1px hidden gray;
+    border-radius:6px;
+    text-align: center;
+}
+QPushButton#expandButton:hover {
+    background-color: rgb(225, 225, 225);
+    color: black;
+}
+QPushButton#expandButton:pressed {
+    background-color:rgb(225, 225, 225);
+    border-style: inset;
+}
 
 QPushButton#inputButton {
     border: 1px solid gray;
