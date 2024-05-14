@@ -11,6 +11,7 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
 
 ## Screenshots
 
+![image](./images/qollama.png)
 ![image](./images/readme.png)
 
 ## Installation
