@@ -2,7 +2,7 @@
 
 A Qt client of [ollama](https://github.com/ollama/ollama).
 
-![image](./images/qollama.png)
+![image](./images/readme.png)
 
 todo:
 
