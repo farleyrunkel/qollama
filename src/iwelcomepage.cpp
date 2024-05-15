@@ -11,3 +11,21 @@ IWelcomePage::IWelcomePage(QWidget *parent)
     ui->welcomeText2->setText("Write a short-and-sweet text message inviting my neighbor to a barbecue.");
     ui->welcomeText4->setText("Explain superconductors like I'm five years old.");
 }
+
+void IWelcomePage::mousePressEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        auto child = this->childAt(event->pos());
+        if (child) {
+            QString name = QString("welcomeText") + child->objectName().back();
+            QLabel* label = this->findChild<QLabel*>(name);
+            if (label) {
+                emit send(label->text());
+            } else {
+                qDebug() << "No matching QLabel found";
+            }
+        } else {
+            qDebug() << "No child widget found at" << event->pos();
+        }
+    }
+    QWidget::mousePressEvent(event);
+}
