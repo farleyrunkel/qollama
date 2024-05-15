@@ -465,7 +465,7 @@
               <bool>false</bool>
              </property>
              <property name="placeholderText">
-              <string>Message ChatGPT...</string>
+              <string>Message llama3...</string>
              </property>
             </widget>
            </item>

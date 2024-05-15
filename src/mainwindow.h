@@ -37,6 +37,8 @@ private slots:
     void addNewChat();
     void on_inputLine_returnPressed();
 
+    void on_comboBox_activated(int index);
+
 private:
     Ui::MainWindow *ui;
     //std::vector<Document*> m_docus;

@@ -206,3 +206,10 @@ void MainWindow::onHistoryListItemClicked(QListWidgetItem *item)
         qDebug() << "Clicked history list item is null.";
     }
 }
+
+void MainWindow::on_comboBox_activated(int index)
+{
+    auto text = ui->comboBox->currentText();
+    ui->inputLine->setPlaceholderText(QString("Message ") + text + "...");
+}
+
