@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>944</width>
-    <height>602</height>
+    <height>592</height>
    </rect>
   </property>
   <property name="font">
@@ -80,10 +80,13 @@
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::NoFrame</enum>
+       <enum>QFrame::Box</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>

@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     welcome = new IWelcomePage(ui->chatTabs);
     chatbot = new ChatBot();
     curr = 0;

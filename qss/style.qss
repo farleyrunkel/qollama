@@ -17,6 +17,11 @@ QTabWidget::pane {
     border: none;
 }
 
+
+QSplitter::handle {
+     border: none;
+}
+
 QFrame#welcomeFrame1,
 QFrame#welcomeFrame2,
 QFrame#welcomeFrame3,
