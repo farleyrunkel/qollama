@@ -35,5 +35,6 @@
         <file>icon/electric-light-bulb.png</file>
         <file>icon/terminal.png</file>
         <file>icon/heart-balloon.png</file>
+        <file>icon/qollama.png</file>
     </qresource>
 </RCC>

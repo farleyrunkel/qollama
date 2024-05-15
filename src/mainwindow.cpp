@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     chatbot = new ChatBot();
     curr = 0;
 
-    this->setWindowIcon(QIcon("://icon/ollama.png"));
+    this->setWindowIcon(QIcon("://icon/qollama.png"));
 
     ui->chatList->setSelectionMode(QAbstractItemView::NoSelection);
     ui->historyList->addItem("");

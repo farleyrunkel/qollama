@@ -44,7 +44,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">image: url(:/icon/ollama.png);</string>
+      <string notr="true">image: url(:/icon/qollama.png);</string>
      </property>
      <property name="text">
       <string/>
