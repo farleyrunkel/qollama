@@ -32,21 +32,20 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+    delete chatbot;
+}
+
+
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
     if (welcome) {
 
-        auto chatlist = getCurrentChatList();
-
-        welcome->setGeometry(chatlist->geometry());
+          welcome->setGeometry(ui->chatTabs->currentWidget()->geometry());
     }
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-    delete chatbot;
 }
 
 
@@ -59,6 +58,11 @@ void MainWindow::expandSideWidget() {
         ui->frameleft->hide();
         ui->expandButton->setIcon(QIcon(":/icon/full-screen-zoom.svg"));
     }
+    ui->chatTabs->updateGeometry();
+
+    QApplication::processEvents();
+
+    welcome->setGeometry(ui->chatTabs->currentWidget()->geometry());
 }
 
 void MainWindow::appendWordToActiveChat(QString text) {

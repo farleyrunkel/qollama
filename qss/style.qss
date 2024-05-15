@@ -25,12 +25,15 @@ QFrame#welcomeFrame4 {
     border-radius:16px;
 }
 
+
 QPushButton#pushButton_3 {
     border: 1px solid gray;
     border-radius:16px;
 }
+
+
 IChatList{
-    border: 1px hidden gray
+   border: 1px hidden gray
 }
 
 
