@@ -703,7 +703,7 @@
            <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
-           <string>GPT can make mistakes. Check important info.</string>
+           <string>AI can make mistakes. Check important info.</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
