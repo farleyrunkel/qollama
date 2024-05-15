@@ -64,7 +64,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="label1">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -80,7 +80,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="welcomeLabel1">
+       <widget class="QLabel" name="welcomeText1">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -129,7 +129,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label2">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -145,7 +145,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="welcomeLabel3">
+       <widget class="QLabel" name="welcomeText2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -194,7 +194,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="label3">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -220,7 +220,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="welcomeLabel2">
+       <widget class="QLabel" name="welcomeText3">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -272,7 +272,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label4">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -288,7 +288,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="welcomeLabel4">
+       <widget class="QLabel" name="welcomeText4">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
