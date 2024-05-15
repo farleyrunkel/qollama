@@ -24,18 +24,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
+//    connect(ui->newChatButton, &QPushButton::pressed, welcome, &IWelcomePage::show);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
-    connect(welcome, &IWelcomePage::send, this, &MainWindow::on_inputLine_return1Pressed);
-
+    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
 }
-// 重写 resizeEvent
+
+
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
     if (welcome) {
-        welcome->setGeometry(ui->chatList->geometry());
+
+        auto chatlist = getCurrentChatList();
+
+        welcome->setGeometry(chatlist->geometry());
     }
 }
 
@@ -126,6 +130,10 @@ void MainWindow::addNewChat() {
 
     auto item = new QListWidgetItem("",ui->historyList );
     ui->historyList->addItem(item);
+
+
+    welcome->show();
+
 }
 
 IChatList* MainWindow::getCurrentChatList()
@@ -149,16 +157,16 @@ void MainWindow::on_inputLine_returnPressed()
 {
     QString text = ui->inputLine->text().trimmed();
 
-    on_inputLine_return1Pressed(text);
+    addMessage(text);
+    ui->inputLine->clear();
 }
 
 
-void MainWindow::on_inputLine_return1Pressed(QString text )
+void MainWindow::addMessage(QString text )
 {
 
-    if (!welcome->isHidden()) {
-        welcome->hide();
-    }
+    welcome->hide();
+
 
     if (text.isEmpty()) {
         qDebug() << "Input text is empty.";
@@ -177,16 +185,14 @@ void MainWindow::on_inputLine_return1Pressed(QString text )
     map["message"] = text;
     map["model"] = ui->comboBox->currentText();
 
-    chatbot->reply(map);
-
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
     if (hisItem) {
-        hisItem->setText(text);
+        hisItem->setToolTip(text);
     } else {
         qDebug() << "Current history list item is null.";
     }
 
-    ui->inputLine->clear();
+    chatbot->reply(map);
 }
 
 void MainWindow::onHistoryListItemClicked(QListWidgetItem *item)

@@ -32,5 +32,8 @@
         <file>icon/art-palette.svg</file>
         <file>icon/terminal.svg</file>
         <file>icon/electric-light-bulb.svg</file>
+        <file>icon/electric-light-bulb.png</file>
+        <file>icon/terminal.png</file>
+        <file>icon/heart-balloon.png</file>
     </qresource>
 </RCC>

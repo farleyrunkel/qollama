@@ -22,6 +22,7 @@ private slots:
 protected:
     void mousePressEvent(QMouseEvent *event) override {
         if (event->button() == Qt::LeftButton) {
+
             auto child = static_cast<QLabel* >( this->childAt(event->pos()));
             emit send(child->text());
         }

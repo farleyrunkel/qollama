@@ -17,7 +17,10 @@ QTabWidget::pane {
     border: none;
 }
 
-IWelcomeButton#IWelcomeButton{
+QFrame#welcomeFrame1,
+QFrame#welcomeFrame2,
+QFrame#welcomeFrame3,
+QFrame#welcomeFrame4 {
     border: 1px solid gray;
     border-radius:16px;
 }

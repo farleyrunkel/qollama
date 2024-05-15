@@ -18,7 +18,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="bottomMargin">
-    <number>40</number>
+    <number>70</number>
    </property>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="welcomeLogo">
@@ -52,131 +52,276 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="welcomeLabel1">
+    <widget class="QFrame" name="welcomeFrame1">
      <property name="maximumSize">
       <size>
        <width>200</width>
-       <height>120</height>
+       <height>150</height>
       </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-image: url(:/icon/art-palette.svg);
-border-radius: 16px;
-border: 2px solid rgb(199, 199, 199);
- background-repeat: no-repeat;
-background-position:  20% 20%;</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::Box</enum>
      </property>
-     <property name="text">
-      <string>Tell me a random fun fact about the Roman Empire</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <property name="indent">
-      <number>10</number>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="welcomeLabel2">
-     <property name="maximumSize">
-      <size>
-       <width>200</width>
-       <height>120</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-image: url(:/icon/art-palette.svg);
-border-radius: 16px;
-border: 2px solid rgb(199, 199, 199);
- background-repeat: no-repeat;
-background-position:  20% 20%;</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="text">
-      <string>Tell me a random fun fact about the Roman Empire</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <property name="indent">
-      <number>10</number>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">image: url(:/icon/art-palette.svg);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="welcomeLabel1">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>130</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>Tell me a random fun fact about the Roman Empire</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="indent">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLabel" name="welcomeLabel3">
+    <widget class="QFrame" name="welcomeFrame2">
      <property name="maximumSize">
       <size>
        <width>200</width>
-       <height>120</height>
+       <height>150</height>
       </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-image: url(:/icon/art-palette.svg);
-border-radius: 16px;
-border: 2px solid rgb(199, 199, 199);
- background-repeat: no-repeat;
-background-position:  20% 20%;</string>
      </property>
      <property name="frameShape">
       <enum>QFrame::Box</enum>
      </property>
-     <property name="text">
-      <string>Tell me a random fun fact about the Roman Empire</string>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">image: url(:/icon/terminal.svg);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="welcomeLabel3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>130</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>Tell me a random fun fact about the Roman Empire</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="indent">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QFrame" name="welcomeFrame3">
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>150</height>
+      </size>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <property name="indent">
-      <number>10</number>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">image: url(:/icon/heart-balloon.svg);
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="welcomeLabel2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>130</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>Tell me a random fun fact about the Roman Empire</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="indent">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLabel" name="welcomeLabel4">
+    <widget class="QFrame" name="welcomeFrame4">
      <property name="maximumSize">
       <size>
        <width>200</width>
-       <height>120</height>
+       <height>150</height>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-image: url(:/icon/art-palette.svg);
-border-radius: 16px;
-border: 2px solid rgb(199, 199, 199);
- background-repeat: no-repeat;
-background-position:  20% 20%;</string>
+      <string notr="true"/>
      </property>
      <property name="frameShape">
       <enum>QFrame::Box</enum>
      </property>
-     <property name="text">
-      <string>Tell me a random fun fact about the Roman Empire</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <property name="indent">
-      <number>10</number>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">image: url(:/icon/electric-light-bulb.svg);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="welcomeLabel4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>130</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string>Tell me a random fun fact about the Roman Empire</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="indent">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
