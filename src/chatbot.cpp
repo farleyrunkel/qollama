@@ -20,7 +20,9 @@ void ChatBot::reply(const QMap<QString, QString>& map) {
 
     m_reply = manager->post(request, QJsonDocument(json).toJson());
     QObject::connect(m_reply, &QNetworkReply::readyRead, this, &ChatBot::readResponseData);
+    QObject::connect(m_reply, &QNetworkReply::finished, this, [&](){emit this->finish();});
 }
+
 
 void ChatBot::readResponseData() {
     QByteArray buffer = m_reply->readAll();

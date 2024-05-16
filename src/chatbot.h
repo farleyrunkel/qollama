@@ -15,7 +15,7 @@ public:
     void reply(const QMap<QString, QString> &map);
 signals:
     void replyReceived(QString);
-
+    void finish();
 private slots:
     void readResponseData();
 

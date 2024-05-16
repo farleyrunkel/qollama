@@ -2,67 +2,15 @@
 
 #include <QPainter>
 #include <QTextDocument>
+#include <QStaticText>
 
-void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
-    if (!painter || !index.isValid()) {
-        qDebug() << "Invalid painter or model index.";
-        return;
-    }
-
-    drawBackground(painter, option.rect);
-
-    QRect contRect = option.rect.adjusted(10, 0, -10, 0);
-    contRect.setHeight(40);
-
-    int leftWidth = 40;
-    QRect leftRect = contRect.adjusted(0, 0, -contRect.width() + leftWidth, 0);
-    QRect rightRect = contRect.adjusted(leftWidth, 0, -5, 0);
-
-    QVariantMap chatData = index.data(Qt::DisplayRole).toMap();
-    QIcon icon = qvariant_cast<QIcon>(chatData["icon"]);
-    QString username = chatData["username"].toString();
-    QString message = chatData["message"].toString();
-
-    QPixmap iconPixmap = icon.pixmap(QSize(20, 20));
-    painter->drawPixmap(leftRect.topLeft(), iconPixmap);
-
-    int userHeight = 30;
-    QRect usernameRect = rightRect.adjusted(0, 0, 0, -rightRect.height() + userHeight);
-    painter->setFont(QFont("Arial", 10, QFont::Bold));
-    painter->drawText(usernameRect, Qt::AlignLeft | Qt::AlignTop, username);
-
-
-    QRect messageRect = calculateMessageRect(rightRect, userHeight, message, painter->fontMetrics());
-    painter->setFont(QFont("Arial", 8));
-    painter->drawText(messageRect, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
-
-
-    // // Render Markdown-formatted text in messageRectF
-    // QRect messageRect =  rightRect.adjusted(0, userHeight, 0, 0);
-    // painter->setFont(QFont("Arial", 12));
-    // QTextDocument textDoc;
-    // textDoc.setDefaultFont(painter->font());
-    // textDoc.setMarkdown(message);
-    // QRectF messageRectF = QRectF(messageRect.topLeft(), messageRect.size());
-    // painter->translate(messageRectF.topLeft());
-    // textDoc.setTextWidth(messageRectF.width());
-    // textDoc.drawContents(painter);
-    // painter->translate(-messageRectF.topLeft());
-
-}
-
-
-QSize IChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
-    QSize size = QStyledItemDelegate::sizeHint(option, index);
-    QRect contRect = option.rect.adjusted(10, 0, -10, 0);
-    contRect.setHeight(40);
-
-    QRect messageRect = calculateMessageRect(contRect, 30, index.data(Qt::DisplayRole).toMap()["message"].toString(), QFontMetrics(QFont("Arial", 9)));
-
-    int totalHeight = messageRect.height() + 30;
-
-    size.setHeight(totalHeight + 10);
-    return size;
+IChatItemDelegate::IChatItemDelegate(QObject *parent)
+    : leftWidth(34)
+    , userHeight(30)
+    , iconMargin(4)
+    , userFont(QFont("Arial", 12, QFont::Bold))
+    , textFont(QFont("Yahei", 12))
+{
 }
 
 void IChatItemDelegate::drawBackground(QPainter *painter, const QRect &rect) const {
@@ -70,7 +18,6 @@ void IChatItemDelegate::drawBackground(QPainter *painter, const QRect &rect) con
         qDebug() << "Invalid painter.";
         return;
     }
-
     painter->save();
     painter->setPen(Qt::NoPen);
     painter->setBrush(QColor(255, 255, 255));  // 背景色为白色
@@ -78,9 +25,63 @@ void IChatItemDelegate::drawBackground(QPainter *painter, const QRect &rect) con
     painter->restore();
 }
 
-QRect IChatItemDelegate::calculateMessageRect(const QRect &rightRect, int userHeight, const QString &message, const QFontMetrics &fontMetrics) const {
-    QRect messageRect1 = rightRect.adjusted(0, userHeight, 0, 0);
-    QRect messageRect = fontMetrics.boundingRect(messageRect1, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, message);
-    messageRect.setHeight(messageRect.height() + 5);
-    return messageRect;
+void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+    if (!painter || !index.isValid()) {
+        qDebug() << "Invalid painter or model index.";
+        return;
+    }
+
+    this->drawBackground(painter, option.rect);
+
+    QRect leftRect = option.rect.adjusted(0, 0, -option.rect.width() + leftWidth, 0);
+    QRect usernameRect = option.rect.adjusted(leftWidth, 0, 0, -option.rect.height() + userHeight);
+    QRect messageRect = option.rect.adjusted(leftWidth, userHeight, 0, 0);
+
+    QVariantMap chatData = index.data(Qt::DisplayRole).toMap();
+    QIcon icon = qvariant_cast<QIcon>(chatData["icon"]);
+    QString username = chatData["username"].toString();
+    QString message = chatData["message"].toString();
+
+    // draw icon
+    int iconPx = leftWidth - iconMargin * 2;
+    QPixmap iconPixmap = icon.pixmap(QSize(iconPx, iconPx));
+    painter->drawPixmap(leftRect.x() + iconMargin, leftRect.y() + iconMargin, iconPixmap);
+
+    // draw username
+    painter->setFont(userFont);
+    QRect usernameAdjusted = usernameRect.adjusted(iconMargin, iconMargin, -iconMargin, 0);
+    painter->drawText(usernameAdjusted, Qt::AlignLeft | Qt::AlignTop, username);
+
+    // draw message
+    painter->save();
+    QRect messageAdjusted = messageRect.adjusted(iconMargin, 0, -iconMargin-10, 0);
+    QTextDocument textDoc;
+    textDoc.setDefaultFont(textFont);
+    textDoc.setMarkdown(message);
+    textDoc.setTextWidth(messageAdjusted.width());
+
+    painter->translate(messageAdjusted.topLeft());
+    textDoc.drawContents(painter);
+    painter->translate(-messageAdjusted.topLeft());
+
+    painter->restore();
+}
+
+
+QSize IChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+    QSize hint = option.rect.size();
+
+    auto message = index.data(Qt::DisplayRole).toMap()["message"].toString();
+    QRect messageRect = option.rect.adjusted(leftWidth, userHeight, 0, 0);
+    QRect messageAdjusted = messageRect.adjusted(iconMargin, 0, -iconMargin-10, 0);
+
+    QTextDocument textDoc;
+    textDoc.setMarkdown(message);
+    textDoc.setDefaultFont(textFont);
+    textDoc.setTextWidth(messageAdjusted.width());
+
+    auto textSize = textDoc.size().toSize();
+
+    hint.setHeight(userHeight + textSize.height() + 20);
+    return hint;
 }
