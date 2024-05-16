@@ -10,6 +10,13 @@ IWelcomePage::IWelcomePage(QWidget *parent)
     ui->welcomeText3->setText("Create a personal webpage for me, all in a single file. Ask me 3 questions first on whatever you need to know.");
     ui->welcomeText2->setText("Write a short-and-sweet text message inviting my neighbor to a barbecue.");
     ui->welcomeText4->setText("Tell me a random fun fact about the Roman Empire");
+
+    // Create a QPalette object and set the background color to black
+    QPalette pal = this->palette();
+    pal.setColor(QPalette::Window, Qt::white);
+    this->setPalette(pal);
+    // Ensure the widget uses the palette to fill the background
+    this->setAutoFillBackground(true);
 }
 
 void IWelcomePage::mousePressEvent(QMouseEvent *event) {

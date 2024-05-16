@@ -411,7 +411,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="IChatList" name="chatList"/>
+             <widget class="IWelcomePage" name="welcomePage" native="true"/>
             </item>
            </layout>
           </widget>
@@ -735,9 +735,10 @@
    <header location="global">ihistorylist.h</header>
   </customwidget>
   <customwidget>
-   <class>IChatList</class>
-   <extends>QListView</extends>
-   <header location="global">ichatlist.h</header>
+   <class>IWelcomePage</class>
+   <extends>QWidget</extends>
+   <header location="global">iwelcomepage.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

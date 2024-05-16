@@ -8,6 +8,11 @@ IChatList::IChatList(QWidget *parent)
     setModel(new IChatItemModel(this));
     setItemDelegate(new IChatItemDelegate(this));
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    setFocusPolicy(Qt::NoFocus);
+    setFrameShape(QFrame::NoFrame);
+    setFrameShadow(QFrame::Plain);
+    setSelectionMode(QAbstractItemView::NoSelection);
 }
 
 bool IChatList::isNew() const {

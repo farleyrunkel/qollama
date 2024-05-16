@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>664</width>
-    <height>328</height>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
