@@ -10,6 +10,7 @@ IChatItemDelegate::IChatItemDelegate(QObject *parent)
     , iconMargin(4)
     , userFont(QFont("Arial", 12, QFont::Bold))
     , textFont(QFont("Yahei", 12))
+    , distance(10)
 {
 }
 
@@ -63,8 +64,13 @@ void IChatItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     painter->translate(messageAdjusted.topLeft());
     textDoc.drawContents(painter);
     painter->translate(-messageAdjusted.topLeft());
-
     painter->restore();
+
+    auto textSize = textDoc.size().toSize();
+    messageRect.setHeight(textSize.height());
+
+    QRect spaceAdjusted = messageRect.adjusted(0, messageRect.height(), 0, distance);
+    this->drawBackground(painter, spaceAdjusted);
 }
 
 
@@ -82,6 +88,6 @@ QSize IChatItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
 
     auto textSize = textDoc.size().toSize();
 
-    hint.setHeight(userHeight + textSize.height() + 20);
+    hint.setHeight(userHeight + textSize.height() + distance);
     return hint;
 }

@@ -22,6 +22,7 @@ private:
     int leftWidth;
     int userHeight;
     int iconMargin;
+    int distance;
 };
 
 
