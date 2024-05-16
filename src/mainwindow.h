@@ -28,8 +28,9 @@ public:
     void onHistoryListItemClicked(QListWidgetItem *item);
 
     void expandSideWidget();
-    void resizeEvent(QResizeEvent *event);
+
     void addMessage(QString text);
+
 public slots:
     void appendWordToActiveChat(QString reply);
 private slots:

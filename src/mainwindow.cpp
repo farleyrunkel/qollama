@@ -34,14 +34,6 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-    QMainWindow::resizeEvent(event);
-    // if (welcome) {
-    //     welcome->setGeometry(ui->chatTabs->currentWidget()->geometry());
-    // }
-}
-
 void MainWindow::expandSideWidget() {
     if ( ui->frameleft->isHidden() ) {
         ui->frameleft->show();
