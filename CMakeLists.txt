@@ -16,7 +16,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 
 include_directories("src")
-include_directories("thirdparty/json/include")
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -31,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         resouces.qrc
         forms/imessagebox.ui
+        qollama.rc
 
         src/ihistorylist.h
         src/ioverlaybutton.h
