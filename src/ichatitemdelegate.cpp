@@ -9,7 +9,7 @@ IChatItemDelegate::IChatItemDelegate(QObject *parent)
     , userHeight(30)
     , iconMargin(4)
     , userFont(QFont("Arial", 12, QFont::Bold))
-    , textFont(QFont("Yahei", 12))
+    , textFont(QFont("Times", 12))
     , distance(10)
 {
 }

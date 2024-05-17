@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>664</width>
-    <height>341</height>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,10 +21,10 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="bottomMargin">
-    <number>70</number>
+    <number>60</number>
    </property>
    <property name="verticalSpacing">
-    <number>20</number>
+    <number>30</number>
    </property>
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="welcomeLogo">
@@ -47,7 +47,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">image: url(:/icon/qollama.png);</string>
+      <string notr="true">image: url(://images/qollama-text.png);</string>
      </property>
      <property name="text">
       <string/>
