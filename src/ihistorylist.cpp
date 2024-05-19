@@ -47,7 +47,7 @@ void IHistoryList::mouseMoveEvent(QMouseEvent *event) {
 
 void IHistoryList::initButtonsWidget() {
 
-    addSubButton(":/icon/archive-book.svg", "Archive");
+    addSubButton(":/icon/delete.svg", "Delete");
     addSubButton(":/icon/more-horiz.svg", "More");
 
     auto moreButton = getSubButton(2);
@@ -58,7 +58,8 @@ void IHistoryList::initButtonsWidget() {
     auto deleteAction =  menu->addAction("Delete chat");
     moreButton->setMenu(menu);
 
-    connect(deleteAction, &QAction::triggered, this, this->deleteChat);
+    connect(getSubButton(1), &QPushButton::clicked, this, &IHistoryList::deleteChat);
+    connect(deleteAction, &QAction::triggered, this, &IHistoryList::deleteChat);
 }
 
 void IHistoryList::setSubGeometry(const QRect &rect, int i) {

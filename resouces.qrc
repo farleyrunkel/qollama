@@ -37,5 +37,6 @@
         <file>icon/heart-balloon.png</file>
         <file>icon/qollama.png</file>
         <file>images/qollama-text.png</file>
+        <file>icon/delete.svg</file>
     </qresource>
 </RCC>
