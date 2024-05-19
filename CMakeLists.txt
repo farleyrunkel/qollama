@@ -24,13 +24,16 @@ set(PROJECT_SOURCES
         forms/mainwindow.ui
 )
 
+if(WIN32)
+    list(APPEND PROJECT_SOURCES qollama.rc)
+endif()
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(qollama
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resouces.qrc
         forms/imessagebox.ui
-        qollama.rc
 
         src/ihistorylist.h
         src/ioverlaybutton.h
@@ -43,8 +46,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/ichatitemmodel.h
         src/ichatitemmodel.cpp
 
-        # src/document.h
-        # src/document.cpp
         src/chatbot.h
         src/chatbot.cpp
         src/ichatlist.cpp

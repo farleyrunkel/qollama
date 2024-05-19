@@ -4,6 +4,7 @@
 #include <QMenu>
 #include <QSpacerItem>
 #include <QShowEvent>
+#include <QAction>
 
 IHistoryList::IHistoryList(QWidget *parent) : QListWidget(parent) {
     initButtonsWidget();
@@ -13,12 +14,24 @@ IHistoryList::IHistoryList(QWidget *parent) : QListWidget(parent) {
     setUniformItemSizes(true);
 }
 
+
+void IHistoryList::deleteChat(bool checked) {
+
+    qDebug() << "void IHistoryList::deleteChat(bool checked)";
+
+    delete this->takeItem(curr_index.row());
+
+    emit itemDeleted(curr_index.row());
+}
+
+
+
 void IHistoryList::mouseMoveEvent(QMouseEvent *event) {
-    auto index = this->indexAt(event->pos());
+    curr_index = this->indexAt(event->pos());
 
-    if (index.isValid()) {
+    if (curr_index.isValid()) {
 
-        auto item_rect = this->visualRect(index);
+        auto item_rect = this->visualRect(curr_index);
 
         for (int i = 1 ; i<= m_buttons.size(); i++) {
             setSubGeometry(item_rect, i);
@@ -39,10 +52,13 @@ void IHistoryList::initButtonsWidget() {
 
     auto moreButton = getSubButton(2);
     QMenu *menu = new QMenu(moreButton);
-    menu->addAction("Share");
-    menu->addAction("Rename");
-    menu->addAction("Delete chat");
+
+    auto shareAction =  menu->addAction("Share");
+    auto renameAction =  menu->addAction("Rename");
+    auto deleteAction =  menu->addAction("Delete chat");
     moreButton->setMenu(menu);
+
+    connect(deleteAction, &QAction::triggered, this, this->deleteChat);
 }
 
 void IHistoryList::setSubGeometry(const QRect &rect, int i) {

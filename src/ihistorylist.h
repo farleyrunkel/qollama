@@ -42,9 +42,15 @@ public:
 };
 
 class IHistoryList : public QListWidget {
+    Q_OBJECT
 public:
     IHistoryList(QWidget *parent = nullptr);
 
+private Q_SLOTS:
+    void deleteChat(bool checked);
+
+public: Q_SIGNALS:
+        void itemDeleted(int);
 protected:
     void mouseMoveEvent(QMouseEvent* event) override;
 
@@ -56,6 +62,8 @@ private:
 
 private:
     std::vector<QPushButton*> m_buttons;
+    QModelIndex curr_index;
+
 };
 
 #endif // IHISTORYLIST_H

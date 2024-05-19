@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
+    connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row);});
 }
 
 
