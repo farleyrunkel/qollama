@@ -6,7 +6,6 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
 
     QString stylePath = ":/qss/style.qss";
     QFile styleFile(stylePath);
@@ -17,6 +16,8 @@ int main(int argc, char *argv[])
     } else {
         qDebug() << "Failed to open style file:" << stylePath;
     }
+
+    MainWindow w;
 
     w.show();
 

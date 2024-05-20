@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>664</width>
-    <height>392</height>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -106,7 +106,7 @@
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
-         <string>Tell me a random fun fact about the Roman Empire</string>
+         <string/>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -134,7 +134,7 @@
       <enum>QFrame::Box</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="welcomeText2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -155,12 +155,7 @@
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
-         <string>## Installation
-
-### Prerequisites
-
-- Qt 5 or higher
-- C++11 or higher</string>
+         <string/>
         </property>
         <property name="textFormat">
          <enum>Qt::MarkdownText</enum>
@@ -173,6 +168,23 @@
         </property>
         <property name="indent">
          <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">
+image: url(:/icon/terminal.svg);</string>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -191,7 +203,41 @@
       <enum>QFrame::Box</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
+      <item row="2" column="0">
+       <widget class="QLabel" name="welcomeText3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>130</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="indent">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
        <widget class="QLabel" name="label3">
         <property name="minimumSize">
          <size>
@@ -214,40 +260,6 @@
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="welcomeText3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>200</width>
-          <height>130</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="text">
-         <string>Tell me a random fun fact about the Roman Empire</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-        <property name="indent">
-         <number>10</number>
         </property>
        </widget>
       </item>
@@ -306,7 +318,7 @@
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="text">
-         <string>Tell me a random fun fact about the Roman Empire</string>
+         <string/>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

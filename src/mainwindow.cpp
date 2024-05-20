@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     welcome = ui->welcomePage;
     chatbot = new ChatBot();
+    user = new IUserPage(this);
 
     this->setWindowIcon(QIcon("://icon/qollama.png"));
 
@@ -26,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
     connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); welcome->show(); });
+    connect(ui->userButton, &QPushButton::pressed, user, &QDialog::show);
 }
 
 

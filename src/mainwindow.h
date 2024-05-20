@@ -7,6 +7,7 @@
 #include <QListWidgetItem>
 #include "ichatList.h"
 #include "iwelcomepage.h"
+#include "iuserpage.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -47,5 +48,7 @@ private:
     ChatBot* chatbot;
 
     IWelcomePage* welcome;
+
+    IUserPage* user;
 };
 #endif // MAINWINDOW_H
