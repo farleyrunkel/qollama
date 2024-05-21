@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
+
     connect(ui->sendButton, &QPushButton::clicked, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->inputLine, &QLineEdit::returnPressed, ui->sendButton, &QPushButton::pressed);
 
@@ -37,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
     connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); welcome->show(); });
-    //connect(ui->userButton, &QPushButton::pressed, user, &QDialog::show);
 }
 
 
@@ -120,6 +120,10 @@ void MainWindow::addMessage(QString text )
         qDebug() << "Input text is empty.";
         return;
     }
+
+    ui->sendButton->setEnabled(true);
+    ui->sendButton->setIcon(QIcon(":/icon/stop.svg"));
+    ui->sendButton->setStatusTip("Pending");
 
     auto *chatListView = getCurrentChatList();
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
