@@ -33,12 +33,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resouces.qrc
-        forms/imessagebox.ui
+
 
         src/ihistorylist.h
         src/ioverlaybutton.h
-        src/imessagebox.h
-        src/imessagebox.cpp
+
+
 
         src/chatbot.h
         src/chatbot.cpp

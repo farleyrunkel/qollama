@@ -1,6 +1,5 @@
 #include "ichatwidget.h"
 
-
 IAutoResizeTextBrowser::IAutoResizeTextBrowser(QWidget *parent) : QTextBrowser(parent) {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -38,7 +37,6 @@ IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, c
     userNameLabel->setFrameShape(QFrame::Shape::NoFrame);
     userNameLabel->setFont(QFont("Yahei", 10, QFont::Bold));
     messageText = new IAutoResizeTextBrowser(this);
-    messageText->setMarkdown(message);
 
     textLayout->addWidget(userNameLabel);
     textLayout->addWidget(messageText);
@@ -46,9 +44,45 @@ IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, c
     mainLayout->addLayout(avatarLayout);
     mainLayout->addLayout(textLayout);
     setLayout(mainLayout);
+
+
+    button = new QPushButton(messageText->parentWidget());
+    button->setGeometry(messageText->geometry());
+    // 设置初始图标
+    QIcon icon(":/icon/stop.svg");
+    button->setIcon(icon);
+
+    // 设置初始图标大小
+    QSize initialSize(10, 10);
+    button->setIconSize(initialSize);
+
+    // 创建动画
+    animation = new QPropertyAnimation(button, "iconSize");
+    animation->setDuration(1000);
+    animation->setStartValue(initialSize);
+    animation->setKeyValueAt(0.5, QSize(16, 16)); // 放大到128x128
+    animation->setEndValue(initialSize);
+    animation->setLoopCount(-1); // 无限循环
+
+    // 开始动画
+    animation->start();
+
+    button->show();
+
+    appendMessage(message);
+}
+
+void IMessageWidget::resizeEvent(QResizeEvent* event) {
+    QFrame::resizeEvent(event);
+    button->setGeometry(messageText->geometry());
 }
 
 void IMessageWidget::appendMessage(const QString &message) {
+    if (message.isEmpty()) {
+        return;
+    }
+    animation->stop();
+    button->hide();
     text += message;
     messageText->setMarkdown(text);
 }

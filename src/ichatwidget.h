@@ -9,6 +9,8 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QLabel>
+#include <QPushButton>
+#include <QPropertyAnimation>
 
 class IAutoResizeTextBrowser : public QTextBrowser {
     Q_OBJECT
@@ -32,7 +34,10 @@ public:
 
     void appendMessage(const QString& message);
 
+    void resizeEvent(QResizeEvent *event);
 private:
+    QPropertyAnimation *animation ;
+    QPushButton* button;
     QString text;
     IAutoResizeTextBrowser* messageText;
 };
