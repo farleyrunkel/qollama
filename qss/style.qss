@@ -177,20 +177,6 @@ QPushButton#expandButton:pressed {
     border-style: inset;
 }
 
-QPushButton#inputButton {
-    border: 1px solid gray;
-    border-radius:6px;
-    text-align: center;
-}
-QPushButton#inputButton:hover {
-    background-color: rgb(225, 225, 225);
-    color: black;
-}
-QPushButton#inputButton:pressed {
-    background-color:rgb(225, 225, 225);
-    border-style: inset;
-}
-
 
 QScrollBar:vertical {
     width: 8px;

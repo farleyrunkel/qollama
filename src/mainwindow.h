@@ -41,6 +41,8 @@ private slots:
 
     void on_comboBox_activated(int index);
 
+    void on_inputLine_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     //std::vector<Document*> m_docus;

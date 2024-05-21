@@ -20,10 +20,15 @@ MainWindow::MainWindow(QWidget *parent)
     this->setWindowIcon(QIcon("://icon/qollama.png"));
 
     ui->chatTabs->tabBar()->hide();
+    ui->sendButton->setDisabled(true);
+    ui->sendButton->setStatusTip("Waiting");
 
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
+    connect(chatbot, &ChatBot::finish, [&](){  ui->sendButton->setIcon(QIcon(":/icon/arrow-up-circle.svg")); ui->sendButton->setStatusTip("Waiting");});
+    connect(ui->sendButton, &QPushButton::pressed,[&](){  ui->sendButton->setIcon(QIcon(":/icon/stop.svg")); ui->sendButton->setStatusTip("Pending");});
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
-    connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
+    connect(ui->sendButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
+
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
@@ -175,5 +180,20 @@ void MainWindow::on_comboBox_activated(int index)
 {
     auto text = ui->comboBox->currentText();
     ui->inputLine->setPlaceholderText(QString("Message ") + text + "...");
+}
+
+
+void MainWindow::on_inputLine_textChanged(const QString &arg1)
+{
+    if ( ui->sendButton->statusTip() == "Pending") {
+        return;
+    }
+    if (arg1.isEmpty()) {
+        ui->sendButton->setDisabled(true);
+        ui->sendButton->setStatusTip("Waiting");
+    }
+    else {
+        ui->sendButton->setEnabled(true);
+    }
 }
 

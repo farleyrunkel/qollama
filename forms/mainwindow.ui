@@ -429,7 +429,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="inputButton">
+            <widget class="QPushButton" name="sendButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -451,17 +451,33 @@
              <property name="layoutDirection">
               <enum>Qt::LeftToRight</enum>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid gray;
+    border-radius:15px;
+    text-align: center;
+}
+QPushButton:hover {
+    background-color: rgb(225, 225, 225);
+    color: black;
+}
+QPushButton:pressed {
+    background-color:rgb(225, 225, 225);
+    border-style: inset;
+}
+</string>
+             </property>
              <property name="text">
               <string/>
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
-               <normaloff>:/icon/send.svg</normaloff>:/icon/send.svg</iconset>
+               <normaloff>:/icon/arrow-up-circle.svg</normaloff>:/icon/arrow-up-circle.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
-               <width>18</width>
-               <height>18</height>
+               <width>30</width>
+               <height>30</height>
               </size>
              </property>
              <property name="flat">
