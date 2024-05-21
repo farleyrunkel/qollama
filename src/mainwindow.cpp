@@ -199,10 +199,6 @@ void MainWindow::on_inputLine_textChanged(const QString &arg1)
 
 void MainWindow::on_inputLine_returnPressed()
 {
-    ui->sendButton->setEnabled(true);
-    ui->sendButton->setIcon(QIcon(":/icon/stop.svg"));
-    ui->sendButton->setStatusTip("Pending");
-
     QString text = ui->inputLine->text().trimmed();
 
     addMessage(text);
