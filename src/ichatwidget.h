@@ -24,7 +24,7 @@ private slots:
 
 };
 
-class IMessageWidget : public QWidget {
+class IMessageWidget : public QFrame {
     Q_OBJECT
 
 public:

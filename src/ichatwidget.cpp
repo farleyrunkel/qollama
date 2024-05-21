@@ -4,8 +4,7 @@
 IAutoResizeTextBrowser::IAutoResizeTextBrowser(QWidget *parent) : QTextBrowser(parent) {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setContentsMargins(0, 0, 0, 0);
-    setFrameShape(Shape::NoFrame);
+    setFrameShape(QFrame::Shape::NoFrame);
     updateHeight();
 
     connect(this, &QTextEdit::textChanged, this, &IAutoResizeTextBrowser::updateHeight);
@@ -23,10 +22,9 @@ void IAutoResizeTextBrowser::updateHeight() {
 
 
 IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, const QString &message, QWidget *parent)
-    : QWidget(parent), messageText(nullptr) {
-    setContentsMargins(0, 0, 0, 0);
+    : QFrame(parent), messageText(nullptr) {
     QHBoxLayout* mainLayout = new QHBoxLayout(this);
-
+    setFrameShape(QFrame::Shape::NoFrame);
     QVBoxLayout* avatarLayout = new QVBoxLayout();
     avatarLayout->setAlignment(Qt::AlignTop);
     QLabel* avatarLabel = new QLabel();
@@ -57,12 +55,13 @@ void IMessageWidget::appendMessage(const QString &message) {
 
 IChatWidget::IChatWidget(QWidget *parent) : QScrollArea(parent) {
     setWidgetResizable(true);
-    setFrameShape(Shape::NoFrame);
-    setContentsMargins(0, 0, 0, 0);
+    setFrameShape(QFrame::Shape::NoFrame);
     setStyleSheet("background-color: white;");
     latestMessageWidget = nullptr;
     chatContainer = new QWidget(this);
     chatLayout = new QVBoxLayout(chatContainer);
+    chatLayout->setContentsMargins(40, 0, 40, 0);
+    chatLayout->setSpacing(0);
     chatLayout->setAlignment(Qt::AlignTop);
     chatContainer->setLayout(chatLayout);
 

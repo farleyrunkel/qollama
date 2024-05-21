@@ -21,13 +21,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->chatTabs->tabBar()->hide();
     ui->sendButton->setDisabled(true);
-    ui->sendButton->setStatusTip("Waiting");
+    ui->sendButton->setStatusTip("Nothing");
 
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
-    connect(chatbot, &ChatBot::finish, [&](){  ui->sendButton->setIcon(QIcon(":/icon/arrow-up-circle.svg")); ui->sendButton->setStatusTip("Waiting");});
-    connect(ui->sendButton, &QPushButton::pressed,[&](){  ui->sendButton->setIcon(QIcon(":/icon/stop.svg")); ui->sendButton->setStatusTip("Pending");});
+    connect(chatbot, &ChatBot::finish, [&](){
+        ui->sendButton->setStatusTip("Waiting");
+        on_inputLine_textChanged(ui->inputLine->text());
+    });
+
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
-    connect(ui->sendButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
+    connect(ui->sendButton, &QPushButton::clicked, ui->inputLine, &QLineEdit::returnPressed);
+    connect(ui->inputLine, &QLineEdit::returnPressed, ui->sendButton, &QPushButton::pressed);
 
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
@@ -110,15 +114,6 @@ IChatWidget *MainWindow::getCurrentChatList()
     return listWidgets.at(0);
 }
 
-void MainWindow::on_inputLine_returnPressed()
-{
-    QString text = ui->inputLine->text().trimmed();
-
-    addMessage(text);
-    ui->inputLine->clear();
-}
-
-
 void MainWindow::addMessage(QString text )
 {
     if (text.isEmpty()) {
@@ -182,18 +177,31 @@ void MainWindow::on_comboBox_activated(int index)
     ui->inputLine->setPlaceholderText(QString("Message ") + text + "...");
 }
 
-
 void MainWindow::on_inputLine_textChanged(const QString &arg1)
 {
     if ( ui->sendButton->statusTip() == "Pending") {
         return;
     }
+    ui->sendButton->setIcon(QIcon(":/icon/arrow-up-circle.svg"));
     if (arg1.isEmpty()) {
         ui->sendButton->setDisabled(true);
-        ui->sendButton->setStatusTip("Waiting");
+        ui->sendButton->setStatusTip("Nothing");
     }
     else {
         ui->sendButton->setEnabled(true);
+        ui->sendButton->setStatusTip("Waiting");
     }
+}
+
+void MainWindow::on_inputLine_returnPressed()
+{
+    ui->sendButton->setEnabled(true);
+    ui->sendButton->setIcon(QIcon(":/icon/stop.svg"));
+    ui->sendButton->setStatusTip("Pending");
+
+    QString text = ui->inputLine->text().trimmed();
+
+    addMessage(text);
+    ui->inputLine->clear();
 }
 
