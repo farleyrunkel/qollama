@@ -8,7 +8,7 @@
 #include "ichatList.h"
 #include "iwelcomepage.h"
 #include "iuserpage.h"
-
+#include "ichatwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,13 +25,13 @@ public:
     ~MainWindow();
 
 
-    IChatList *getCurrentChatList();
     void onHistoryListItemClicked(QListWidgetItem *item);
 
     void expandSideWidget();
 
     void addMessage(QString text);
 
+    IChatWidget *getCurrentChatList();
 public slots:
     void appendWordToActiveChat(QString reply);
 private slots:

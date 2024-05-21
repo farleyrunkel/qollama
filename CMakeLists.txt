@@ -59,6 +59,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         forms/userpage.ui
         src/iuserpage.h
         src/iuserpage.cpp
+        src/ichatwidget.h src/ichatwidget.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

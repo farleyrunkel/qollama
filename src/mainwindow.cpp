@@ -5,6 +5,7 @@
 #include "ioverlaybutton.h"
 #include <QLabel>
 #include <QStandardItemModel>
+#include "ichatwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -62,57 +63,32 @@ void MainWindow::appendWordToActiveChat(QString text) {
         return;
     }
 
-    QStandardItemModel* model = qobject_cast<QStandardItemModel*>(chatListView->model());
-    if (!model) {
-        qDebug() << "Chat list model is null.";
-        return;
-    }
-
-    QModelIndex lastIndex = model->index(model->rowCount() - 1, 0);
-    QStandardItem* lastItem = model->itemFromIndex(lastIndex);
-    if (!lastItem) {
-        lastItem = new QStandardItem();
-        model->appendRow(lastItem);
-    }
-
-    // Update message field of the last item
-    QVariant itemData = lastItem->data(Qt::DisplayRole);
-    QVariantMap chatData = itemData.toMap();
-    chatData["message"] = chatData["message"].toString() + text;
-    lastItem->setData(chatData, Qt::DisplayRole);
-
-    qDebug() << "appendText:" << text;
+    MessageWidget* curr = chatListView->getLatestMessageWidget();
+    curr->appendMessage(text);
 
     chatListView->scrollToBottom();
     // Emit dataChanged signal to refresh the view
-    emit model->dataChanged(lastIndex, lastIndex);
 }
 
 void MainWindow::addNewChat() {
+
     if (ui->chatTabs->count() >= 50) {
         qDebug() << "Maximum chat tabs reached.";
         return;
     }
 
-    IChatList *uniqueListWidget = getCurrentChatList();
+    IChatWidget *uniqueListWidget = getCurrentChatList();
 
     if (!uniqueListWidget || uniqueListWidget->isNew()) {
         qDebug() << "Current chat list is null or already contains a new chat.";
         return;
     }
 
-    // auto tab = new QWidget();
-    // auto verticalLayout = new QVBoxLayout(tab);
-    // verticalLayout->setSpacing(0);
-    // verticalLayout->setContentsMargins(0, 0, 0, 0);
-    // auto chatList = new IChatList(tab);
-    // verticalLayout->addWidget(chatList);
-
     ui->chatTabs->setCurrentIndex(ui->chatTabs->count()-1);
     welcome->show();
 }
 
-IChatList* MainWindow::getCurrentChatList()
+IChatWidget *MainWindow::getCurrentChatList()
 {
     QWidget *currentTabWidget = ui->chatTabs->currentWidget();
     if (!currentTabWidget) {
@@ -120,7 +96,7 @@ IChatList* MainWindow::getCurrentChatList()
         return nullptr;
     }
 
-    QList<IChatList *> listWidgets = currentTabWidget->findChildren<IChatList *>();
+    QList<IChatWidget *> listWidgets = currentTabWidget->findChildren<IChatWidget *>();
     if (listWidgets.size() != 1) {
         qDebug() << "Error: There is not exactly one IChatList widget in the current tab.";
         return nullptr;
@@ -155,7 +131,7 @@ void MainWindow::addMessage(QString text )
         auto verticalLayout = new QVBoxLayout(tab);
         verticalLayout->setSpacing(0);
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        auto newChatList = new IChatList(tab);
+        auto newChatList = new IChatWidget(tab);
         verticalLayout->addWidget(newChatList);
 
         ui->chatTabs->setCurrentIndex(ui->chatTabs->insertTab(0, tab, QString()));
@@ -169,8 +145,10 @@ void MainWindow::addMessage(QString text )
 
     welcome->hide();
 
-    chatListView->addItem(ui->userButton->icon(), ui->userButton->text(), text);
-    chatListView->addItem(ui->newChatButton->icon(), this->windowTitle(), "");
+    QPixmap avatar(":/icon/farley.jpg");
+
+    chatListView->addMessage(ui->userButton->text(), ui->userButton->icon().pixmap(30), text);
+    chatListView->addMessage(ui->comboBox->currentText(), ui->newChatButton->icon().pixmap(30), "");
     chatListView->scrollToBottom();
 
     if (hisItem) {
