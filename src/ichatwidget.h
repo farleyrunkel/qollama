@@ -17,8 +17,10 @@ public:
     AutoResizingTextEdit(QWidget* parent = nullptr) : QTextBrowser(parent) {
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);\
-        connect(this, &QTextEdit::textChanged, this, &AutoResizingTextEdit::updateHeight);
+        setFrameShape(Shape::NoFrame);
         updateHeight();
+
+        connect(this, &QTextEdit::textChanged, this, &AutoResizingTextEdit::updateHeight);
     }
 
 protected:
@@ -52,6 +54,7 @@ public:
 
         QVBoxLayout* textLayout = new QVBoxLayout();
         QLabel* userNameLabel = new QLabel(userName, this);
+        userNameLabel->setFrameShape(QFrame::Shape::NoFrame);
         messageText = new AutoResizingTextEdit(this);
         messageText->setMarkdown(message);
 
@@ -80,6 +83,8 @@ class IChatWidget : public QScrollArea {
 public:
     IChatWidget(QWidget* parent = nullptr) : QScrollArea(parent) {
         setWidgetResizable(true);
+        setFrameShape(Shape::NoFrame);
+        setStyleSheet("background-color: white;");
         latestMessageWidget = nullptr;
         chatContainer = new QWidget(this);
         chatLayout = new QVBoxLayout(chatContainer);

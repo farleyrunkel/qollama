@@ -288,47 +288,6 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="settingButton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>48</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>48</height>
-              </size>
-             </property>
-             <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
-             </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
-             <property name="text">
-              <string>Settings</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../resouces.qrc">
-               <normaloff>:/icon/gear.svg</normaloff>:/icon/gear.svg</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
@@ -725,11 +684,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>INewChatButton</class>
-   <extends>QPushButton</extends>
-   <header location="global">ioverlaybutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>IHistoryList</class>
    <extends>QListWidget</extends>
    <header location="global">ihistorylist.h</header>
@@ -739,6 +693,11 @@
    <extends>QWidget</extends>
    <header location="global">iwelcomepage.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>INewChatButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">ioverlaybutton.h</header>
   </customwidget>
  </customwidgets>
  <resources>

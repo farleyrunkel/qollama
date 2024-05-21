@@ -19,6 +19,7 @@ public:
     }
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+        QStyledItemDelegate::paint(painter, option, index);
         if (!painter || !index.isValid()) {
             qDebug() << "Invalid painter or model index.";
             return;
