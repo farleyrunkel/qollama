@@ -10,70 +10,31 @@
 #include <QTimer>
 #include <QLabel>
 
-class AutoResizingTextEdit : public QTextBrowser {
+class IAutoResizeTextBrowser : public QTextBrowser {
     Q_OBJECT
 
 public:
-    AutoResizingTextEdit(QWidget* parent = nullptr) : QTextBrowser(parent) {
-        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);\
-        setFrameShape(Shape::NoFrame);
-        updateHeight();
-
-        connect(this, &QTextEdit::textChanged, this, &AutoResizingTextEdit::updateHeight);
-    }
+    IAutoResizeTextBrowser(QWidget* parent = nullptr);
 
 protected:
-    void resizeEvent(QResizeEvent* event) override {
-        QTextEdit::resizeEvent(event);
-        updateHeight();
-    }
+    void resizeEvent(QResizeEvent* event) override;
 
 private slots:
-    void updateHeight() {
-        document()->setTextWidth(width()-5);
-        setFixedHeight(document()->size().height());
-    }
+    void updateHeight();
 
 };
 
-class MessageWidget : public QWidget {
+class IMessageWidget : public QWidget {
     Q_OBJECT
 
 public:
-    MessageWidget(const QString& userName, const QPixmap& avatar, const QString& message, QWidget* parent = nullptr)
-        : QWidget(parent), messageText(nullptr) {
-        QHBoxLayout* mainLayout = new QHBoxLayout(this);
+    IMessageWidget(const QString& userName, const QPixmap& avatar, const QString& message, QWidget* parent = nullptr);
 
-        QVBoxLayout* avatarLayout = new QVBoxLayout();
-        avatarLayout->setAlignment(Qt::AlignTop);
-        QLabel* avatarLabel = new QLabel();
-        avatarLabel->setPixmap(avatar.scaled(30, 30, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        avatarLabel->setFixedWidth(35);
-        avatarLayout->addWidget(avatarLabel);
-
-        QVBoxLayout* textLayout = new QVBoxLayout();
-        QLabel* userNameLabel = new QLabel(userName, this);
-        userNameLabel->setFrameShape(QFrame::Shape::NoFrame);
-        messageText = new AutoResizingTextEdit(this);
-        messageText->setMarkdown(message);
-
-        textLayout->addWidget(userNameLabel);
-        textLayout->addWidget(messageText);
-
-        mainLayout->addLayout(avatarLayout);
-        mainLayout->addLayout(textLayout);
-        setLayout(mainLayout);
-    }
-
-    void appendMessage(const QString& message) {
-        text += message;
-        messageText->setMarkdown(text);
-    }
+    void appendMessage(const QString& message);
 
 private:
     QString text;
-    AutoResizingTextEdit* messageText;
+    IAutoResizeTextBrowser* messageText;
 };
 
 
@@ -81,43 +42,20 @@ class IChatWidget : public QScrollArea {
     Q_OBJECT
 
 public:
-    IChatWidget(QWidget* parent = nullptr) : QScrollArea(parent) {
-        setWidgetResizable(true);
-        setFrameShape(Shape::NoFrame);
-        setStyleSheet("background-color: white;");
-        latestMessageWidget = nullptr;
-        chatContainer = new QWidget(this);
-        chatLayout = new QVBoxLayout(chatContainer);
-        chatLayout->setAlignment(Qt::AlignTop);
-        chatContainer->setLayout(chatLayout);
+    IChatWidget(QWidget* parent = nullptr);
 
-        setWidget(chatContainer);
-    }
-
-    void addMessage(const QString& userName, const QPixmap& avatar, const QString& message) {
-        MessageWidget* messageWidget = new MessageWidget(userName, avatar, message, this);
-        chatLayout->addWidget(messageWidget);
-
-        latestMessageWidget = messageWidget; // Store the latest message widget
-        QTimer::singleShot(0, this, &IChatWidget::scrollToBottom);
-    }
+    void addMessage(const QString& userName, const QPixmap& avatar, const QString& message);
 
 
-    bool isNew() {
-        return latestMessageWidget == nullptr;
-    }
+    bool isNew();
 
-    MessageWidget* getLatestMessageWidget() const {
-        return latestMessageWidget;
-    }
+    IMessageWidget* getLatestMessageWidget() const;
 
 public slots:
-    void scrollToBottom() {
-        verticalScrollBar()->setValue(verticalScrollBar()->maximum());
-    }
+    void scrollToBottom();
 
 private:
-    MessageWidget* latestMessageWidget;
+    IMessageWidget* latestMessageWidget;
     QWidget* chatContainer;
     QVBoxLayout* chatLayout;
 };

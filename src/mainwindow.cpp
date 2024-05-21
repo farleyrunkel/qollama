@@ -21,14 +21,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->chatTabs->tabBar()->hide();
 
+    connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
+    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
     connect(ui->inputButton, &QPushButton::pressed, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
-    connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
-    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
     connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); welcome->show(); });
-    connect(ui->userButton, &QPushButton::pressed, user, &QDialog::show);
+    //connect(ui->userButton, &QPushButton::pressed, user, &QDialog::show);
 }
 
 
@@ -63,7 +63,7 @@ void MainWindow::appendWordToActiveChat(QString text) {
         return;
     }
 
-    MessageWidget* curr = chatListView->getLatestMessageWidget();
+    IMessageWidget* curr = chatListView->getLatestMessageWidget();
     curr->appendMessage(text);
 
     chatListView->scrollToBottom();
@@ -144,8 +144,6 @@ void MainWindow::addMessage(QString text )
     }
 
     welcome->hide();
-
-    QPixmap avatar(":/icon/farley.jpg");
 
     chatListView->addMessage(ui->userButton->text(), ui->userButton->icon().pixmap(30), text);
     chatListView->addMessage(ui->comboBox->currentText(), ui->newChatButton->icon().pixmap(30), "");

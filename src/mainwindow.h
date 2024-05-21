@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include "document.h"
+
 #include "chatbot.h"
 #include <QListWidgetItem>
-#include "ichatList.h"
+
 #include "iwelcomepage.h"
 #include "iuserpage.h"
 #include "ichatwidget.h"

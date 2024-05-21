@@ -9,7 +9,7 @@
 IHistoryList::IHistoryList(QWidget *parent) : QListWidget(parent) {
     initButtonsWidget();
     setIconSize(QSize(100, 100)); // 设置item中的图标大小
-    setItemDelegate(new CustomItemDelegate);
+    setItemDelegate(new IHistoryItemDelegate);
     setObjectName("historyList");
     setUniformItemSizes(true);
 }

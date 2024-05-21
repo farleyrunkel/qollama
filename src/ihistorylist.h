@@ -6,9 +6,9 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 
-class CustomItemDelegate : public QStyledItemDelegate {
+class IHistoryItemDelegate : public QStyledItemDelegate {
 public:
-    CustomItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {
+    IHistoryItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {
         qDebug() << "CustomItemDelegate created";
     }
 
