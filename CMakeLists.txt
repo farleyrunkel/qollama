@@ -47,8 +47,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         forms/welcomepage.ui
         src/iwelcomepage.h
         src/iwelcomepage.cpp
-        src/iwelcomebutton.h
-        src/iwelcomebutton.cpp
+
+
 
         forms/userpage.ui
         src/iuserpage.h
