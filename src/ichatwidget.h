@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QPropertyAnimation>
+#include "waitingspinnerwidget.h"
 
 class IAutoResizeTextBrowser : public QTextBrowser {
     Q_OBJECT
@@ -40,14 +41,11 @@ public:
          messageText->setMarkdown(markdown);
     }
 
-    void finish() {
-        messageText->setMarkdown(text);
-    }
+    void finish();
 
     QString data() {return text;}
 private:
-    QPropertyAnimation *animation ;
-    QPushButton* button;
+    QFrame* spinFrame;
     QString text;
     IAutoResizeTextBrowser* messageText;
     void initAnimation();

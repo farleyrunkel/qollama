@@ -9,6 +9,7 @@
 #include "iwelcomepage.h"
 #include "iuserpage.h"
 #include "ichatwidget.h"
+#include "itestwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -52,5 +53,7 @@ private:
     IWelcomePage* welcome;
 
     IUserPage* user;
+
+    ITestWidget* test;
 };
 #endif // MAINWINDOW_H

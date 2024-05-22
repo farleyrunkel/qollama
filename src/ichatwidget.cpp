@@ -55,47 +55,62 @@ IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, c
 
 void IMessageWidget::initAnimation() {
     // 设置按钮
-    button = new QPushButton(messageText->parentWidget());
-    button->setFixedSize(20, 20);
-    button->setStyleSheet("text-align:center;");
+    spinFrame = new QFrame(messageText->parentWidget());
+    spinFrame->setFixedSize(QSize(20, 20));
+    auto layout = new QVBoxLayout(this);
+    auto spinner = new WaitingSpinnerWidget(messageText->parentWidget());
+    spinner->setFixedSize(QSize(10, 10));
+    spinner->setRoundness(100.0);
+    spinner->setMinimumTrailOpacity(15.0);
+    spinner->setTrailFadePercentage(10.0);
+    spinner->setNumberOfLines(10);
+    spinner->setLineLength(10);
+    spinner->setLineWidth(10);
+    spinner->setInnerRadius(0);
+    spinner->setRevolutionsPerSecond(1);
+    spinner->setColor(QColor(84, 210, 99));
+    spinner->setStyleSheet("border: 1px solid red;");
 
-    auto createCircleIcon = [](const QSize &size, const QColor &color) {
-        QPixmap pixmap(size);
-        pixmap.fill(Qt::transparent);
-        QPainter painter(&pixmap);
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.setBrush(color);
-        painter.setPen(Qt::NoPen);
-        painter.drawEllipse(pixmap.rect());
-        return QIcon(pixmap);
-    };
+    layout->addWidget(spinner);
+    spinFrame->setLayout(layout);
 
-    button->setIcon(createCircleIcon(QSize(16, 16), Qt::black));
-    button->setIconSize(QSize(10, 10));
+    spinner->start(); // gets the show on the road!
 
-    // 创建动画
-    animation = new QPropertyAnimation(button, "iconSize");
-    animation->setDuration(900);
-    animation->setStartValue(QSize(10, 10));
-    animation->setKeyValueAt(0.5, QSize(16, 16));
-    animation->setEndValue(QSize(10, 10));
-    animation->setLoopCount(-1);
-    animation->start();
-    button->show();
 }
 
 
 void IMessageWidget::resizeEvent(QResizeEvent* event) {
     QFrame::resizeEvent(event);
-    button->setGeometry(messageText->geometry());
+
+    spinFrame->setGeometry(messageText->geometry());
+}
+
+void IMessageWidget::finish() {
+    messageText->setMarkdown(text);
 }
 
 void IMessageWidget::appendMessage(const QString &message) {
     if (message.isEmpty()) return;
-    button->hide();
-    animation->stop();
+    spinFrame->close();
     text += message;
-    messageText->setMarkdown(text + QString::fromUtf8("\u26AB"));
+
+    messageText->setMarkdown(text + "\u26AB");
+  //  QString html = messageText->toHtml();
+
+    // 定义蓝色大圆点
+    //QString blueCircle = QString::fromUtf8("<span style='display:inline-block; width:12px; height:12px; background-color:rgb(84, 210, 99); border-radius:50%;'></span>");
+
+    // 查找最后一个 </span> 的位置
+   // int lastSpanPos = html.lastIndexOf("\u26AB");
+
+    // 如果找到最后一个 </span>，则在其之前插入蓝色大圆
+
+    //html = html.replace("\u26AB", blueCircle);
+
+    // 设置修改后的 HTML
+    //messageText->setHtml(html);
+
+    qDebug() << "messageText->toHtml()" << messageText->toHtml();
 }
 
 

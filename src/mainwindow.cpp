@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QStandardItemModel>
 #include "ichatwidget.h"
+#include "itestwidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     welcome = ui->welcomePage;
     chatbot = new ChatBot();
     user = new IUserPage(this);
+    test = new ITestWidget(this);
+    test->hide();
 
     this->setWindowIcon(QIcon("://icon/qollama.png"));
 
@@ -52,6 +55,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::on_historyListItem_clicked);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
     connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); welcome->show(); });
+
+    connect(ui->shareButton, &QPushButton::pressed, test, &QWidget::show);
 }
 
 
