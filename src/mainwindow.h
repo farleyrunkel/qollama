@@ -25,7 +25,7 @@ public:
     ~MainWindow();
 
 
-    void onHistoryListItemClicked(QListWidgetItem *item);
+    void on_historyListItem_clicked(QListWidgetItem *item);
 
     void expandSideWidget();
 

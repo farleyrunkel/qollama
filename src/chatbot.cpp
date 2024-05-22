@@ -52,3 +52,7 @@ void ChatBot::readResponseData() {
     qDebug() << "Received prompt from server:" << prompt;
     emit replyReceived(prompt);
 }
+
+void ChatBot::abort() {
+    m_reply->abort();
+}

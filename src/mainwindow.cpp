@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->inputLine, &QLineEdit::returnPressed, ui->sendButton, &QPushButton::pressed);
 
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
-    connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::onHistoryListItemClicked);
+    connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::on_historyListItem_clicked);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
     connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); welcome->show(); });
 }
@@ -179,7 +179,7 @@ void MainWindow::addMessage(QString text )
     chatbot->reply(map);
 }
 
-void MainWindow::onHistoryListItemClicked(QListWidgetItem *item)
+void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
 {
     if (item) {
         ui->chatTabs->setCurrentIndex(ui->historyList->row(item));

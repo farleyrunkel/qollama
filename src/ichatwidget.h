@@ -50,6 +50,7 @@ private:
     QPushButton* button;
     QString text;
     IAutoResizeTextBrowser* messageText;
+    void initAnimation();
 };
 
 
