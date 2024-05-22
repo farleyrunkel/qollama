@@ -146,7 +146,7 @@ void MainWindow::addMessage(QString text )
     auto *chatListView = getCurrentChatList();
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
 
-    if (welcome->isVisible()) {
+    if (!chatListView || welcome->isVisible()) {
         qDebug() << "Create new chatList.";
 
         auto tab = new QWidget();

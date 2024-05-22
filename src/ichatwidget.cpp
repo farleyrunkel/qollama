@@ -1,5 +1,6 @@
 #include "ichatwidget.h"
 #include <QPainter>
+#include "waitingspinnerwidget.h"
 
 IAutoResizeTextBrowser::IAutoResizeTextBrowser(QWidget *parent) : QTextBrowser(parent) {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
@@ -23,9 +24,8 @@ void IAutoResizeTextBrowser::updateHeight() {
 
 
 IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, const QString &message, QWidget *parent)
-    : QFrame(parent)
+    : QWidget(parent)
     , messageText(new IAutoResizeTextBrowser(this)){
-    setFrameShape(QFrame::NoFrame);
 
     // 设置头像布局
     QVBoxLayout* avatarLayout = new QVBoxLayout();
@@ -80,7 +80,7 @@ void IMessageWidget::initAnimation() {
 
 
 void IMessageWidget::resizeEvent(QResizeEvent* event) {
-    QFrame::resizeEvent(event);
+    QWidget::resizeEvent(event);
 
     spinFrame->setGeometry(messageText->geometry());
 }

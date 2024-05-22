@@ -11,7 +11,6 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QPropertyAnimation>
-#include "waitingspinnerwidget.h"
 
 class IAutoResizeTextBrowser : public QTextBrowser {
     Q_OBJECT
@@ -27,7 +26,7 @@ private slots:
 
 };
 
-class IMessageWidget : public QFrame {
+class IMessageWidget : public QWidget {
     Q_OBJECT
 
 public:
