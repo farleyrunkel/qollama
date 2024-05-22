@@ -6,12 +6,6 @@ QWidget#sideWidget {
     border: 1px hidden;
     border-radius: 10px;
 }
-QFrame#inputFrame{
-    background-color:white;
-    border: 1px solid #a6a6a6;
-    border-radius: 10px;
-}
-
 
 QTabWidget::pane {
     border: none;

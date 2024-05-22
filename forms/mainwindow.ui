@@ -331,6 +331,14 @@
        <layout class="QGridLayout" name="gridLayout">
         <item row="3" column="1">
          <widget class="QFrame" name="inputFrame">
+          <property name="styleSheet">
+           <string notr="true">QFrame{
+    background-color:white;
+    border: 1px solid #a6a6a6;
+    border-radius: 26px;
+}
+</string>
+          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -348,7 +356,7 @@
             <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>5</number>
+            <number>8</number>
            </property>
            <property name="bottomMargin">
             <number>0</number>
@@ -368,7 +376,12 @@
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true"/>
+              <string notr="true">
+    background-color:white;
+    border: 1px hidden #a6a6a6;
+    border-radius: 25px;
+
+</string>
              </property>
              <property name="inputMethodHints">
               <set>Qt::ImhFormattedNumbersOnly</set>
