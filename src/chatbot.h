@@ -16,8 +16,13 @@ public:
 signals:
     void replyReceived(QString);
     void finish();
-private slots:
+
+
+public slots:
     void readResponseData();
+    void abort() {
+        m_reply->abort();
+    };
 
 private:
     QNetworkAccessManager *manager;

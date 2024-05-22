@@ -23,15 +23,29 @@ MainWindow::MainWindow(QWidget *parent)
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
 
+    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
+
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(chatbot, &ChatBot::finish, [&](){
         ui->sendButton->setStatusTip("Waiting");
         on_inputLine_textChanged(ui->inputLine->text());
+        auto *chatListView = getCurrentChatList();
+        if (!chatListView) {
+            qDebug() << "Current chat list is null.";
+            return;
+        }
+
+        IMessageWidget* curr = chatListView->getLatestMessageWidget();
+        curr->finish();
     });
 
-    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
+    connect(ui->sendButton, &QPushButton::clicked,[&](){
+        if (ui->sendButton->statusTip() == "Pending") {
+            chatbot->abort();
+        }
+        emit ui->inputLine->returnPressed();
+    });
 
-    connect(ui->sendButton, &QPushButton::clicked, ui->inputLine, &QLineEdit::returnPressed);
     connect(ui->inputLine, &QLineEdit::returnPressed, ui->sendButton, &QPushButton::pressed);
 
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
@@ -76,7 +90,6 @@ void MainWindow::appendWordToActiveChat(QString text) {
     curr->appendMessage(text);
 
     chatListView->scrollToBottom();
-    // Emit dataChanged signal to refresh the view
 }
 
 void MainWindow::addNewChat() {

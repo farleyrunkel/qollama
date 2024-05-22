@@ -35,6 +35,16 @@ public:
     void appendMessage(const QString& message);
 
     void resizeEvent(QResizeEvent *event);
+
+    void setMarkdown(const QString& markdown ) {
+         messageText->setMarkdown(markdown);
+    }
+
+    void finish() {
+        messageText->setMarkdown(text);
+    }
+
+    QString data() {return text;}
 private:
     QPropertyAnimation *animation ;
     QPushButton* button;

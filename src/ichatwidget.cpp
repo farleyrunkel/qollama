@@ -1,4 +1,5 @@
 #include "ichatwidget.h"
+#include <QPainter>
 
 IAutoResizeTextBrowser::IAutoResizeTextBrowser(QWidget *parent) : QTextBrowser(parent) {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
@@ -19,6 +20,19 @@ void IAutoResizeTextBrowser::updateHeight() {
     setFixedHeight(document()->size().height());
 }
 
+
+QIcon createCircleIcon(const QSize &size, const QColor &color) {
+    QPixmap pixmap(size);
+    pixmap.fill(Qt::transparent); // 透明背景
+
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(color);
+    painter.setPen(Qt::NoPen);
+    painter.drawEllipse(QRect(0, 0, size.width(), size.height()));
+
+    return QIcon(pixmap);
+}
 
 IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, const QString &message, QWidget *parent)
     : QFrame(parent), messageText(nullptr) {
@@ -47,9 +61,12 @@ IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, c
 
 
     button = new QPushButton(messageText->parentWidget());
-    button->setGeometry(messageText->geometry());
-    // 设置初始图标
-    QIcon icon(":/icon/stop.svg");
+
+    button->setFixedSize(QSize(20, 20));
+    button->setStyleSheet("text-align:center;");
+
+    // 创建黑色实心圆图标
+    QIcon icon = createCircleIcon(QSize(16, 16), Qt::black);
     button->setIcon(icon);
 
     // 设置初始图标大小
@@ -58,7 +75,7 @@ IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, c
 
     // 创建动画
     animation = new QPropertyAnimation(button, "iconSize");
-    animation->setDuration(1000);
+    animation->setDuration(900);
     animation->setStartValue(initialSize);
     animation->setKeyValueAt(0.5, QSize(16, 16)); // 放大到128x128
     animation->setEndValue(initialSize);
@@ -66,10 +83,10 @@ IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, c
 
     // 开始动画
     animation->start();
-
     button->show();
 
     appendMessage(message);
+    finish();
 }
 
 void IMessageWidget::resizeEvent(QResizeEvent* event) {
@@ -81,10 +98,10 @@ void IMessageWidget::appendMessage(const QString &message) {
     if (message.isEmpty()) {
         return;
     }
-    animation->stop();
     button->hide();
+    animation->stop();
     text += message;
-    messageText->setMarkdown(text);
+    messageText->setMarkdown(text +  QString::fromUtf8("\u26AB"));
 }
 
 IChatWidget::IChatWidget(QWidget *parent) : QScrollArea(parent) {
