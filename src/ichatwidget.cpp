@@ -94,21 +94,22 @@ void IMessageWidget::appendMessage(const QString &message) {
     spinFrame->close();
     text += message;
 
-    messageText->setMarkdown(text + "\u26AB");
-  //  QString html = messageText->toHtml();
+    messageText->setMarkdown(text);
+    QString html = messageText->toHtml();
 
-    // 定义蓝色大圆点
-    //QString blueCircle = QString::fromUtf8("<span style='display:inline-block; width:12px; height:12px; background-color:rgb(84, 210, 99); border-radius:50%;'></span>");
+    QString circleSpan = "<img src=':/icon/qtcircle.svg' height='11' width='11'/>";
 
-    // 查找最后一个 </span> 的位置
-   // int lastSpanPos = html.lastIndexOf("\u26AB");
+    if (html.contains("</p></body></html>")) {
+        html = html.replace("</p></body></html>", circleSpan + "</p></body></html>");
+    }
+    else if (html.contains("</li></ol></body></html>")) {
+        html = html.replace("</li></ol></body></html>", circleSpan + "</li></ol></body></html>");
+    }
+    else if (html.contains("</li></ul></body></html>")) {
+        html = html.replace("</li></ul></body></html>", circleSpan + "</li></ul></body></html>");
+    }
 
-    // 如果找到最后一个 </span>，则在其之前插入蓝色大圆
-
-    //html = html.replace("\u26AB", blueCircle);
-
-    // 设置修改后的 HTML
-    //messageText->setHtml(html);
+    messageText->setHtml(html);
 
     qDebug() << "messageText->toHtml()" << messageText->toHtml();
 }

@@ -40,5 +40,6 @@
         <file>icon/delete.svg</file>
         <file>icon/stop.svg</file>
         <file>icon/arrow-up-circle.svg</file>
+        <file>icon/qtcircle.svg</file>
     </qresource>
 </RCC>

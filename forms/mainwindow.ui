@@ -419,16 +419,16 @@
              </property>
              <property name="styleSheet">
               <string notr="true">QPushButton {
-    border: 1px solid gray;
+    border: 1px hidden rgb(84, 210, 99);
     border-radius:15px;
     text-align: center;
 }
 QPushButton:hover {
-    background-color: rgb(225, 225, 225);
+    background-color: rgb(84, 210, 199);
     color: black;
 }
 QPushButton:pressed {
-    background-color:rgb(225, 225, 225);
+    background-color:rgb(84, 210, 199);
     border-style: inset;
 }
 </string>
