@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->chatTabs->tabBar()->hide();
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
+    ui->expandButton->icon().addPixmap(QPixmap(":/icon/full-screen.svg"), QIcon::Normal, QIcon::On);
+    ui->expandButton->icon().addPixmap(QPixmap(":/icon/full-screen-zoom.svg"), QIcon::Normal, QIcon::Off);
+
     setWindowIcon(QIcon("://icon/qollama.png"));
 
     test->hide();
@@ -66,13 +69,14 @@ MainWindow::~MainWindow()
 void MainWindow::expandSideWidget()
 {
     if ( ui->frameleft->isHidden() ) {
-        ui->frameleft->show();
-        ui->expandButton->setIcon(QIcon(":/icon/full-screen.svg"));
+        ui->expandButton->setIcon(ui->expandButton->icon().pixmap(30, QIcon::Normal, QIcon::Off));
     }
     else {
-        ui->frameleft->hide();
-        ui->expandButton->setIcon(QIcon(":/icon/full-screen-zoom.svg"));
+        ui->expandButton->setIcon(ui->expandButton->icon().pixmap(30, QIcon::Normal, QIcon::On));
     }
+
+    ui->frameleft->setVisible(!ui->frameleft->isVisible());
+   // ui->expandButton->
     ui->chatTabs->updateGeometry();
 
     QApplication::processEvents();
@@ -82,7 +86,7 @@ void MainWindow::expandSideWidget()
 
 void MainWindow::appendWordToActiveChat(QString text)
 {
-    auto *chatListView = getCurrentChatList();
+    auto chatListView = getCurrentChatList();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
