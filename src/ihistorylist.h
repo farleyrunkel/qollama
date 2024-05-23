@@ -44,27 +44,27 @@ public:
 
 class IHistoryList : public QListWidget {
     Q_OBJECT
+
 public:
     IHistoryList(QWidget *parent = nullptr);
 
-private Q_SLOTS:
-    void deleteChat(bool checked);
 
-public: Q_SIGNALS:
-        void itemDeleted(int);
 protected:
     void mouseMoveEvent(QMouseEvent* event) override;
 
 private:
-    void initButtonsWidget();
+    void setupUI();
     void setSubGeometry(const QRect& rect, int i);
     QPushButton* getSubButton(int i);
-    void addSubButton(const QString& icon, const QString &tooltip = "");
+    QPushButton * addButton(const QString& icon, const QString &tooltip = "");
+    void deleteChat(bool checked);
+
+signals:
+    void itemDeleted(int);
 
 private:
     std::vector<QPushButton*> m_buttons;
     QModelIndex curr_index;
-
 };
 
 #endif // IHISTORYLIST_H

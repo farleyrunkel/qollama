@@ -6,27 +6,21 @@
 #include <QShowEvent>
 #include <QAction>
 
-IHistoryList::IHistoryList(QWidget *parent) : QListWidget(parent) {
-    initButtonsWidget();
-    setIconSize(QSize(100, 100)); // 设置item中的图标大小
+IHistoryList::IHistoryList(QWidget *parent) : QListWidget(parent)
+{
+    setupUI();
     setItemDelegate(new IHistoryItemDelegate);
-    setObjectName("historyList");
-    setUniformItemSizes(true);
 }
 
-
-void IHistoryList::deleteChat(bool checked) {
-
-    qDebug() << "void IHistoryList::deleteChat(bool checked)";
-
+void IHistoryList::deleteChat(bool checked)
+{
     delete this->takeItem(curr_index.row());
 
     emit itemDeleted(curr_index.row());
 }
 
-
-
-void IHistoryList::mouseMoveEvent(QMouseEvent *event) {
+void IHistoryList::mouseMoveEvent(QMouseEvent *event)
+{
     curr_index = this->indexAt(event->pos());
 
     if (curr_index.isValid()) {
@@ -45,12 +39,15 @@ void IHistoryList::mouseMoveEvent(QMouseEvent *event) {
     }
 }
 
-void IHistoryList::initButtonsWidget() {
+void IHistoryList::setupUI()
+{
+    setIconSize(QSize(100, 100)); // 设置item中的图标大小
+    setObjectName("historyList");
+    setUniformItemSizes(true);
 
-    addSubButton(":/icon/delete.svg", "Delete");
-    addSubButton(":/icon/more-horiz.svg", "More");
+    auto deleButton = addButton(":/icon/delete.svg", "Delete");
+    auto moreButton = addButton(":/icon/more-horiz.svg", "More");
 
-    auto moreButton = getSubButton(2);
     QMenu *menu = new QMenu(moreButton);
 
     auto shareAction =  menu->addAction("Share");
@@ -58,12 +55,13 @@ void IHistoryList::initButtonsWidget() {
     auto deleteAction =  menu->addAction("Delete chat");
     moreButton->setMenu(menu);
 
-    connect(getSubButton(1), &QPushButton::clicked, this, &IHistoryList::deleteChat);
+    connect(deleButton, &QPushButton::clicked, this, &IHistoryList::deleteChat);
     connect(deleteAction, &QAction::triggered, this, &IHistoryList::deleteChat);
 }
 
-void IHistoryList::setSubGeometry(const QRect &rect, int i) {
-    if (i <= 0) return ;
+void IHistoryList::setSubGeometry(const QRect &rect, int i)
+{
+    if (i <= 0) return;
     int margin = rect.height() * 0.25;
     int h = rect.height() - (margin * 2);
     int w = h;
@@ -73,7 +71,8 @@ void IHistoryList::setSubGeometry(const QRect &rect, int i) {
     getSubButton(i)->setGeometry(x, y, w, h);
 }
 
-void IHistoryList::addSubButton(const QString &icon, const QString &tooltip) {
+QPushButton* IHistoryList::addButton(const QString &icon, const QString &tooltip)
+{
     auto button = new QPushButton(QIcon(icon), "", this);
     button->setFlat(true);
     button->setFocusPolicy(Qt::NoFocus);
@@ -82,9 +81,11 @@ void IHistoryList::addSubButton(const QString &icon, const QString &tooltip) {
     button->setVisible(false);
 
     m_buttons.push_back(button);
+    return button;
 }
 
-QPushButton *IHistoryList::getSubButton(int i) {
+QPushButton* IHistoryList::getSubButton(int i)
+{
     if (i <= 0) return nullptr;
     return m_buttons[i-1];
 }

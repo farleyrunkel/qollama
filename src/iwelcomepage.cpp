@@ -1,6 +1,5 @@
 #include "iwelcomepage.h"
 
-
 IWelcomePage::IWelcomePage(QWidget *parent)
     : QWidget{parent}
     , ui(new Ui::IWelcomePage)
@@ -20,6 +19,7 @@ IWelcomePage::IWelcomePage(QWidget *parent)
 }
 
 void IWelcomePage::mousePressEvent(QMouseEvent *event) {
+    QWidget::mousePressEvent(event);
     if (event->button() == Qt::LeftButton) {
         auto child = this->childAt(event->pos());
         if (child) {
@@ -34,5 +34,4 @@ void IWelcomePage::mousePressEvent(QMouseEvent *event) {
             qDebug() << "No child widget found at" << event->pos();
         }
     }
-    QWidget::mousePressEvent(event);
 }

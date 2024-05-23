@@ -11,6 +11,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QPropertyAnimation>
+#include "waitingspinnerwidget.h"
 
 class IAutoResizeTextBrowser : public QTextBrowser {
     Q_OBJECT
@@ -21,9 +22,8 @@ public:
 protected:
     void resizeEvent(QResizeEvent* event) override;
 
-private slots:
-    void updateHeight();
-
+public:
+    void updateGeometry();
 };
 
 class IMessageWidget : public QWidget {
@@ -32,22 +32,29 @@ class IMessageWidget : public QWidget {
 public:
     IMessageWidget(const QString& userName, const QPixmap& avatar, const QString& message, QWidget* parent = nullptr);
 
-    void appendMessage(const QString& message);
-
+protected:
     void resizeEvent(QResizeEvent *event);
 
-    void setMarkdown(const QString& markdown ) {
-         messageText->setMarkdown(markdown);
-    }
+public:
+    void setMarkdown(const QString& markdown );
+
+    void appendMessage(const QString& message);
 
     void finish();
 
-    QString data() {return text;}
+    void setPixmap(const QPixmap &avatar);
+
 private:
-    QFrame* spinFrame;
-    QString text;
-    IAutoResizeTextBrowser* messageText;
-    void initAnimation();
+    void setAnimation();
+    void setupUI();
+
+private:
+    QLabel* avatarLabel;
+    QLabel* userLabel;
+    IAutoResizeTextBrowser* messageBrowser;
+    WaitingSpinnerWidget* spinner;
+
+    QString messageCache;
 };
 
 
@@ -59,18 +66,18 @@ public:
 
     void addMessage(const QString& userName, const QPixmap& avatar, const QString& message);
 
-
     bool isNew();
 
     IMessageWidget* getLatestMessageWidget() const;
-
-public slots:
     void scrollToBottom();
+
+private:
+    void setupUI();
 
 private:
     IMessageWidget* latestMessageWidget;
     QWidget* chatContainer;
-    QVBoxLayout* chatLayout;
+
 };
 
 

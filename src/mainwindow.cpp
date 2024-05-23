@@ -11,22 +11,19 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-
+    , chatbot (new ChatBot(this))
+    , user(new IUserPage(this))
+    , test(new ITestWidget(this))
 {
     ui->setupUi(this);
-    welcome = ui->welcomePage;
-    chatbot = new ChatBot();
-    user = new IUserPage(this);
-    test = new ITestWidget(this);
-    test->hide();
-
-    this->setWindowIcon(QIcon("://icon/qollama.png"));
-
     ui->chatTabs->tabBar()->hide();
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
+    setWindowIcon(QIcon("://icon/qollama.png"));
 
-    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
+    test->hide();
+
+    connect(ui->welcomePage, &IWelcomePage::send, this, &MainWindow::addMessage);
 
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(chatbot, &ChatBot::finish, [&](){
@@ -54,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::on_historyListItem_clicked);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
-    connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); welcome->show(); });
+    connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); ui->welcomePage->show(); });
 
     connect(ui->shareButton, &QPushButton::pressed, test, &QWidget::show);
 }
@@ -63,11 +60,11 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete chatbot;
 }
 
 
-void MainWindow::expandSideWidget() {
+void MainWindow::expandSideWidget()
+{
     if ( ui->frameleft->isHidden() ) {
         ui->frameleft->show();
         ui->expandButton->setIcon(QIcon(":/icon/full-screen.svg"));
@@ -80,11 +77,11 @@ void MainWindow::expandSideWidget() {
 
     QApplication::processEvents();
 
-    welcome->setGeometry(ui->chatTabs->currentWidget()->geometry());
+    ui->welcomePage->setGeometry(ui->chatTabs->currentWidget()->geometry());
 }
 
-void MainWindow::appendWordToActiveChat(QString text) {
-
+void MainWindow::appendWordToActiveChat(QString text)
+{
     auto *chatListView = getCurrentChatList();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
@@ -97,7 +94,8 @@ void MainWindow::appendWordToActiveChat(QString text) {
     chatListView->scrollToBottom();
 }
 
-void MainWindow::addNewChat() {
+void MainWindow::addNewChat()
+{
 
     if (ui->chatTabs->count() >= 50) {
         qDebug() << "Maximum chat tabs reached.";
@@ -112,7 +110,7 @@ void MainWindow::addNewChat() {
     }
 
     ui->chatTabs->setCurrentIndex(ui->chatTabs->count()-1);
-    welcome->show();
+    ui->welcomePage->show();
 }
 
 IChatWidget *MainWindow::getCurrentChatList()
@@ -146,7 +144,7 @@ void MainWindow::addMessage(QString text )
     auto *chatListView = getCurrentChatList();
     auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
 
-    if (!chatListView || welcome->isVisible()) {
+    if (!chatListView || ui->welcomePage->isVisible()) {
         qDebug() << "Create new chatList.";
 
         auto tab = new QWidget();
@@ -165,7 +163,7 @@ void MainWindow::addMessage(QString text )
         hisItem = item;
     }
 
-    welcome->hide();
+    ui->welcomePage->hide();
 
     chatListView->addMessage(ui->userButton->text(), ui->userButton->icon().pixmap(30), text);
     chatListView->addMessage(ui->comboBox->currentText(), ui->newChatButton->icon().pixmap(30), "");

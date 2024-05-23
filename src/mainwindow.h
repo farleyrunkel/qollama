@@ -50,8 +50,6 @@ private:
     int curr;
     ChatBot* chatbot;
 
-    IWelcomePage* welcome;
-
     IUserPage* user;
 
     ITestWidget* test;
