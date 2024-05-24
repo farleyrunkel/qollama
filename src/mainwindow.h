@@ -10,6 +10,7 @@
 #include "iuserpage.h"
 #include "ichatwidget.h"
 #include "itestwidget.h"
+#include "imarketpage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -53,5 +54,6 @@ private:
     IUserPage* user;
 
     ITestWidget* test;
+    IMarketPage* market;
 };
 #endif // MAINWINDOW_H

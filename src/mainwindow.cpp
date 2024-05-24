@@ -7,6 +7,7 @@
 #include <QStandardItemModel>
 #include "ichatwidget.h"
 #include "itestwidget.h"
+#include "imarketpage.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     , test(new ITestWidget(this))
 {
     ui->setupUi(this);
-    ui->chatTabs->tabBar()->hide();
+
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
     ui->expandButton->icon().addPixmap(QPixmap(":/icon/full-screen.svg"), QIcon::Normal, QIcon::On);
@@ -26,7 +27,31 @@ MainWindow::MainWindow(QWidget *parent)
 
     test->hide();
 
-    connect(ui->welcomePage, &IWelcomePage::send, this, &MainWindow::addMessage);
+    auto welcome = new IWelcomePage;
+    auto newPage = new QWidget;
+    newPage->setLayout(new QHBoxLayout);
+    newPage->layout()->addWidget(welcome);
+    newPage->setContentsMargins(0, 80, 0, 80);
+    ui->rightStack->addWidget(newPage);
+    ui->rightStack->setCurrentWidget(newPage);
+
+
+    market = new IMarketPage(this);
+    auto marketStackWidget = new QWidget;
+    marketStackWidget->setLayout(new QHBoxLayout);
+    marketStackWidget->layout()->addWidget(market);
+    marketStackWidget->setContentsMargins(0, 80, 0, 80);
+    ui->rightStack->addWidget(marketStackWidget);
+
+    connect(ui->exploreButton, &QPushButton::clicked, [&](){
+        market->show();});
+
+
+    connect(welcome, &IWelcomePage::send, [&](){ui->rightStack->setCurrentIndex(0);});
+    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
+
+    connect(ui->newChatButton, &QPushButton::pressed,[&](){ui->rightStack->setCurrentIndex(1);});
+    connect(ui->exploreButton, &QPushButton::pressed,[&](){ui->rightStack->setCurrentIndex(2);});
 
     connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(chatbot, &ChatBot::finish, [&](){
@@ -54,9 +79,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::on_historyListItem_clicked);
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
-    connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->chatTabs->removeTab(row); ui->welcomePage->show(); });
+    //connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->stack->widgetRemoved(row); ui->welcomePage->show(); });
 
-    connect(ui->shareButton, &QPushButton::pressed, test, &QWidget::show);
+    connect(ui->userButton, &QPushButton::pressed, test, &QWidget::show);
 }
 
 
@@ -74,14 +99,10 @@ void MainWindow::expandSideWidget()
     else {
         ui->expandButton->setIcon(ui->expandButton->icon().pixmap(30, QIcon::Normal, QIcon::On));
     }
-
-    ui->frameleft->setVisible(!ui->frameleft->isVisible());
-   // ui->expandButton->
-    ui->chatTabs->updateGeometry();
+    ui->stack->updateGeometry();
 
     QApplication::processEvents();
 
-    ui->welcomePage->setGeometry(ui->chatTabs->currentWidget()->geometry());
 }
 
 void MainWindow::appendWordToActiveChat(QString text)
@@ -101,7 +122,7 @@ void MainWindow::appendWordToActiveChat(QString text)
 void MainWindow::addNewChat()
 {
 
-    if (ui->chatTabs->count() >= 50) {
+    if (ui->stack->count() >= 50) {
         qDebug() << "Maximum chat tabs reached.";
         return;
     }
@@ -112,14 +133,12 @@ void MainWindow::addNewChat()
         qDebug() << "Current chat list is null or already contains a new chat.";
         return;
     }
-
-    ui->chatTabs->setCurrentIndex(ui->chatTabs->count()-1);
-    ui->welcomePage->show();
+    ui->rightStack->setCurrentIndex(1);
 }
 
 IChatWidget *MainWindow::getCurrentChatList()
 {
-    QWidget *currentTabWidget = ui->chatTabs->currentWidget();
+    QWidget *currentTabWidget = ui->stack->currentWidget();
     if (!currentTabWidget) {
         qDebug() << "Current tab widget is null.";
         return nullptr;
@@ -146,9 +165,9 @@ void MainWindow::addMessage(QString text )
     ui->sendButton->setStatusTip("Pending");
 
     auto *chatListView = getCurrentChatList();
-    auto hisItem = ui->historyList->item(ui->chatTabs->currentIndex());
+    auto hisItem = ui->historyList->item(ui->stack->currentIndex());
 
-    if (!chatListView || ui->welcomePage->isVisible()) {
+    if (!chatListView || chatListView->isNew()) {
         qDebug() << "Create new chatList.";
 
         auto tab = new QWidget();
@@ -158,7 +177,7 @@ void MainWindow::addMessage(QString text )
         auto newChatList = new IChatWidget(tab);
         verticalLayout->addWidget(newChatList);
 
-        ui->chatTabs->setCurrentIndex(ui->chatTabs->insertTab(0, tab, QString()));
+        ui->stack->setCurrentIndex(ui->stack->insertWidget(0, tab));
 
         chatListView = newChatList;
 
@@ -166,8 +185,6 @@ void MainWindow::addMessage(QString text )
         ui->historyList->insertItem(0, item);
         hisItem = item;
     }
-
-    ui->welcomePage->hide();
 
     chatListView->addMessage(ui->userButton->text(), ui->userButton->icon().pixmap(30), text);
     chatListView->addMessage(ui->comboBox->currentText(), ui->newChatButton->icon().pixmap(30), "");
@@ -189,7 +206,8 @@ void MainWindow::addMessage(QString text )
 void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
 {
     if (item) {
-        ui->chatTabs->setCurrentIndex(ui->historyList->row(item));
+        ui->rightStack->setCurrentIndex(0);
+        ui->stack->setCurrentIndex(ui->historyList->row(item));
     } else {
         qDebug() << "Clicked history list item is null.";
     }
@@ -224,4 +242,5 @@ void MainWindow::on_inputLine_returnPressed()
     addMessage(text);
     ui->inputLine->clear();
 }
+
 

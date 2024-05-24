@@ -207,6 +207,17 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="exploreButton">
+             <property name="text">
+              <string>Explore</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../resouces.qrc">
+               <normaloff>:/icon/sparkles.png</normaloff>:/icon/sparkles.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="IHistoryList" name="historyList">
              <property name="mouseTracking">
               <bool>true</bool>
@@ -274,11 +285,11 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>Farley runkel</string>
+              <string>Setting</string>
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
-               <normaloff>:/icon/farley.jpg</normaloff>:/icon/farley.jpg</iconset>
+               <normaloff>:/icon/gear.svg</normaloff>:/icon/gear.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -309,7 +320,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QFrame" name="frameRight">
+      <widget class="QStackedWidget" name="rightStack">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -328,74 +339,192 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="3" column="1">
-         <widget class="QFrame" name="inputFrame">
-          <property name="styleSheet">
-           <string notr="true">QFrame{
+       <widget class="QWidget" name="rightPage1" native="true">
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="3" column="1">
+          <widget class="QFrame" name="inputFrame">
+           <property name="styleSheet">
+            <string notr="true">QFrame{
     background-color:white;
     border: 1px solid #a6a6a6;
     border-radius: 26px;
 }
 </string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
-           <property name="spacing">
-            <number>0</number>
            </property>
-           <property name="leftMargin">
-            <number>5</number>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
            </property>
-           <property name="topMargin">
-            <number>0</number>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
            </property>
-           <property name="rightMargin">
-            <number>8</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLineEdit" name="inputLine">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>5</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>8</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="inputLine">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">
     background-color:white;
     border: 1px hidden #a6a6a6;
     border-radius: 25px;
 
 </string>
+              </property>
+              <property name="inputMethodHints">
+               <set>Qt::ImhFormattedNumbersOnly</set>
+              </property>
+              <property name="frame">
+               <bool>false</bool>
+              </property>
+              <property name="placeholderText">
+               <string>Message llama3...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="sendButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    border: 1px hidden rgb(84, 210, 99);
+    border-radius:15px;
+    text-align: center;
+}
+QPushButton:hover {
+    background-color: rgb(84, 210, 199);
+    color: black;
+}
+QPushButton:pressed {
+    background-color:rgb(84, 210, 199);
+    border-style: inset;
+}
+</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="../resouces.qrc">
+                <normaloff>:/icon/arrow-up-circle.svg</normaloff>:/icon/arrow-up-circle.svg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>30</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="3">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QComboBox" name="comboBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-             <property name="inputMethodHints">
-              <set>Qt::ImhFormattedNumbersOnly</set>
+             <property name="maximumSize">
+              <size>
+               <width>88</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI</family>
+               <pointsize>10</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(112, 112, 112);</string>
+             </property>
+             <property name="minimumContentsLength">
+              <number>0</number>
              </property>
              <property name="frame">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
-             <property name="placeholderText">
-              <string>Message llama3...</string>
-             </property>
+             <item>
+              <property name="text">
+               <string>llama3</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ChatGPT</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="sendButton">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="shareButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -414,37 +543,66 @@
                <height>30</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI</family>
+               <pointsize>10</pointsize>
+               <bold>false</bold>
+              </font>
+             </property>
              <property name="layoutDirection">
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton {
-    border: 1px hidden rgb(84, 210, 99);
-    border-radius:15px;
-    text-align: center;
-}
-QPushButton:hover {
-    background-color: rgb(84, 210, 199);
-    color: black;
-}
-QPushButton:pressed {
-    background-color:rgb(84, 210, 199);
-    border-style: inset;
-}
-</string>
+              <string notr="true"/>
              </property>
              <property name="text">
               <string/>
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
-               <normaloff>:/icon/arrow-up-circle.svg</normaloff>:/icon/arrow-up-circle.svg</iconset>
+               <normaloff>:/icon/share-box.svg</normaloff>:/icon/share-box.svg</iconset>
              </property>
-             <property name="iconSize">
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
+             <property name="default">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="expandButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
               <size>
                <width>30</width>
                <height>30</height>
               </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>30</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resouces.qrc">
+               <normaloff>:/icon/full-screen.svg</normaloff>:/icon/full-screen.svg</iconset>
              </property>
              <property name="flat">
               <bool>true</bool>
@@ -452,259 +610,90 @@ QPushButton:pressed {
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="3">
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QComboBox" name="comboBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>88</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Microsoft YaHei UI</family>
-              <pointsize>10</pointsize>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: rgb(112, 112, 112);</string>
-            </property>
-            <property name="minimumContentsLength">
-             <number>0</number>
-            </property>
-            <property name="frame">
-             <bool>true</bool>
-            </property>
-            <item>
-             <property name="text">
-              <string>llama3</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>ChatGPT</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="shareButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Microsoft YaHei UI</family>
-              <pointsize>10</pointsize>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../resouces.qrc">
-              <normaloff>:/icon/share-box.svg</normaloff>:/icon/share-box.svg</iconset>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="autoDefault">
-             <bool>false</bool>
-            </property>
-            <property name="default">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="expandButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="../resouces.qrc">
-              <normaloff>:/icon/full-screen.svg</normaloff>:/icon/full-screen.svg</iconset>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="3" column="2">
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="4" column="1" colspan="2">
-         <widget class="QLabel" name="label">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>7</pointsize>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="text">
-           <string>AI can make mistakes. Check important info.</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="0" colspan="3">
-         <widget class="QTabWidget" name="chatTabs">
-          <property name="tabPosition">
-           <enum>QTabWidget::East</enum>
-          </property>
-          <property name="tabShape">
-           <enum>QTabWidget::Rounded</enum>
-          </property>
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <property name="tabsClosable">
-           <bool>false</bool>
-          </property>
-          <property name="movable">
-           <bool>false</bool>
-          </property>
-          <property name="tabBarAutoHide">
-           <bool>false</bool>
-          </property>
-          <widget class="QWidget" name="tab">
-           <attribute name="title">
-            <string>Tab 1</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="leftMargin">
-             <number>40</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>40</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="IWelcomePage" name="welcomePage" native="true"/>
-            </item>
-           </layout>
+         </item>
+         <item row="3" column="2">
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Preferred</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="4" column="1" colspan="2">
+          <widget class="QLabel" name="label">
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei UI</family>
+             <pointsize>7</pointsize>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="text">
+            <string>AI can make mistakes. Check important info.</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="wordWrap">
+            <bool>false</bool>
+           </property>
+           <property name="margin">
+            <number>0</number>
+           </property>
           </widget>
-         </widget>
-        </item>
-       </layout>
+         </item>
+         <item row="3" column="0">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Preferred</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="0" colspan="3">
+          <widget class="QStackedWidget" name="stack">
+           <widget class="QWidget" name="chatTabsPage1" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>40</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>40</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -716,12 +705,6 @@ QPushButton:pressed {
    <class>IHistoryList</class>
    <extends>QListWidget</extends>
    <header location="global">ihistorylist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>IWelcomePage</class>
-   <extends>QWidget</extends>
-   <header location="global">iwelcomepage.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>INewChatButton</class>

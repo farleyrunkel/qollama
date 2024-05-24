@@ -1,5 +1,7 @@
 #include "itestwidget.h"
 #include "waitingspinnerwidget.h"
+#include "igallerywidget.h"
+#include "imarketpage.h"
 
 ITestWidget::ITestWidget(QWidget *parent)
     : QDialog(parent)
@@ -7,18 +9,9 @@ ITestWidget::ITestWidget(QWidget *parent)
 
     setAutoFillBackground(true);
     setFixedSize(QSize(500, 500));
+    auto mainLayout = new QHBoxLayout(this);
+    setLayout(mainLayout);
 
-    auto spinner = new WaitingSpinnerWidget(this);
-
-    spinner->setRoundness(100.0);
-    spinner->setMinimumTrailOpacity(15.0);
-    spinner->setTrailFadePercentage(10.0);
-    spinner->setNumberOfLines(10);
-    spinner->setLineLength(10);
-    spinner->setLineWidth(10);
-    spinner->setInnerRadius(0);
-    spinner->setRevolutionsPerSecond(1);
-    spinner->setColor(QColor(84, 210, 99));
-
-    spinner->start(); // gets the show on the road!
+    auto widget = new IMarketPage(this);
+    mainLayout->addWidget(widget);
 }
