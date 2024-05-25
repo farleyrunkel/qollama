@@ -164,13 +164,13 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>38</height>
+               <height>34</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>38</height>
+               <height>34</height>
               </size>
              </property>
              <property name="mouseTracking">
@@ -188,11 +188,8 @@
              <property name="layoutDirection">
               <enum>Qt::LeftToRight</enum>
              </property>
-             <property name="styleSheet">
-              <string notr="true"/>
-             </property>
              <property name="text">
-              <string>New chat</string>
+              <string> New chat</string>
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
@@ -208,8 +205,26 @@
            </item>
            <item>
             <widget class="QPushButton" name="exploreButton">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>34</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>34</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">    border: 1px hidden gray;
+    border-radius:10px;
+    padding-left: 10px; /* 设置左边距 */
+    text-align: left; /* 设置文本左对齐 */</string>
+             </property>
              <property name="text">
-              <string>Explore</string>
+              <string> Explore</string>
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
@@ -265,13 +280,13 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>48</height>
+               <height>40</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>48</height>
+               <height>40</height>
               </size>
              </property>
              <property name="font">
@@ -285,7 +300,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>Setting</string>
+              <string> Setting</string>
              </property>
              <property name="icon">
               <iconset resource="../resouces.qrc">
@@ -339,17 +354,21 @@
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
-       <widget class="QWidget" name="rightPage1" native="true">
+       <widget class="QWidget" name="rightPage1">
         <layout class="QGridLayout" name="gridLayout">
          <item row="3" column="1">
           <widget class="QFrame" name="inputFrame">
-           <property name="styleSheet">
-            <string notr="true">QFrame{
-    background-color:white;
-    border: 1px solid #a6a6a6;
-    border-radius: 26px;
-}
-</string>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
            </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
@@ -359,47 +378,36 @@
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
             <property name="spacing">
-             <number>0</number>
+             <number>2</number>
             </property>
             <property name="leftMargin">
-             <number>5</number>
+             <number>10</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>7</number>
             </property>
             <property name="rightMargin">
-             <number>8</number>
+             <number>5</number>
             </property>
             <property name="bottomMargin">
-             <number>0</number>
+             <number>7</number>
             </property>
             <item>
              <widget class="QLineEdit" name="inputLine">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">
-    background-color:white;
-    border: 1px hidden #a6a6a6;
-    border-radius: 25px;
-
-</string>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
               <property name="inputMethodHints">
                <set>Qt::ImhFormattedNumbersOnly</set>
               </property>
               <property name="frame">
                <bool>false</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
               <property name="placeholderText">
                <string>Message llama3...</string>
@@ -428,22 +436,6 @@
               </property>
               <property name="layoutDirection">
                <enum>Qt::LeftToRight</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton {
-    border: 1px hidden rgb(84, 210, 99);
-    border-radius:15px;
-    text-align: center;
-}
-QPushButton:hover {
-    background-color: rgb(84, 210, 199);
-    color: black;
-}
-QPushButton:pressed {
-    background-color:rgb(84, 210, 199);
-    border-style: inset;
-}
-</string>
               </property>
               <property name="text">
                <string/>
@@ -671,7 +663,7 @@ QPushButton:pressed {
          </item>
          <item row="2" column="0" colspan="3">
           <widget class="QStackedWidget" name="stack">
-           <widget class="QWidget" name="chatTabsPage1" native="true">
+           <widget class="QWidget" name="chatTabsPage1">
             <layout class="QVBoxLayout" name="verticalLayout">
              <property name="spacing">
               <number>0</number>

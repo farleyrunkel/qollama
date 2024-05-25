@@ -26,7 +26,7 @@ private:
 
         setMinimumWidth(150);
         setMinimumHeight(40);
-        setMaximumWidth(450);
+        setMaximumWidth(150);
         setMaximumHeight(50);
         setStyleSheet("border: 1px solid red");
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -121,12 +121,6 @@ public:
         mainLayout->setAlignment(Qt::AlignLeft);
 
         mainLayout->addWidget(new IGalleryItem, 0, 0);
-         mainLayout->addWidget(new IGalleryItem, 0, 1);
-       mainLayout->addWidget(new IGalleryItem);
-         mainLayout->addWidget(new IGalleryItem);
-         mainLayout->addWidget(new IGalleryItem);
-         mainLayout->addWidget(new IGalleryItem);
-                 mainLayout->addWidget(new IGalleryItem);
     }
 
 private:

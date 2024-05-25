@@ -2,34 +2,52 @@
 #define IMARKETPAGE_H
 
 #include <QScrollArea>
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QCalendarWidget>
 #include <QSizePolicy>
+#include <QLabel>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QFrame>
+#include <QScrollBar>
+#include <QDebug>
+#include <QEvent>
 
 class IMarketPage : public QScrollArea
 {
     Q_OBJECT
+
 public:
-    IMarketPage(QWidget* parent = nullptr) : QScrollArea(parent) {
-        container = new QWidget(this);
-        mainLayout = new QHBoxLayout(container);
-
-        setMinimumHeight(400);
-        setMinimumWidth(600);
-
-        // Set the size policy to ensure the container can expand
-        container->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-        // Set the container widget to QScrollArea
-        setWidget(container);
-        setWidgetResizable(true);
-
-        mainLayout->addWidget(new QCalendarWidget(container));
-    };
+    IMarketPage(QWidget* parent = nullptr);
 
 private:
-    QHBoxLayout* mainLayout;
-    QWidget* container;
+    void setupTopSearchArea();
+
+    void setupTitle();
+
+    void setupSearchLine();
+
+    void setupNavigator();
+
+    void addKind(const QString& text);
+
+    void setupKinds();
+
+protected:
+    void scrollContentsBy(int dx, int dy) override;
+
+private:
+    QVBoxLayout* contentLayout;
+    QVBoxLayout* mainLayout;
+    QWidget* containerWidget;
+    QWidget* topSearchArea;
+    QWidget* titleWidget;
+    QWidget* searchLineFrame;
+    QWidget* navigatorWidget;
+
+    QVector<QPair<QPushButton*, QWidget*>> kindButtons;
 };
 
 #endif // IMARKETPAGE_H

@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto newPage = new QWidget;
     newPage->setLayout(new QHBoxLayout);
     newPage->layout()->addWidget(welcome);
-    newPage->setContentsMargins(0, 80, 0, 80);
+    newPage->setContentsMargins(0, 50, 0, 50);
     ui->rightStack->addWidget(newPage);
     ui->rightStack->setCurrentWidget(newPage);
 
@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto marketStackWidget = new QWidget;
     marketStackWidget->setLayout(new QHBoxLayout);
     marketStackWidget->layout()->addWidget(market);
-    marketStackWidget->setContentsMargins(0, 80, 0, 80);
+    marketStackWidget->setContentsMargins(0, 5, 0, 5);
     ui->rightStack->addWidget(marketStackWidget);
 
     connect(ui->exploreButton, &QPushButton::clicked, [&](){

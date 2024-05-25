@@ -54,20 +54,6 @@ QPushButton::menu-indicator {
 }
 
 
-INewChatButton{
-    border: 1px hidden gray;
-    border-radius:6px;
-    padding-left: 10px; /* 设置左边距 */
-    text-align: left; /* 设置文本左对齐 */
-}
-INewChatButton:hover {
-    background-color: #ececec;
-    color: black;
-}
-INewChatButton:pressed {
-    background-color:#ececec;
-    border-style: hidden;
-}
 
 
 QComboBox { /* 编辑框的样式 */
@@ -143,6 +129,56 @@ QPushButton#userButton:pressed {
     border-style: inset;
 }
 
+/* set input style */
+
+QFrame#inputFrame{
+    background-color:white;
+    border: 1px solid #a6a6a6;
+    border-radius: 25px;
+}
+QLineEdit#inputLine{
+    background-color:white;
+    border: 1px hidden #a6a6a6;
+    border-radius: 24px;
+}
+QPushButton#sendButton{
+    border: 1px hidden rgb(84, 210, 99);
+    border-radius:15px;
+    text-align: center;
+}
+QPushButton#sendButton:hover {
+    background-color: rgb(84, 210, 199);
+    color: black;
+}
+QPushButton#sendButton:pressed {
+    background-color:rgb(84, 210, 199);
+    border-style: inset;
+}
+QFrame#welInputFrame{
+    background-color:white;
+    border: 1px solid #a6a6a6;
+    border-radius: 25px;
+}
+QLineEdit#welInputLine{
+    background-color:white;
+    border: 1px hidden #a6a6a6;
+    border-radius: 24px;
+}
+QPushButton#welInputButton{
+    border: 1px hidden rgb(84, 210, 99);
+    border-radius:15px;
+    text-align: center;
+}
+QPushButton#welInputButton:hover {
+    background-color: rgb(84, 210, 99);
+    color: black;
+}
+QPushButton#welInputButton:pressed {
+    background-color:rgb(84, 210, 99);
+    border-style: inset;
+}
+
+/* finish input style */
 
 QPushButton#shareButton {
     border: 1px hidden gray;

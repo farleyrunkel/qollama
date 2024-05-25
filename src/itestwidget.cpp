@@ -12,6 +12,6 @@ ITestWidget::ITestWidget(QWidget *parent)
     auto mainLayout = new QHBoxLayout(this);
     setLayout(mainLayout);
 
-    auto widget = new IMarketPage(this);
+    auto widget = new IGalleryList(this);
     mainLayout->addWidget(widget);
 }
