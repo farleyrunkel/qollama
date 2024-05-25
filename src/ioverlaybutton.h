@@ -15,22 +15,6 @@ public:
         : QPushButton(parent)
     {
         setIcon(QIcon("://icon/qollama.png"));
-        setStyleSheet(R"(
-            INewChatButton {
-                border: 1px hidden gray;
-                border-radius: 6px;
-                padding-left: 10px; /* 设置左边距 */
-                text-align: left; /* 设置文本左对齐 */
-            }
-            INewChatButton:hover {
-                background-color: #ececec;
-                color: black;
-            }
-            INewChatButton:pressed {
-                background-color: #ececec;
-                border-style: hidden;
-            }
-        )");
 
         addSubButton(QIcon("://icon/create-new.svg"));
         getSubButton(1)->setToolTip("New chat");

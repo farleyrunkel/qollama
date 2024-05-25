@@ -51,8 +51,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
 
         forms/userpage.ui
-        src/iuserpage.h
-        src/iuserpage.cpp
+
+
         src/ichatwidget.h
         src/ichatwidget.cpp
         src/waitingspinnerwidget.cpp src/waitingspinnerwidget.h

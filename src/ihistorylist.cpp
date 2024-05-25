@@ -46,17 +46,17 @@ void IHistoryList::setupUI()
     setUniformItemSizes(true);
 
     auto deleButton = addButton(":/icon/delete.svg", "Delete");
-    auto moreButton = addButton(":/icon/more-horiz.svg", "More");
+    //auto moreButton = addButton(":/icon/more-horiz.svg", "More");
 
-    QMenu *menu = new QMenu(moreButton);
+    //QMenu *menu = new QMenu(moreButton);
 
-    auto shareAction =  menu->addAction("Share");
-    auto renameAction =  menu->addAction("Rename");
-    auto deleteAction =  menu->addAction("Delete chat");
-    moreButton->setMenu(menu);
+    //auto shareAction =  menu->addAction("Share");
+   // auto renameAction =  menu->addAction("Rename");
+    //auto deleteAction =  menu->addAction("Delete chat");
+   // moreButton->setMenu(menu);
 
     connect(deleButton, &QPushButton::clicked, this, &IHistoryList::deleteChat);
-    connect(deleteAction, &QAction::triggered, this, &IHistoryList::deleteChat);
+    //connect(deleteAction, &QAction::triggered, this, &IHistoryList::deleteChat);
 }
 
 void IHistoryList::setSubGeometry(const QRect &rect, int i)

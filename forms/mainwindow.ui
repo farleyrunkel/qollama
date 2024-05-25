@@ -218,10 +218,7 @@
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">    border: 1px hidden gray;
-    border-radius:10px;
-    padding-left: 10px; /* 设置左边距 */
-    text-align: left; /* 设置文本左对齐 */</string>
+              <string notr="true"/>
              </property>
              <property name="text">
               <string> Explore</string>
@@ -270,7 +267,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="userButton">
+            <widget class="QPushButton" name="settingButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -316,22 +313,6 @@
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -603,23 +584,10 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="2">
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Preferred</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+         <item row="2" column="0" colspan="3">
+          <widget class="QStackedWidget" name="stack"/>
          </item>
-         <item row="4" column="1" colspan="2">
+         <item row="4" column="0" colspan="3">
           <widget class="QLabel" name="label">
            <property name="font">
             <font>
@@ -645,6 +613,22 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="2">
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Preferred</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="3" column="0">
           <spacer name="horizontalSpacer_2">
            <property name="orientation">
@@ -660,29 +644,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-         <item row="2" column="0" colspan="3">
-          <widget class="QStackedWidget" name="stack">
-           <widget class="QWidget" name="chatTabsPage1">
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>40</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>40</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-            </layout>
-           </widget>
-          </widget>
          </item>
         </layout>
        </widget>

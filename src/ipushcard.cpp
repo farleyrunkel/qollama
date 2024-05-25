@@ -27,12 +27,12 @@ bool IPushCard::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::Enter)
         {
             qDebug() << "Mouse entered";
-            setStyleSheet("border: 1px solid gray; border-radius: 10px; background-color: lightgray;");
+            setStyleSheet("border: 1px solid #ececec; border-radius: 10px; background-color: #ececec;");
         }
         else if (event->type() == QEvent::Leave)
         {
             qDebug() << "Mouse left";
-            setStyleSheet("border: 1px hidden gray; border-radius: 10px; background-color: none;");
+            setStyleSheet("border: 1px hidden #ececec; border-radius: 10px; background-color: none;");
         }
     }
     return QFrame::eventFilter(watched, event);

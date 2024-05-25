@@ -7,7 +7,7 @@
 #include <QListWidgetItem>
 
 #include "iwelcomepage.h"
-#include "iuserpage.h"
+
 #include "ichatwidget.h"
 #include "itestwidget.h"
 #include "imarketpage.h"
@@ -33,7 +33,7 @@ public:
 
     void addMessage(QString text);
 
-    IChatWidget *getCurrentChatList();
+    IChatWidget *currentChatList();
 public slots:
     void appendWordToActiveChat(QString reply);
 private slots:
@@ -49,11 +49,11 @@ private:
     Ui::MainWindow *ui;
     //std::vector<Document*> m_docus;
     int curr;
-    ChatBot* chatbot;
+    IChatBot* chatbot;
 
-    IUserPage* user;
 
     ITestWidget* test;
     IMarketPage* market;
+    void on_chatbot_finish();
 };
 #endif // MAINWINDOW_H

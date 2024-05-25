@@ -12,8 +12,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , chatbot (new ChatBot(this))
-    , user(new IUserPage(this))
+    , chatbot (new IChatBot(this))
     , test(new ITestWidget(this))
 {
     ui->setupUi(this);
@@ -43,45 +42,38 @@ MainWindow::MainWindow(QWidget *parent)
     marketStackWidget->setContentsMargins(0, 5, 0, 5);
     ui->rightStack->addWidget(marketStackWidget);
 
-    connect(ui->exploreButton, &QPushButton::clicked, [&](){
-        market->show();});
-
+    connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
 
     connect(welcome, &IWelcomePage::send, [&](){ui->rightStack->setCurrentIndex(0);});
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
+    connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
+    connect(ui->exploreButton, &QPushButton::pressed, [&](){ui->rightStack->setCurrentIndex(2);});
+    connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
 
-    connect(ui->newChatButton, &QPushButton::pressed,[&](){ui->rightStack->setCurrentIndex(1);});
-    connect(ui->exploreButton, &QPushButton::pressed,[&](){ui->rightStack->setCurrentIndex(2);});
-
-    connect(chatbot, &ChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
-    connect(chatbot, &ChatBot::finish, [&](){
-        ui->sendButton->setStatusTip("Waiting");
-        on_inputLine_textChanged(ui->inputLine->text());
-        auto *chatListView = getCurrentChatList();
-        if (!chatListView) {
-            qDebug() << "Current chat list is null.";
-            return;
-        }
-
-        IMessageWidget* curr = chatListView->getLatestMessageWidget();
-        curr->finish();
-    });
+    connect(chatbot, &IChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
+    connect(chatbot, &IChatBot::finished, this,  &MainWindow::on_chatbot_finish);
 
     connect(ui->sendButton, &QPushButton::clicked,[&](){
         if (ui->sendButton->statusTip() == "Pending") {
             chatbot->abort();
+            ui->sendButton->statusTip() = "Nothing";
+            return ;
         }
-        emit ui->inputLine->returnPressed();
+        else if (ui->sendButton->statusTip() == "Waiting") {
+            on_inputLine_returnPressed();
+        }
     });
 
     connect(ui->inputLine, &QLineEdit::returnPressed, ui->sendButton, &QPushButton::pressed);
 
-    connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
-    connect(ui->historyList, &QListWidget::itemClicked, this, &MainWindow::on_historyListItem_clicked);
-    connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
-    //connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){ ui->stack->widgetRemoved(row); ui->welcomePage->show(); });
+    connect(ui->historyList, &IHistoryList::itemClicked, this, &MainWindow::on_historyListItem_clicked);
+    connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){
+        ui->stack->removeWidget(ui->stack->widget(row));
+        chatbot->abort();
+        ui->rightStack->setCurrentIndex(1);
+    });
 
-    connect(ui->userButton, &QPushButton::pressed, test, &QWidget::show);
+    connect(ui->settingButton, &QPushButton::pressed, test, &QWidget::show);
 }
 
 
@@ -90,7 +82,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_chatbot_finish() {
+    ui->sendButton->setStatusTip("Nothing");
+    on_inputLine_textChanged(ui->inputLine->text());
+    auto *chatListView = currentChatList();
+    if (!chatListView) {
+        qDebug() << "Current chat list is null.";
+        return;
+    }
 
+    IMessageWidget* curr = chatListView->getLatestMessageWidget();
+    curr->finish();
+
+}
 void MainWindow::expandSideWidget()
 {
     if ( ui->frameleft->isHidden() ) {
@@ -99,15 +103,15 @@ void MainWindow::expandSideWidget()
     else {
         ui->expandButton->setIcon(ui->expandButton->icon().pixmap(30, QIcon::Normal, QIcon::On));
     }
+    ui->frameleft->setVisible(!ui->frameleft->isVisible());
     ui->stack->updateGeometry();
 
     QApplication::processEvents();
-
 }
 
 void MainWindow::appendWordToActiveChat(QString text)
 {
-    auto chatListView = getCurrentChatList();
+    auto chatListView = currentChatList();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
@@ -121,22 +125,23 @@ void MainWindow::appendWordToActiveChat(QString text)
 
 void MainWindow::addNewChat()
 {
-
     if (ui->stack->count() >= 50) {
         qDebug() << "Maximum chat tabs reached.";
         return;
     }
 
-    IChatWidget *uniqueListWidget = getCurrentChatList();
+    IChatWidget *uniqueListWidget = currentChatList();
 
     if (!uniqueListWidget || uniqueListWidget->isNew()) {
         qDebug() << "Current chat list is null or already contains a new chat.";
+        ui->stack->setCurrentWidget(uniqueListWidget);
         return;
     }
+
     ui->rightStack->setCurrentIndex(1);
 }
 
-IChatWidget *MainWindow::getCurrentChatList()
+IChatWidget *MainWindow::currentChatList()
 {
     QWidget *currentTabWidget = ui->stack->currentWidget();
     if (!currentTabWidget) {
@@ -155,6 +160,10 @@ IChatWidget *MainWindow::getCurrentChatList()
 
 void MainWindow::addMessage(QString text )
 {
+    if (chatbot->status() == IChatBot::Status::Receiving
+        || chatbot->status() == IChatBot::Status::Requesting
+    ) {return;}
+
     if (text.isEmpty()) {
         qDebug() << "Input text is empty.";
         return;
@@ -164,10 +173,10 @@ void MainWindow::addMessage(QString text )
     ui->sendButton->setIcon(QIcon(":/icon/stop.svg"));
     ui->sendButton->setStatusTip("Pending");
 
-    auto *chatListView = getCurrentChatList();
-    auto hisItem = ui->historyList->item(ui->stack->currentIndex());
+    auto chatListView = currentChatList();
+    auto hisItem = ui->historyList->currentItem();
 
-    if (!chatListView || chatListView->isNew()) {
+    if (!chatListView  || chatListView && !chatListView->isNew()) {
         qDebug() << "Create new chatList.";
 
         auto tab = new QWidget();
@@ -177,16 +186,20 @@ void MainWindow::addMessage(QString text )
         auto newChatList = new IChatWidget(tab);
         verticalLayout->addWidget(newChatList);
 
-        ui->stack->setCurrentIndex(ui->stack->insertWidget(0, tab));
+        ui->stack->addWidget(tab);
+        ui->stack->setCurrentWidget(tab);
 
+        qDebug() << "ui->stack->currentIndex" << ui->stack->currentIndex();
         chatListView = newChatList;
 
         auto item = new QListWidgetItem(ui->historyList);
-        ui->historyList->insertItem(0, item);
+        ui->historyList->addItem(item);
+        ui->historyList->setCurrentItem(item);
+
         hisItem = item;
     }
 
-    chatListView->addMessage(ui->userButton->text(), ui->userButton->icon().pixmap(30), text);
+    chatListView->addMessage(ui->settingButton->text(), ui->settingButton->icon().pixmap(30), text);
     chatListView->addMessage(ui->comboBox->currentText(), ui->newChatButton->icon().pixmap(30), "");
     chatListView->scrollToBottom();
 
@@ -207,6 +220,7 @@ void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
 {
     if (item) {
         ui->rightStack->setCurrentIndex(0);
+        qDebug() << "ui->historyList->row(item)" << ui->historyList->row(item);
         ui->stack->setCurrentIndex(ui->historyList->row(item));
     } else {
         qDebug() << "Clicked history list item is null.";
@@ -237,7 +251,16 @@ void MainWindow::on_inputLine_textChanged(const QString &arg1)
 
 void MainWindow::on_inputLine_returnPressed()
 {
+    if (chatbot->status() == IChatBot::Status::Receiving
+        || chatbot->status() == IChatBot::Status::Requesting
+        ) {return;}
+
     QString text = ui->inputLine->text().trimmed();
+
+    if (text.isEmpty()) {
+        qDebug() << "Input text is empty.";
+        return;
+    }
 
     addMessage(text);
     ui->inputLine->clear();

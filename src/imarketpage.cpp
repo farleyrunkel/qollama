@@ -8,7 +8,7 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     containerWidget = new QWidget(this);
     contentLayout = new QVBoxLayout(containerWidget);
     containerWidget->setLayout(contentLayout);
-
+    contentLayout->setContentsMargins(80, 0, 80, 0);
     containerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setStyleSheet("background-color: white; border: 1px hidden blue;");
     setWidget(containerWidget);
@@ -20,7 +20,7 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     setLayout(mainLayout);
     mainLayout->setSpacing(0);
     mainLayout->setAlignment(Qt::AlignTop);
-    mainLayout->setContentsMargins(10, 0, 10, 0);
+    mainLayout->setContentsMargins(80, 0, 80, 0);
 
     setupTitle();
     setupSearchLine();

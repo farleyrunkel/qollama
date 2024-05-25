@@ -4,35 +4,56 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-ChatBot::ChatBot(QObject *parent) : QObject(parent) {
-    manager = new QNetworkAccessManager(this);
+IChatBot::IChatBot(QObject *parent)
+    : QObject(parent)
+    , manager(new QNetworkAccessManager(this))
+    , m_reply(nullptr)
+    , m_status(Waiting) {
+    // 初始化成员变量
 }
 
-void ChatBot::reply(const QMap<QString, QString>& map) {
+IChatBot::~IChatBot() {
+    // 确保资源被正确释放
+    if (m_reply) {
+        m_reply->deleteLater();
+    }
+}
+
+void IChatBot::reply(const QMap<QString, QString>& map) {
     QUrl url("http://localhost:11434/api/generate");
 
     QJsonObject json;
-    json["model"] = map["model"]; // "llama3";
+    json["model"] = map["model"];
     json["prompt"] = map["message"];
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     m_reply = manager->post(request, QJsonDocument(json).toJson());
-    QObject::connect(m_reply, &QNetworkReply::readyRead, this, &ChatBot::readResponseData);
-    QObject::connect(m_reply, &QNetworkReply::finished, this, &ChatBot::finish);
-    QObject::connect(m_reply, &QNetworkReply::errorOccurred, this, [&](QNetworkReply::NetworkError error){emit replyReceived("NetworkError");});
+    m_status = Status::Requesting;
+
+    QObject::connect(m_reply, &QNetworkReply::readyRead, this, &IChatBot::readResponseData);
+    QObject::connect(m_reply, &QNetworkReply::finished, this, &IChatBot::finish);
+    QObject::connect(m_reply, &QNetworkReply::errorOccurred, this, [&](QNetworkReply::NetworkError error){
+        qDebug() << "Network error occurred:" << error;
+        emit replyReceived("NetworkError");
+    });
 }
 
+void IChatBot::finish() {
+    m_status = Status::Finished;
+    emit finished();
+}
 
-void ChatBot::readResponseData() {
+void IChatBot::readResponseData() {
+    m_status = Status::Receiving;
     QByteArray buffer = m_reply->readAll();
     if (buffer.isEmpty()) {
         qDebug() << "Empty response from server";
+        return;
     }
-    else {
-        qDebug() << "Received response from server:" << buffer;
-    }
+
+    qDebug() << "Received response from server:" << buffer;
 
     QJsonParseError error;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(buffer, &error);
@@ -53,6 +74,8 @@ void ChatBot::readResponseData() {
     emit replyReceived(prompt);
 }
 
-void ChatBot::abort() {
-    m_reply->abort();
+void IChatBot::abort() {
+    if (m_reply) {
+        m_reply->abort();
+    }
 }
