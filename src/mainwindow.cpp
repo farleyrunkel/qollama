@@ -135,7 +135,6 @@ void MainWindow::addNewChat()
     if (!uniqueListWidget || uniqueListWidget->isNew()) {
         qDebug() << "Current chat list is null or already contains a new chat.";
         ui->stack->setCurrentWidget(uniqueListWidget);
-        return;
     }
 
     ui->rightStack->setCurrentIndex(1);
