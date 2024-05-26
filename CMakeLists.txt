@@ -16,6 +16,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 
 include_directories("src")
+include_directories("external/json/include")
+include_directories("asio/asio/include")
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -25,21 +27,17 @@ set(PROJECT_SOURCES
 )
 
 if(WIN32)
-    list(APPEND PROJECT_SOURCES qollama.rc)
+    list(APPEND PROJECT_SOURCES resources/qollama.rc)
 endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(qollama
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        resouces.qrc
-
+        resources/resouces.qrc
 
         src/ihistorylist.h
         src/ioverlaybutton.h
-
-
-
         src/chatbot.h
         src/chatbot.cpp
 
@@ -48,10 +46,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/iwelcomepage.h
         src/iwelcomepage.cpp
 
-
-
         forms/userpage.ui
-
 
         src/ichatwidget.h
         src/ichatwidget.cpp
