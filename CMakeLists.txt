@@ -17,7 +17,7 @@ find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 
 include_directories("src")
 include_directories("external/json/include")
-include_directories("asio/asio/include")
+include_directories("external/asio/asio/include")
 
 set(PROJECT_SOURCES
         src/main.cpp
