@@ -37,7 +37,7 @@ IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, c
     , userLabel(new QLabel(userName, this))
     , messageBrowser(new IAutoResizeTextBrowser(this))
     , spinner(nullptr)
-    , messageCache(message)
+    , messageCache()
 {
     setupUI();
     setPixmap(avatar);

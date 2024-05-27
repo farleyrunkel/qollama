@@ -46,6 +46,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(marketStackWidget);
     promoteToMacButtons() ;
 
+    connect(ui->stack, &QStackedWidget::show, ui->comboBox, &QComboBox::show);
+    connect(ui->stack, &QStackedWidget::hide, ui->comboBox, &QComboBox::hide);
+
     connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
 
     connect(welcome, &IWelcomePage::send, [&](){ui->stackedWidget->setCurrentIndex(0);});
@@ -53,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->exploreButton, &QPushButton::pressed, [&](){ui->stackedWidget->setCurrentIndex(2);});
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
+    connect(ui->newChatBtn, &QPushButton::pressed,  this, &MainWindow::addNewChat);
 
     connect(chatbot, &IChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(chatbot, &IChatBot::finished, this,  &MainWindow::on_chatbot_finish);
@@ -234,7 +238,7 @@ void MainWindow::addMessage(QString text )
         hisItem = item;
     }
 
-    chatListView->addMessage(ui->settingButton->text(), ui->settingButton->icon().pixmap(30), text);
+    chatListView->addMessage("farley", QIcon("://icon/farley.jpg").pixmap(30), text);
     chatListView->addMessage(ui->comboBox->currentText(), ui->newChatButton->icon().pixmap(30), "");
     chatListView->scrollToBottom();
 

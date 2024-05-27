@@ -18,6 +18,7 @@ public:
 
         addSubButton(QIcon("://icon/create-new.svg"));
         getSubButton(1)->setToolTip("New chat");
+        getSubButton(1)->hide();
     }
 
 public:

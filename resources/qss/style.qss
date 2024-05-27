@@ -36,6 +36,45 @@ QPushButton::menu-indicator {
     image: none;
 }
 
+QPushButton#newChatBtn,
+QPushButton#expandSideBtn,
+QPushButton#expandButton
+{
+    border: 1px hidden gray;
+    border-radius: 10px;
+    text-align: center; /* 设置文本左对齐 */
+}
+QPushButton#newChatBtn:hover,
+QPushButton#expandSideBtn:hover,
+QPushButton#expandButton:hover {
+    background-color: #ececec;
+    color: black;
+}
+QPushButton#newChatBtn:pressed,
+QPushButton#expandSideBtn:pressed,
+QPushButton#expandButton:pressed {
+    background-color:#ececec;
+    border-style: hidden;
+     border-style: outset;
+}
+
+QPushButton#userButton {
+    border: 1px solid gray;
+    border-radius: 10px;
+    text-align: center;
+    border-image:url(:/icon/farley.jpg)
+}
+QPushButton#userButton:hover {
+border: 1px solid gray;
+border-radius: 10px;
+        border-style: outset;
+}
+QPushButton#userButton:pressed {
+    background-color:#ececec;
+    border-style: outset;
+}
+
+
 QPushButton#exploreButton,
 QPushButton#settingButton,
 QPushButton#newChatButton {
@@ -51,9 +90,10 @@ QPushButton#newChatButton:hover  {
 QPushButton#settingButton:pressed,
 QPushButton#exploreButton:pressed,
 QPushButton#newChatButton:pressed  {
+    border: 1px hidden;
+    border-radius: 10px;
     background-color: #ececec;
-    border-color: #ececec;
-    border-style: outset;
+    border-style: none;
 }
 
 
@@ -61,9 +101,7 @@ QComboBox { /* 编辑框的样式 */
     border: 1px hidden black;
     border-radius: 5px;
 }
-QComboBox:hover {
-    border: 1px solid black;
-}
+
 QComboBox::drop-down { /* 下拉按钮样式，默认在编辑框右上角 */
     border: hidden;
 }

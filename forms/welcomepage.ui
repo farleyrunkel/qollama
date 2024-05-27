@@ -31,6 +31,12 @@
    </property>
    <item row="2" column="1">
     <widget class="QFrame" name="welcomeFrame3">
+     <property name="minimumSize">
+      <size>
+       <width>120</width>
+       <height>120</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
        <width>200</width>
@@ -106,6 +112,12 @@
    </item>
    <item row="1" column="1">
     <widget class="QFrame" name="welcomeFrame1">
+     <property name="minimumSize">
+      <size>
+       <width>120</width>
+       <height>120</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
        <width>200</width>
@@ -171,6 +183,12 @@
    </item>
    <item row="2" column="2">
     <widget class="QFrame" name="welcomeFrame2">
+     <property name="minimumSize">
+      <size>
+       <width>120</width>
+       <height>120</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
        <width>200</width>
@@ -271,6 +289,12 @@ image: url(:/icon/terminal.svg);</string>
    </item>
    <item row="1" column="2">
     <widget class="QFrame" name="welcomeFrame4">
+     <property name="minimumSize">
+      <size>
+       <width>120</width>
+       <height>120</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
        <width>200</width>
@@ -356,7 +380,7 @@ image: url(:/icon/terminal.svg);</string>
    <item row="3" column="1" colspan="2">
     <widget class="QFrame" name="welInputFrame">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
