@@ -17,24 +17,15 @@ MainWindow::MainWindow(QWidget *parent)
     , chatbot (new IChatBot(this))
     , test(new ITestWidget(this))
 {
-
-
     ui->setupUi(this);
+
 
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
     ui->expandButton->hide();
 
     setWindowIcon(QIcon("://icon/qollama.png"));
-
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground);
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
-    effect->setBlurRadius(20);
-    effect->setColor(QColor::fromRgbF(0, 0, 0, 0.7));
-    effect->setOffset(0, 0);
-    ui->centralwidget-> setGraphicsEffect(effect);
-    this-> setGraphicsEffect(effect);
+    setShadeBackground();
 
     test->hide();
 
@@ -93,6 +84,42 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+
+void MainWindow::setShadeBackground() {
+    setWindowFlags( windowFlags() | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    // 创建中央小部件
+    QWidget *centralWidget = this->centralWidget();
+    setContentsMargins(4, 4, 4, 4);
+
+    // 创建阴影效果
+    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);
+    shadowEffect->setBlurRadius(10);
+    shadowEffect->setOffset(1, 1);
+    shadowEffect->setColor(Qt::gray);
+
+    // 设置阴影效果到中央小部件
+    this->setGraphicsEffect(shadowEffect);
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        clickPosition = event->globalPosition() - frameGeometry().topLeft();
+        event->accept();
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        move(event->globalPosition().toPoint() - clickPosition.toPoint() );
+        event->accept();
+    }
 }
 
 void MainWindow::on_chatbot_finish() {

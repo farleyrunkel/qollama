@@ -34,6 +34,10 @@ public:
     void addMessage(QString text);
 
     IChatWidget *currentChatList();
+protected:
+
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 public slots:
     void appendWordToActiveChat(QString reply);
 private slots:
@@ -55,10 +59,12 @@ private:
     int curr;
     IChatBot* chatbot;
 
+    QPointF clickPosition;
 
     ITestWidget* test;
     IMarketPage* market;
     void on_chatbot_finish();
     void promoteToMacButtons();
+        void setShadeBackground();
 };
 #endif // MAINWINDOW_H

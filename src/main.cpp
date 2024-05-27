@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QFile>
+#include <QGraphicsDropShadowEffect>
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
+
 
     w.show();
 
