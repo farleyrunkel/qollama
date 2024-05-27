@@ -429,7 +429,7 @@ image: url(:/icon/terminal.svg);</string>
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resouces.qrc">
+         <iconset resource="../resources/resouces.qrc">
           <normaloff>:/icon/send.svg</normaloff>:/icon/send.svg</iconset>
         </property>
        </widget>
@@ -456,7 +456,7 @@ image: url(:/icon/terminal.svg);</string>
   </layout>
  </widget>
  <resources>
-  <include location="../resouces.qrc"/>
+  <include location="../resources/resouces.qrc"/>
  </resources>
  <connections/>
 </ui>

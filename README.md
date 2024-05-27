@@ -1,10 +1,10 @@
 # QOllama
 
-![image](./images/qollama-text.png)
+![image](./resources/images/qollama-text.png)
 
 QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The application provides a user-friendly interface for interacting with the model and managing chat history.
 
-![video](./images/QOllama.gif)
+![video](./resources/images/QOllama.gif)
 
 ## Features
 
@@ -14,7 +14,7 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
 
 ## Screenshots
 
-![image](./images/qollama.png)
+![image](./resources/images/qollama.png)
 
 ## Installation
 

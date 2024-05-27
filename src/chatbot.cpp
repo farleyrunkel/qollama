@@ -9,22 +9,17 @@ IChatBot::IChatBot(QObject *parent)
     , manager(new QNetworkAccessManager(this))
     , m_reply(nullptr)
     , m_status(Waiting) {
-    // 初始化成员变量
 }
 
 IChatBot::~IChatBot() {
-    // 确保资源被正确释放
+
     if (m_reply) {
         m_reply->deleteLater();
     }
 }
 
-void IChatBot::reply(const QMap<QString, QString>& map) {
+void IChatBot::reply(const QJsonObject& json) {
     QUrl url("http://localhost:11434/api/generate");
-
-    QJsonObject json;
-    json["model"] = map["model"];
-    json["prompt"] = map["message"];
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -36,7 +31,7 @@ void IChatBot::reply(const QMap<QString, QString>& map) {
     QObject::connect(m_reply, &QNetworkReply::finished, this, &IChatBot::finish);
     QObject::connect(m_reply, &QNetworkReply::errorOccurred, this, [&](QNetworkReply::NetworkError error){
         qDebug() << "Network error occurred:" << error;
-        emit replyReceived("NetworkError");
+        emit replyReceived("Network error occurred");
     });
 }
 

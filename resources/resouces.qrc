@@ -43,5 +43,10 @@
         <file>icon/qtcircle.svg</file>
         <file>images/QOllama.gif</file>
         <file>icon/search.svg</file>
+        <file>icon/sidebar-left.svg</file>
+        <file>icon/window-close-line.svg</file>
+        <file>icon/window-max-line.svg</file>
+        <file>icon/window-minimize.svg</file>
+        <file>icon/window-restore-line.svg</file>
     </qresource>
 </RCC>

@@ -84,6 +84,7 @@ QListWidget#historyList::item {
 }
 QListWidget#historyList::item:hover {
     background-color: #ececec;
+    border-radius:6px;
     color: black;
     border-style: hidden;
 }

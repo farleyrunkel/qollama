@@ -8,6 +8,8 @@
 #include "ichatwidget.h"
 #include "itestwidget.h"
 #include "imarketpage.h"
+#include "QJsonObject"
+#include <QGraphicsDropShadowEffect>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,14 +17,24 @@ MainWindow::MainWindow(QWidget *parent)
     , chatbot (new IChatBot(this))
     , test(new ITestWidget(this))
 {
+
+
     ui->setupUi(this);
 
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
-    ui->expandButton->icon().addPixmap(QPixmap(":/icon/full-screen.svg"), QIcon::Normal, QIcon::On);
-    ui->expandButton->icon().addPixmap(QPixmap(":/icon/full-screen-zoom.svg"), QIcon::Normal, QIcon::Off);
+    ui->expandButton->hide();
 
     setWindowIcon(QIcon("://icon/qollama.png"));
+
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect();
+    effect->setBlurRadius(20);
+    effect->setColor(QColor::fromRgbF(0, 0, 0, 0.7));
+    effect->setOffset(0, 0);
+    ui->centralwidget-> setGraphicsEffect(effect);
+    this-> setGraphicsEffect(effect);
 
     test->hide();
 
@@ -31,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     newPage->setLayout(new QHBoxLayout);
     newPage->layout()->addWidget(welcome);
     newPage->setContentsMargins(0, 50, 0, 50);
-    ui->rightStack->addWidget(newPage);
-    ui->rightStack->setCurrentWidget(newPage);
+    ui->stackedWidget->addWidget(newPage);
+    ui->stackedWidget->setCurrentWidget(newPage);
 
 
     market = new IMarketPage(this);
@@ -40,14 +52,15 @@ MainWindow::MainWindow(QWidget *parent)
     marketStackWidget->setLayout(new QHBoxLayout);
     marketStackWidget->layout()->addWidget(market);
     marketStackWidget->setContentsMargins(0, 5, 0, 5);
-    ui->rightStack->addWidget(marketStackWidget);
+    ui->stackedWidget->addWidget(marketStackWidget);
+    promoteToMacButtons() ;
 
     connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
 
-    connect(welcome, &IWelcomePage::send, [&](){ui->rightStack->setCurrentIndex(0);});
+    connect(welcome, &IWelcomePage::send, [&](){ui->stackedWidget->setCurrentIndex(0);});
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
-    connect(ui->exploreButton, &QPushButton::pressed, [&](){ui->rightStack->setCurrentIndex(2);});
+    connect(ui->exploreButton, &QPushButton::pressed, [&](){ui->stackedWidget->setCurrentIndex(2);});
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
 
     connect(chatbot, &IChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
@@ -70,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){
         ui->stack->removeWidget(ui->stack->widget(row));
         chatbot->abort();
-        ui->rightStack->setCurrentIndex(1);
+        ui->stackedWidget->setCurrentIndex(1);
     });
 
     connect(ui->settingButton, &QPushButton::pressed, test, &QWidget::show);
@@ -97,13 +110,9 @@ void MainWindow::on_chatbot_finish() {
 }
 void MainWindow::expandSideWidget()
 {
-    if ( ui->frameleft->isHidden() ) {
-        ui->expandButton->setIcon(ui->expandButton->icon().pixmap(30, QIcon::Normal, QIcon::Off));
-    }
-    else {
-        ui->expandButton->setIcon(ui->expandButton->icon().pixmap(30, QIcon::Normal, QIcon::On));
-    }
     ui->frameleft->setVisible(!ui->frameleft->isVisible());
+    ui->expandButton->setVisible(!ui->frameleft->isVisible());
+
     ui->stack->updateGeometry();
 
     QApplication::processEvents();
@@ -137,7 +146,7 @@ void MainWindow::addNewChat()
         ui->stack->setCurrentWidget(uniqueListWidget);
     }
 
-    ui->rightStack->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
 IChatWidget *MainWindow::currentChatList()
@@ -208,17 +217,23 @@ void MainWindow::addMessage(QString text )
         qDebug() << "Current history list item is null.";
     }
 
-    QMap<QString, QString> map;
-    map["message"] = text;
-    map["model"] = ui->comboBox->currentText();
+    QJsonObject json ;
+    json["prompt"] = text;
+    json["model"] = ui->comboBox->currentText();
 
-    chatbot->reply(map);
+    chatbot->reply(json);
+}
+
+void MainWindow::promoteToMacButtons() {
+#ifdef Q_OS_WIN // Check if the platform is Windows
+    ui->macButtons->close();
+#endif
 }
 
 void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
 {
     if (item) {
-        ui->rightStack->setCurrentIndex(0);
+        ui->stackedWidget->setCurrentIndex(0);
         qDebug() << "ui->historyList->row(item)" << ui->historyList->row(item);
         ui->stack->setCurrentIndex(ui->historyList->row(item));
     } else {
@@ -265,4 +280,9 @@ void MainWindow::on_inputLine_returnPressed()
     ui->inputLine->clear();
 }
 
+
+void MainWindow::on_expandSideBtn_clicked()
+{
+    expandSideWidget();
+}
 

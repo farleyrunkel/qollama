@@ -45,6 +45,10 @@ private slots:
 
     void on_inputLine_textChanged(const QString &arg1);
 
+
+
+    void on_expandSideBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     //std::vector<Document*> m_docus;
@@ -55,5 +59,6 @@ private:
     ITestWidget* test;
     IMarketPage* market;
     void on_chatbot_finish();
+    void promoteToMacButtons();
 };
 #endif // MAINWINDOW_H

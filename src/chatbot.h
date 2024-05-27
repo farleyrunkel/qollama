@@ -16,15 +16,15 @@ public:
     explicit IChatBot(QObject *parent = nullptr);
     ~IChatBot();
 
-    void reply(const QMap<QString, QString> &map);
+    void reply(const QJsonObject &json);
 
-    Status status() const { return m_status; } // 更正getter函数
+    Status status() const { return m_status; }
 
 signals:
     void replyReceived(QString);
     void finished();
 
-public slots:
+public:
     void readResponseData();
     void abort();
     void finish();
@@ -32,7 +32,7 @@ public slots:
 private:
     QNetworkAccessManager *manager;
     QNetworkReply *m_reply;
-    Status m_status; // 更正成员变量的名字以避免混淆
+    Status m_status;
 };
 
 #endif // CHATBOT_H
