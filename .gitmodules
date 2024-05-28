@@ -6,7 +6,4 @@
 	url = https://github.com/nlohmann/json
 [submodule "external/spinner"]
 	path = external/spinner
-	url = https://github.com/snowwlex/QtWaitingSpinner.git
-[submodule "src/3rdParty/spinner"]
-	path = src/3rdParty/spinner
-	url = https://github.com/snowwlex/QtWaitingSpinner.git
+	ur = https://github.com/snowwnlex/QtWaitingSpinner.git
