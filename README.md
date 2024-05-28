@@ -22,6 +22,8 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
 
 - Qt 5 or higher
 - C++11 or higher
+- CMake
+- Git
 
 ### Steps
 
@@ -31,17 +33,29 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
     cd qollama
     ```
 
-2. **Open the Project**:
+2. **Initialize Submodules**:
+    ```sh
+    git submodule update --init --recursive
+    ```
+
+3. **Open the Project**:
     Open the project in Qt Creator or any compatible IDE.
 
-3. **Build the Project**:
-    Build the project using your IDE or run the following commands in the terminal:
+4. **Configure the Project**:
+    Ensure that Qt and CMake are properly configured in your IDE. Alternatively, you can configure it manually in the terminal:
     ```sh
-    cmake
+    mkdir build
+    cd build
+    cmake ..
+    ```
+
+5. **Build the Project**:
+    Build the project using your IDE or run the following command in the terminal:
+    ```sh
     make
     ```
 
-4. **Run the Application**:
+6. **Run the Application**:
     Run the application through your IDE or execute the built binary:
     ```sh
     ./qollama
