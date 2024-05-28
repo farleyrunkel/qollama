@@ -95,8 +95,8 @@ void IMarketPage::setupTitle()
     auto titleLabel = new QLabel;
     titleLabel->setWordWrap(true);
     titleLabel->setText(
-        "<p style='text-align: center; font-size: 50px; font-weight: bold; color: black;'>GPTs</p>"
-        "<p style='text-align: center; font-size: 15px; color: gray;'>Explore and create a customized version of ChatGPT that integrates commands, additional knowledge, and any combination of skills.</p>");
+        "<p style='text-align: center; font-size: 48px; font-weight: bold; color: black;'>GPTs</p>"
+        "<p style='text-align: center; font-size: 12px; color: gray;'>Explore and create a customized version of ChatGPT that integrates commands, additional knowledge, and any combination of skills.</p>");
     titleWidget = titleLabel;
     contentLayout->addWidget(titleWidget);
 }

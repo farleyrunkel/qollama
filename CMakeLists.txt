@@ -18,12 +18,38 @@ find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 include_directories("src")
 include_directories("external/json/include")
 include_directories("external/asio/asio/include")
+include_directories("external/spinner")
+
+include_directories("src/buttons")
+include_directories("src/network")
+include_directories("src/display")
+include_directories("src/input")
+include_directories("src/pages")
+include_directories("src/tests")
+include_directories("src/container")
 
 set(PROJECT_SOURCES
         src/main.cpp
-        src/mainwindow.cpp
-        src/mainwindow.h
         forms/mainwindow.ui
+        forms/welcomepage.ui
+
+        src/network/chatbot.h src/network/chatbot.cpp
+
+        src/buttons/ioverlaybutton.h
+        src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp
+        src/buttons/iwinbuttonswidget.h src/buttons/iwinbuttonswidget.cpp
+
+        src/display/ipushcard.h src/display/ipushcard.cpp
+
+        src/container/ihistorylist.h  src/container/ihistorylist.cpp
+        src/container/igallerywidget.h src/container/igallerywidget.cpp
+        src/container/ichatwidget.h  src/container/ichatwidget.cpp
+
+        src/pages/iwelcomepage.h src/pages/iwelcomepage.cpp
+        src/pages/mainwindow.h src/pages/mainwindow.cpp
+        src/pages/imarketpage.h src/pages/imarketpage.cpp
+
+        src/tests/itestwidget.h src/tests/itestwidget.cpp
 )
 
 if(WIN32)
@@ -36,28 +62,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         resources/resouces.qrc
 
-        src/ihistorylist.h
-        src/ioverlaybutton.h
-        src/chatbot.h
-        src/chatbot.cpp
-
-        src/ihistorylist.cpp
-        forms/welcomepage.ui
-        src/iwelcomepage.h
-        src/iwelcomepage.cpp
-
-
-
-        src/ichatwidget.h
-        src/ichatwidget.cpp
-        src/waitingspinnerwidget.cpp src/waitingspinnerwidget.h
-        src/itestwidget.h src/itestwidget.cpp
-        src/igallerywidget.h src/igallerywidget.cpp
-        src/imarketpage.h src/imarketpage.cpp
-        src/ipushcard.h src/ipushcard.cpp
-        src/imacbuttonswidget.h src/imacbuttonswidget.cpp
-        src/iwinbuttonswidget.h src/iwinbuttonswidget.cpp
-    )
+        external/spinner/waitingspinnerwidget.h
+        external/spinner/waitingspinnerwidget.cpp
+ )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)

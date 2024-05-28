@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "chatbot.h"
+#include "network/chatbot.h"
 #include <QListWidgetItem>
 
 #include "iwelcomepage.h"
