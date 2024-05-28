@@ -35,7 +35,7 @@ public:
 
     IChatWidget *currentChatList();
 protected:
-
+    void showEvent(QShowEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
 public slots:
@@ -60,11 +60,11 @@ private:
     IChatBot* chatbot;
 
     QPointF clickPosition;
-
+    QWidget* rightTitleBar;
     ITestWidget* test;
     IMarketPage* market;
     void on_chatbot_finish();
     void promoteToMacButtons();
-        void setShadeBackground();
+    void setShadeBackground();
 };
 #endif // MAINWINDOW_H

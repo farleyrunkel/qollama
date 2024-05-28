@@ -156,12 +156,12 @@ QPushButton#welInputButton {
 }
 QPushButton#sendButton:hover,
 QPushButton#welInputButton:hover {
-    background-color: rgb(84, 210, 199);
+    background-color: rgb(84, 210, 99);
     color: black;
 }
 QPushButton#sendButton:pressed,
 QPushButton#welInputButton:pressed {
-    background-color:rgb(84, 210, 199);
+    background-color:rgb(84, 210, 99);
     border-style: inset;
 }
 /* finish input style */

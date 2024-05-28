@@ -16,6 +16,9 @@ IWelcomePage::IWelcomePage(QWidget *parent)
     this->setPalette(pal);
     // Ensure the widget uses the palette to fill the background
     this->setAutoFillBackground(true);
+
+    connect(ui->welInputLine, &QLineEdit::returnPressed, [&]()  {emit send(ui->welInputLine->text());});
+    connect(ui->welInputButton, &QPushButton::pressed, [&]()  {emit send(ui->welInputLine->text());});
 }
 
 void IWelcomePage::mousePressEvent(QMouseEvent *event) {

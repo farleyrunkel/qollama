@@ -19,15 +19,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    rightTitleBar = ui->titleBar;
 
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
-    ui->expandButton->hide();
 
     setWindowIcon(QIcon("://icon/qollama.png"));
     setShadeBackground();
-
-    test->hide();
 
     auto welcome = new IWelcomePage;
     auto newPage = new QWidget;
@@ -37,19 +35,16 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(newPage);
     ui->stackedWidget->setCurrentWidget(newPage);
 
-
     market = new IMarketPage(this);
     auto marketStackWidget = new QWidget;
     marketStackWidget->setLayout(new QHBoxLayout);
     marketStackWidget->layout()->addWidget(market);
     marketStackWidget->setContentsMargins(0, 5, 0, 5);
     ui->stackedWidget->addWidget(marketStackWidget);
-    promoteToMacButtons() ;
-
-    connect(ui->stack, &QStackedWidget::show, ui->comboBox, &QComboBox::show);
-    connect(ui->stack, &QStackedWidget::hide, ui->comboBox, &QComboBox::hide);
+    promoteToMacButtons();
 
     connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
+    connect(ui->chatPage, &IWidget::shown, ui->comboBox, &QComboBox::setVisible);
 
     connect(welcome, &IWelcomePage::send, [&](){ui->stackedWidget->setCurrentIndex(0);});
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
@@ -89,8 +84,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
 
 void MainWindow::setShadeBackground() {
     setWindowFlags( windowFlags() | Qt::FramelessWindowHint);
@@ -141,8 +134,8 @@ void MainWindow::on_chatbot_finish() {
 }
 void MainWindow::expandSideWidget()
 {
-    ui->frameleft->setVisible(!ui->frameleft->isVisible());
-    ui->expandButton->setVisible(!ui->frameleft->isVisible());
+    ui->left->setVisible(!ui->left->isVisible());
+    ui->expandButton->setVisible(!ui->left->isVisible());
 
     ui->stack->updateGeometry();
 
@@ -197,6 +190,16 @@ IChatWidget *MainWindow::currentChatList()
     return listWidgets.at(0);
 }
 
+void MainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+
+    ui->expandButton->hide();
+    ui->comboBox->hide();
+
+    test->hide();
+}
+
 void MainWindow::addMessage(QString text )
 {
     if (chatbot->status() == IChatBot::Status::Receiving
@@ -207,7 +210,7 @@ void MainWindow::addMessage(QString text )
         qDebug() << "Input text is empty.";
         return;
     }
-
+    ui->stackedWidget->setCurrentIndex(0);
     ui->sendButton->setEnabled(true);
     ui->sendButton->setIcon(QIcon(":/icon/stop.svg"));
     ui->sendButton->setStatusTip("Pending");
