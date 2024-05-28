@@ -265,6 +265,10 @@ void MainWindow::promoteToMacButtons() {
 #ifdef Q_OS_WIN // Check if the platform is Windows
     ui->macButtons->close();
 #endif
+
+#ifdef Q_OS_MAC // Check if the platform is macOS
+    ui->winTitles->close();
+#endif
 }
 
 void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
