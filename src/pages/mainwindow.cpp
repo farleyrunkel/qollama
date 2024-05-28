@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentWidget(newPage);
 
     market = new IMarketPage(this);
-    auto marketStackWidget = new QWidget;
+    auto marketStackWidget = new IWidget;
     marketStackWidget->setLayout(new QHBoxLayout);
     marketStackWidget->layout()->addWidget(market);
     marketStackWidget->setContentsMargins(0, 5, 0, 5);
@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
     connect(ui->chatPage, &IWidget::shown, ui->comboBox, &QComboBox::setVisible);
+    connect(marketStackWidget, &IWidget::shown, ui->exploreLabel, &QComboBox::setVisible);
 
     connect(welcome, &IWelcomePage::send, [&](){ui->stackedWidget->setCurrentIndex(0);});
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
@@ -196,7 +197,7 @@ void MainWindow::showEvent(QShowEvent *event)
 
     ui->expandButton->hide();
     ui->comboBox->hide();
-
+    ui->exploreLabel->hide();
     test->hide();
 }
 

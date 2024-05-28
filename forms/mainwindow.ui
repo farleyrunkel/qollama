@@ -720,7 +720,7 @@
          <widget class="QWidget" name="titleBar" native="true">
           <layout class="QHBoxLayout" name="rightTitleBar">
            <property name="spacing">
-            <number>5</number>
+            <number>7</number>
            </property>
            <property name="leftMargin">
             <number>5</number>
@@ -806,6 +806,13 @@
                <string>ChatGPT</string>
               </property>
              </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="exploreLabel">
+             <property name="text">
+              <string>Explore GPTs</string>
+             </property>
             </widget>
            </item>
            <item>

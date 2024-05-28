@@ -141,7 +141,8 @@ void IMessageWidget::appendMessage(const QString &message)
 
 
 IChatWidget::IChatWidget(QWidget *parent)
-    : QScrollArea(parent)
+    : IWidget(parent)
+    , scrollArea(new QScrollArea(this))
     , chatContainer(new QWidget(this))
     , latestMessageWidget(nullptr)
 {
@@ -150,9 +151,10 @@ IChatWidget::IChatWidget(QWidget *parent)
 
 void IChatWidget::setupUI()
 {
-    setWidgetResizable(true);
-    setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFrameShape(QFrame::NoFrame);
     setStyleSheet("background-color: white;");
+    setContentsMargins(0, 0, 0, 0);
 
     auto chatLayout = new QVBoxLayout(chatContainer);
     chatLayout->setContentsMargins(40, 0, 40, 0);
@@ -160,7 +162,7 @@ void IChatWidget::setupUI()
     chatLayout->setAlignment(Qt::AlignTop);
     chatContainer->setLayout(chatLayout);
 
-    setWidget(chatContainer);
+    scrollArea->setWidget(chatContainer);
 }
 
 void IChatWidget::addMessage(const QString &userName, const QPixmap &avatar, const QString &message)
@@ -184,5 +186,5 @@ IMessageWidget* IChatWidget::getLatestMessageWidget() const
 
 void IChatWidget::scrollToBottom()
 {
-    verticalScrollBar()->setValue(verticalScrollBar()->maximum());
+    scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum());
 }
