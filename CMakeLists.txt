@@ -16,9 +16,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
 
 include_directories("src")
-include_directories("external/json/include")
-include_directories("external/asio/asio/include")
-include_directories("external/spinner")
 
 include_directories("src/buttons")
 include_directories("src/network")
@@ -27,6 +24,10 @@ include_directories("src/input")
 include_directories("src/pages")
 include_directories("src/tests")
 include_directories("src/container")
+include_directories("src/3rdParty/spinner")
+
+include_directories("external/json/include")
+include_directories("external/asio/asio/include")
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -62,8 +63,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         resources/resouces.qrc
 
-        external/spinner/waitingspinnerwidget.h
-        external/spinner/waitingspinnerwidget.cpp
+        src/3rdParty/spinner/waitingspinnerwidget.h
+        src/3rdParty/spinner/waitingspinnerwidget.cpp
         src/container/iwidget.h src/container/iwidget.cpp
         src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
  )
