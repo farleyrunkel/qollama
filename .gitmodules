@@ -4,3 +4,6 @@
 [submodule "external/json"]
 	path = external/json
 	url = https://github.com/nlohmann/json
+[submodule "external/spinner"]
+	path = external/spinner
+	url = https://github.com/snowwlex/QtWaitingSpinner.git
