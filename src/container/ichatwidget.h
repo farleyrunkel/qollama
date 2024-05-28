@@ -59,7 +59,7 @@ private:
 };
 
 
-class IChatWidget : public IWidget {
+class IChatWidget : public QScrollArea {
     Q_OBJECT
 
 public:
@@ -76,7 +76,6 @@ private:
     void setupUI();
 
 private:
-    QScrollArea* scrollArea;
     IMessageWidget* latestMessageWidget;
     QWidget* chatContainer;
 
