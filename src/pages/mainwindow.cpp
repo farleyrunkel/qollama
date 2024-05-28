@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(marketStackWidget);
     promoteToMacButtons();
 
+    auto userWidget = new QDialog;
+    connect(ui->userButton, &QPushButton::clicked, userWidget, &QDialog::show);
     connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
     connect(ui->chatPage, &IWidget::shown, ui->comboBox, &QComboBox::setVisible);
     connect(marketStackWidget, &IWidget::shown, ui->exploreLabel, &QComboBox::setVisible);

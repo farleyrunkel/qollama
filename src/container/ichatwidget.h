@@ -12,20 +12,7 @@
 #include <QPushButton>
 #include <QPropertyAnimation>
 #include "waitingspinnerwidget.h"
-#include "iWidget.h"
-
-class IAutoResizeTextBrowser : public QTextBrowser {
-    Q_OBJECT
-
-public:
-    IAutoResizeTextBrowser(QWidget* parent = nullptr);
-
-protected:
-    void resizeEvent(QResizeEvent* event) override;
-
-public:
-    void updateGeometry();
-};
+#include "iautoresizetextbrowser.h"
 
 class IMessageWidget : public QWidget {
     Q_OBJECT
@@ -80,7 +67,6 @@ private:
     QWidget* chatContainer;
 
 };
-
 
 
 #endif // ICHATWIDGET_H

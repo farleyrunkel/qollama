@@ -65,6 +65,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         external/spinner/waitingspinnerwidget.h
         external/spinner/waitingspinnerwidget.cpp
         src/container/iwidget.h src/container/iwidget.cpp
+        src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
  )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
