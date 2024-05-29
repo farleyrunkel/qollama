@@ -58,7 +58,6 @@ void IPushCard::setupUI()
 
     itemIconLabel = new QLabel(this);
     itemIconLabel->setFixedSize(QSize(52, 52));
-    //itemIconLabel->setPixmap(QIcon("://icon/art-palette.svg").pixmap(itemIconLabel->width()));
     itemIconLabel->setStyleSheet("border: 1px solid gray; border-radius: 26px;");
 
     QObject::connect(new ImageLoader, &ImageLoader::imageLoaded, [&](QPixmap *pixmap) {
