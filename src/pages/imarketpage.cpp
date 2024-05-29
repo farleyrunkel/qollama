@@ -10,7 +10,7 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     containerWidget->setLayout(contentLayout);
     contentLayout->setContentsMargins(80, 0, 80, 0);
     containerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setStyleSheet("background-color: white; border: 1px hidden blue;");
+
     setWidget(containerWidget);
     setWidgetResizable(true);
     setAlignment(Qt::AlignTop);

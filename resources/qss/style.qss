@@ -1,9 +1,16 @@
 QWidget#centralwidget {
-    background-color:white;
+    background-color:#F5F5F5;
 }
 QWidget#sideWidget {
-    background-color:#f7f7f5;
+    background-color:#78D999;
     border: 1px hidden;
+}
+
+QListWidget#historyList,
+IWelcomePage,
+IMarketPage,
+IChatWidget {
+    background-color:#78D999;
 }
 
 QTabWidget::pane,
@@ -113,9 +120,7 @@ QComboBox::menu-indicator {
 }
 
 
-QListWidget#historyList {
-    background-color:#f7f7f5;
-}
+
 QListWidget#historyList::item {
     border: 1px hidden gray;
     border-style: hidden;
@@ -138,13 +143,13 @@ QListWidget#historyList::item::selected {
 
 QFrame#inputFrame,
 QFrame#welInputFrame {
-    background-color:white;
+    background-color:#F5F5F5;
     border: 1px solid #a6a6a6;
     border-radius: 25px;
 }
 QLineEdit#inputLine,
 QLineEdit#welInputLine {
-    background-color:white;
+    background-color:#F5F5F5;
     border: 1px hidden #a6a6a6;
     border-radius: 24px;
 }

@@ -123,7 +123,6 @@ void IChatWidget::setupUI()
 {
     setWidgetResizable(true);
     setFrameShape(QFrame::NoFrame);
-    setStyleSheet("background-color: white;");
     setContentsMargins(0, 0, 0, 0);
 
     auto chatLayout = new QVBoxLayout(chatContainer);

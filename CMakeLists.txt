@@ -37,8 +37,6 @@ set(PROJECT_SOURCES
         src/main.cpp
         forms/mainwindow.ui
         forms/welcomepage.ui
-
-
 )
 
 if(WIN32)
