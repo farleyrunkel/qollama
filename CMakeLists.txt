@@ -38,23 +38,7 @@ set(PROJECT_SOURCES
         forms/mainwindow.ui
         forms/welcomepage.ui
 
-        src/network/client.h src/network/client.cpp
 
-        src/buttons/ioverlaybutton.h
-        src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp
-        src/buttons/iwinbuttonswidget.h src/buttons/iwinbuttonswidget.cpp
-
-        src/display/ipushcard.h src/display/ipushcard.cpp
-
-        src/container/ihistorylist.h  src/container/ihistorylist.cpp
-        src/container/igallerywidget.h src/container/igallerywidget.cpp
-        src/container/ichatwidget.h  src/container/ichatwidget.cpp
-
-        src/pages/iwelcomepage.h src/pages/iwelcomepage.cpp
-        src/pages/mainwindow.h src/pages/mainwindow.cpp
-        src/pages/imarketpage.h src/pages/imarketpage.cpp
-
-        src/tests/itestwidget.h src/tests/itestwidget.cpp
 )
 
 if(WIN32)
@@ -67,10 +51,29 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         resources/resouces.qrc
 
+        src/network/client.h src/network/client.cpp
+
+        src/buttons/ioverlaybutton.h
+        src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp
+        src/buttons/iwinbuttonswidget.h src/buttons/iwinbuttonswidget.cpp
+
+        src/display/ipushcard.h src/display/ipushcard.cpp
+        src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
+
+        src/container/ihistorylist.h  src/container/ihistorylist.cpp
+        src/container/igallerywidget.h src/container/igallerywidget.cpp
+        src/container/ichatwidget.h  src/container/ichatwidget.cpp
+        src/container/iwidget.h src/container/iwidget.cpp
+
+        src/pages/iwelcomepage.h src/pages/iwelcomepage.cpp
+        src/pages/mainwindow.h src/pages/mainwindow.cpp
+        src/pages/imarketpage.h src/pages/imarketpage.cpp
+
+        src/tests/itestwidget.h src/tests/itestwidget.cpp
+
         src/3rdParty/spinner/waitingspinnerwidget.h
         src/3rdParty/spinner/waitingspinnerwidget.cpp
-        src/container/iwidget.h src/container/iwidget.cpp
-        src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
+
         src/objects/imageloader.h src/objects/imageloader.cpp
  )
 # Define target properties for Android with Qt 6 as:
