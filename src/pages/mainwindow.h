@@ -2,12 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include "network/chatbot.h"
 #include <QListWidgetItem>
 
-#include "iwelcomepage.h"
-
+#include "client.h"
 #include "ichatwidget.h"
 #include "itestwidget.h"
 #include "imarketpage.h"
@@ -26,38 +23,30 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-
     void on_historyListItem_clicked(QListWidgetItem *item);
-
     void expandSideWidget();
-
     void addMessage(QString text);
-
     IChatWidget *currentChatList();
+
 protected:
     void showEvent(QShowEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
+
 public slots:
     void appendWordToActiveChat(QString reply);
-private slots:
 
+private slots:
     void addNewChat();
     void on_inputLine_returnPressed();
-
     void on_comboBox_activated(int index);
-
     void on_inputLine_textChanged(const QString &arg1);
-
-
-
     void on_expandSideBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
     //std::vector<Document*> m_docus;
-    int curr;
-    IChatBot* chatbot;
+    ollama::Client* chatbot;
 
     QPointF clickPosition;
     QWidget* rightTitleBar;

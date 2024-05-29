@@ -30,13 +30,14 @@ include_directories("src/3rdParty/spinner")
 
 include_directories("external/json/include")
 include_directories("external/asio/asio/include")
+include_directories("external/ollama/include")
 
 set(PROJECT_SOURCES
         src/main.cpp
         forms/mainwindow.ui
         forms/welcomepage.ui
 
-        src/network/chatbot.h src/network/chatbot.cpp
+        src/network/client.h src/network/client.cpp
 
         src/buttons/ioverlaybutton.h
         src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp

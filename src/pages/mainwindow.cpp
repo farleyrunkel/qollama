@@ -1,20 +1,23 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include <QVBoxLayout>
 #include <QDialog>
-#include "ioverlaybutton.h"
 #include <QLabel>
 #include <QStandardItemModel>
+#include <QJsonObject>
+#include <QGraphicsDropShadowEffect>
+
+#include "ioverlaybutton.h"
 #include "ichatwidget.h"
 #include "itestwidget.h"
 #include "imarketpage.h"
-#include "QJsonObject"
-#include <QGraphicsDropShadowEffect>
+#include "iwelcomepage.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , chatbot (new IChatBot(this))
+    , chatbot (new ollama::Client(this))
     , test(new ITestWidget(this))
 {
     ui->setupUi(this);
@@ -56,8 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
     connect(ui->newChatBtn, &QPushButton::pressed,  this, &MainWindow::addNewChat);
 
-    connect(chatbot, &IChatBot::replyReceived, this, &MainWindow::appendWordToActiveChat);
-    connect(chatbot, &IChatBot::finished, this,  &MainWindow::on_chatbot_finish);
+    connect(chatbot, &ollama::Client::replyReceived, this, &MainWindow::appendWordToActiveChat);
+    connect(chatbot, &ollama::Client::finished, this,  &MainWindow::on_chatbot_finish);
 
     connect(ui->sendButton, &QPushButton::clicked,[&](){
         if (ui->sendButton->statusTip() == "Pending") {
@@ -205,8 +208,8 @@ void MainWindow::showEvent(QShowEvent *event)
 
 void MainWindow::addMessage(QString text )
 {
-    if (chatbot->status() == IChatBot::Status::Receiving
-        || chatbot->status() == IChatBot::Status::Requesting
+    if (chatbot->status() == ollama::Client::Receiving
+        || chatbot->status() == ollama::Client::Requesting
     ) {return;}
 
     if (text.isEmpty()) {
@@ -258,7 +261,7 @@ void MainWindow::addMessage(QString text )
     json["prompt"] = text;
     json["model"] = ui->comboBox->currentText();
 
-    chatbot->reply(json);
+    chatbot->generate(json);
 }
 
 void MainWindow::promoteToMacButtons() {
@@ -306,8 +309,8 @@ void MainWindow::on_inputLine_textChanged(const QString &arg1)
 
 void MainWindow::on_inputLine_returnPressed()
 {
-    if (chatbot->status() == IChatBot::Status::Receiving
-        || chatbot->status() == IChatBot::Status::Requesting
+    if (chatbot->status() == ollama::Client::Receiving
+        || chatbot->status() == ollama::Client::Requesting
         ) {return;}
 
     QString text = ui->inputLine->text().trimmed();

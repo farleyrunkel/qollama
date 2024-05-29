@@ -6,12 +6,16 @@ project(test1 LANGUAGES CXX)
 
 message(STATUS "Start config project " ${PROJECT_NAME})
 
+include_directories(${CMAKE_SOURCE_DIR}/external/json/include)
+include_directories(${CMAKE_SOURCE_DIR}/external/asio/asio/include)
+include_directories(${CMAKE_SOURCE_DIR}/external/ollama/include)
+
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Test Widgets)
 
 qt_standard_project_setup()
 
 qt_add_executable(test1
-    testqstring.cpp
+    testasio.cpp
 )
 
 set_target_properties(test1 PROPERTIES
@@ -24,6 +28,7 @@ target_link_libraries(test1 PRIVATE
     Qt6::Gui
     Qt6::Test
     Qt6::Widgets
+    ws2_32
 )
 
 install(TARGETS test1
