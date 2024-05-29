@@ -26,6 +26,7 @@ include_directories("src/input")
 include_directories("src/pages")
 include_directories("src/tests")
 include_directories("src/container")
+include_directories("src/objects")
 include_directories("src/3rdParty/spinner")
 
 include_directories("external/json/include")
@@ -70,6 +71,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/3rdParty/spinner/waitingspinnerwidget.cpp
         src/container/iwidget.h src/container/iwidget.cpp
         src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
+        src/objects/imageloader.h src/objects/imageloader.cpp
  )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

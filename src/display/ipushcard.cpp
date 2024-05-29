@@ -1,12 +1,19 @@
 #include "ipushcard.h"
-
+#include "imageloader.h"
+#include <QPainter>
+#include <QPainterPath>
 
 IPushCard::IPushCard(QWidget *parent) : QFrame(parent)
 {
     setupUI();
-    // 安装事件过滤器
+
     installEventFilter(this);
 }
+
+void IPushCard::setNumber(int num) {
+    itemNumberLabel->setNum(num);
+}
+
 
 void IPushCard::setText(const QString &text) {
     itemTextLabel->setText(text);
@@ -46,14 +53,23 @@ void IPushCard::setupUI()
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     itemNumberLabel = new QLabel(this);
-    itemNumberLabel->setNum(1);
     itemNumberLabel->setFixedWidth(20);
     itemNumberLabel->setStyleSheet("border:none; font-size: 20px; font-weight: bold;");
 
     itemIconLabel = new QLabel(this);
     itemIconLabel->setFixedSize(QSize(52, 52));
-    itemIconLabel->setPixmap(QIcon("://icon/art-palette.svg").pixmap(itemIconLabel->width()));
+    //itemIconLabel->setPixmap(QIcon("://icon/art-palette.svg").pixmap(itemIconLabel->width()));
     itemIconLabel->setStyleSheet("border: 1px solid gray; border-radius: 26px;");
+
+    QObject::connect(new ImageLoader, &ImageLoader::imageLoaded, [&](QPixmap *pixmap) {
+        if (pixmap)
+        {
+            itemIconLabel->setPixmap(ImageLoader::circularPixmap(*pixmap));
+            itemIconLabel->setScaledContents(true);
+        }
+        delete pixmap;
+    });
+
 
     itemTextLabel = new QLabel(this);
     itemTextLabel->setText(QString("<b>Heading</b><p>%1</p>").arg("This is a text"));

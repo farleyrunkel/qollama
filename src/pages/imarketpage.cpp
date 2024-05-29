@@ -158,7 +158,7 @@ void IMarketPage::addKind(const QString &text)
 
     for (int i = 0; i < 5; i++)
     {
-        kindItemsLayout->addWidget(new IPushCard);
+        kindItemsLayout->addWidget(new IPushCard(kindItemsLayout->count()));
     }
 
     contentLayout->addWidget(kindItemsWidget);

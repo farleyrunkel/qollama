@@ -1,7 +1,6 @@
 #ifndef IWINBUTTONSWIDGET_H
 #define IWINBUTTONSWIDGET_H
 
-
 #include <QColor>
 #include <QFont>
 #include <QWidget>
@@ -11,19 +10,14 @@
 #include <QPainter>
 #include <QRegularExpression>
 
-
-//{"#DD0000", "#AA8800", "#008800"};
-
-
-
-class IWinButton: public QPushButton
+class IWinButton : public QPushButton
 {
     Q_OBJECT
 
 public:
     IWinButton(QWidget* parent = nullptr)
-        : QPushButton(parent)  {
-
+        : QPushButton(parent)
+    {
         setFixedHeight(30);
         setFixedWidth(40);
 
@@ -40,7 +34,11 @@ public:
     void setBackgroundColor(QColor color) {
         QString colorStr = color.name();  // Get the color name as a string
         QString newStyleSheet = defaultStyleSheet;
-        newStyleSheet.replace(QRegularExpression("background-color\\s*:\\s*\\w+;"), "background-color: " + colorStr + ";");
+        if (newStyleSheet.contains(QRegularExpression("background-color\\s*:\\s*#[0-9a-fA-F]+;"))) {
+            newStyleSheet.replace(QRegularExpression("background-color\\s*:\\s*#[0-9a-fA-F]+;"), "background-color: " + colorStr + ";");
+        } else {
+            newStyleSheet += QString("background-color: %1;").arg(colorStr);
+        }
         setStyleSheet(newStyleSheet);
         update();
     }
@@ -49,82 +47,44 @@ private:
     QString defaultStyleSheet;
 };
 
-
-class IWinMaxmizeButton: public QPushButton
+class IWinButtonsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    IWinMaxmizeButton(QWidget* parent = nullptr)
-        : QPushButton(parent)  {
-
-        setIcon(QIcon(createWinFullScreenIcon(width()-2)));
-
-    }
-
-private:
-    QPixmap createWinFullScreenIcon(int size) {
-        QPixmap pixmap(size, size);
-        pixmap.fill(Qt::transparent);  // 透明背景
-
-        QPainter painter(&pixmap);
-        painter.setRenderHint(QPainter::Antialiasing);
-
-        // 内部的两个箭头（类似于 WinOS 全屏按钮的图标）
-        QPen arrowPen(Qt::white, size / 10);
-        painter.setPen(arrowPen);
-
-        int offset = size / 4;
-        QPointF points[3] = {
-            QPointF(offset, offset),
-            QPointF(size / 2, size / 2),
-            QPointF(offset, size - offset)
-        };
-        painter.drawPolyline(points, 3);
-
-        points[0] = QPointF(size - offset, size - offset);
-        points[1] = QPointF(size / 2, size / 2);
-        points[2] = QPointF(size - offset, offset);
-        painter.drawPolyline(points, 3);
-
-        return pixmap;
-    }
-};
-
-
-
-
-class IWinButtonsWidget : public QWidget {
-    Q_OBJECT
-
-public:
     IWinButtonsWidget(QWidget* parent = nullptr)
-        : QWidget(parent){
+        : QWidget(parent)
+    {
+        setFixedWidth(120);
 
-        setFixedWidth(100);
+        minimizeBtn = new IWinButton(this);
+        //minimizeBtn->setBackgroundColor(QColor("#AA8800"));
+        minimizeBtn->setIcon(QIcon(":/icon/window-minimize.svg"));
+
+        maximizeBtn = new IWinButton(this);
+       // maximizeBtn->setBackgroundColor(QColor("#008800"));
+        maximizeBtn->setIcon(QIcon(":/icon/window-max-line.svg"));
+
         closeBtn = new IWinButton(this);
-        closeBtn->setBackgroundColor(QColor("#DD0000"));
-        closeBtn->setIcon(QIcon("://icon/window-close-line.svg"));
-
-        minimizeBtn = new IWinButton;
-        minimizeBtn->setBackgroundColor(QColor("#AA8800"));
-        minimizeBtn->setIcon(QIcon("://icon/window-minimize.svg"));
-
-        maximizeBtn = new IWinButton;
-        maximizeBtn->setBackgroundColor(QColor("#008800"));
-        maximizeBtn->setIcon(QIcon("://icon/window-max-line.svg"));
+        //closeBtn->setBackgroundColor(QColor("#DD0000"));
+        closeBtn->setIcon(QIcon(":/icon/window-close-line.svg"));
+        closeBtn->setObjectName("winCloseButton");
 
         auto layout = new QHBoxLayout(this);
 
         layout->addWidget(minimizeBtn);
         layout->addWidget(maximizeBtn);
+        layout->addWidget(closeBtn);
+
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
-        layout->addWidget(closeBtn);
+
+        // Hover effect using QSS
+        closeBtn->setStyleSheet(closeBtn->styleSheet() + " QPushButton:hover { background-color: #e81123; }");
+
         connect(closeBtn, &QPushButton::clicked, qApp, &QApplication::closeAllWindows);
         connect(maximizeBtn, &QPushButton::clicked, this, &IWinButtonsWidget::maximizeWindow);
         connect(minimizeBtn, &QPushButton::clicked, this, &IWinButtonsWidget::minimizeWindow);
-
     }
 
 public slots:
@@ -141,8 +101,6 @@ public slots:
     }
 
 private:
-
-    QString styleSheet;
     IWinButton* closeBtn;
     IWinButton* minimizeBtn;
     IWinButton* maximizeBtn;

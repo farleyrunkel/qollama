@@ -21,6 +21,11 @@ class IPushCard : public QFrame
 
 public:
     IPushCard(QWidget* parent = nullptr);
+    IPushCard(int num, QWidget* parent = nullptr) : IPushCard(parent) {
+        setNumber(num);
+    };
+
+    void setNumber(int num);
 
 
     void setText(const QString& text);
