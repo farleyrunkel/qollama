@@ -130,7 +130,7 @@ void IChatWidget::setupUI()
     chatLayout->setSpacing(0);
     chatLayout->setAlignment(Qt::AlignTop);
     chatContainer->setLayout(chatLayout);
-
+    chatContainer->setObjectName("chatContainer");
     setWidget(chatContainer);
 }
 

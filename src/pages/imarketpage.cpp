@@ -9,6 +9,7 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     contentLayout = new QVBoxLayout(containerWidget);
     containerWidget->setLayout(contentLayout);
     contentLayout->setContentsMargins(80, 0, 80, 0);
+    containerWidget->setObjectName("marketContainerWidget");
     containerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     setWidget(containerWidget);

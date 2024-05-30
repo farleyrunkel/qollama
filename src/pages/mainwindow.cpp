@@ -187,13 +187,7 @@ IChatWidget *MainWindow::currentChatList()
         return nullptr;
     }
 
-    QList<IChatWidget *> listWidgets = currentTabWidget->findChildren<IChatWidget *>();
-    if (listWidgets.size() != 1) {
-        qDebug() << "Error: There is not exactly one IChatList widget in the current tab.";
-        return nullptr;
-    }
-
-    return listWidgets.at(0);
+    return qobject_cast<IChatWidget *>(currentTabWidget);
 }
 
 void MainWindow::showEvent(QShowEvent *event)
@@ -227,15 +221,10 @@ void MainWindow::addMessage(QString text )
     if (!chatListView  || chatListView && !chatListView->isNew()) {
         qDebug() << "Create new chatList.";
 
-        auto tab = new QWidget();
-        auto verticalLayout = new QVBoxLayout(tab);
-        verticalLayout->setSpacing(0);
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        auto newChatList = new IChatWidget(tab);
-        verticalLayout->addWidget(newChatList);
+        auto newChatList = new IChatWidget();
 
-        ui->stack->addWidget(tab);
-        ui->stack->setCurrentWidget(tab);
+        ui->stack->addWidget(newChatList);
+        ui->stack->setCurrentWidget(newChatList);
 
         qDebug() << "ui->stack->currentIndex" << ui->stack->currentIndex();
         chatListView = newChatList;
@@ -271,6 +260,7 @@ void MainWindow::promoteToMacButtons() {
 
 #ifdef Q_OS_MAC // Check if the platform is macOS
     ui->winTitles->close();
+    ui->winButtons->close();
 #endif
 }
 

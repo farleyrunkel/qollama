@@ -37,23 +37,31 @@
 */
 
 Example#Usage {
-   background-color: transparent; /*@PrimaryColor*/
-   border: 1px solid transparent; /*@DarkBorder*/
+   background-color: transparent; /*@LightBackground*/
+   border: 1px solid transparent; /*@LightBorder*/
 }
 
-QWidget#centralwidget {
-    background-color: transparent; /*@PrimaryColor*/
-}
-QWidget#sideWidget {
-    background-color:#78D999;
-    border: 1px hidden;
-}
 
-QListWidget#historyList,
+QWidget#centralwidget,
+QWidget#marketContainerWidget,
+QWidget#chatPage,
+QWidget#chatContainer,
 IWelcomePage,
 IMarketPage,
 IChatWidget {
-    background-color:#78D999; /*#F5F5F5*/
+    background-color: #78D999; /*@White*/
+    border: none;
+}
+
+QStackedWidget#stack {
+    background-color: red;
+    border: none;
+}
+
+QWidget#sideWidget,
+QListWidget#historyList {
+    background-color: #78D999;  /*@LightGreen*/
+    border: 1px hidden;
 }
 
 QTabWidget::pane,

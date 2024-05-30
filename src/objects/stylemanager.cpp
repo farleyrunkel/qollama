@@ -4,22 +4,26 @@
 #include <QRegularExpression>
 #include <QWidget>
 
-StyleManager::StyleManager(QObject *parent) : QObject(parent) {
+StyleManager::StyleManager( QObject *parent)
+    : QObject(parent) {
 }
 
 void StyleManager::loadStyleSheet(const QString &filePath) {
     QFile file(filePath);
-    if (file.open(QFile::ReadOnly | QFile::Text)) {
-        QTextStream stream(&file);
-        QString styleSheet = stream.readAll();
-        file.close();
-
-        // Parse the color palette from the QSS comments
-        colorPalette = parseColorPalette(styleSheet);
-
-        // Replace color variables with actual values
-        currentStyleSheet = replaceColors(styleSheet);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        qDebug() << "Failed to open file for reading:" << filePath;
+        return;
     }
+
+    QTextStream stream(&file);
+    QString styleSheet = stream.readAll();
+    file.close();
+
+    // Parse the color palette from the QSS comments
+    colorPalette = parseColorPalette(styleSheet);
+
+    // Replace color variables with actual values
+    currentStyleSheet = replaceColors(styleSheet);
 }
 
 void StyleManager::applyStyleSheet(QWidget *widget) {
@@ -29,7 +33,7 @@ void StyleManager::applyStyleSheet(QWidget *widget) {
 QString StyleManager::replaceColors(const QString &styleSheet) {
     QString newStyleSheet = styleSheet;
 
-    QRegularExpression regex(R"(\s([^\s;]+)\s*;\s*/\*\s*@(\w+)\s*\*/)");
+    QRegularExpression regex(R"([\s:]([^\s;]+)\s*;\s*/\*\s*@(\w+)\s*\*/)");
 
     QRegularExpressionMatchIterator it = regex.globalMatch(styleSheet);
     while (it.hasNext()) {

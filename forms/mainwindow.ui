@@ -873,7 +873,7 @@
             </widget>
            </item>
            <item>
-            <widget class="IWinButtonsWidget" name="widget_2" native="true">
+            <widget class="IWinButtonsWidget" name="winButtons" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
