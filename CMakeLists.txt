@@ -73,6 +73,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/3rdParty/spinner/waitingspinnerwidget.cpp
 
         src/objects/imageloader.h src/objects/imageloader.cpp
+        src/objects/stylemanager.h src/objects/stylemanager.cpp
  )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

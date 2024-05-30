@@ -1,23 +1,18 @@
 #include <QApplication>
 #include <QFile>
-
+#include "stylemanager.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QString stylePath = ":/qss/style.qss";
-    QFile styleFile(stylePath);
-    if (styleFile.open(QFile::ReadOnly)) {
-        QString styleSheet = QLatin1String(styleFile.readAll());
-        a.setStyleSheet(styleSheet);
-        styleFile.close();
-    } else {
-        qDebug() << "Failed to open style file:" << stylePath;
-    }
+    // Load and apply the stylesheet
+    StyleManager styleManager;
+    styleManager.loadStyleSheet(":/qss/style.qss");
 
     MainWindow w;
+    styleManager.applyStyleSheet(&w);
 
     w.show();
 

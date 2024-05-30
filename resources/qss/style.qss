@@ -1,5 +1,48 @@
+/*
+    Color Palette
+    Primary Color:
+        @PrimaryColor:        #54D263;  (84, 210, 99)
+
+    Light Shades:
+        @VeryLightGreen:      #E7F8E9;  (231, 248, 233)
+        @LightGreen:          #A6E6B3;  (166, 230, 179)
+        @PaleGreen:           #78D999;  (120, 217, 153)
+
+    Dark Shades:
+        @DarkGreen:           #42A352;  (66, 163, 82)
+        @DeeperGreen:         #2D7B3C;  (45, 123, 60)
+        @DarkForestGreen:     #1C562B;  (28, 86, 43)
+
+    Contrast Colors:
+        @LightOrange:         #FFA726;  (255, 167, 38)
+        @LightYellow:         #FFEB3B;  (255, 235, 59)
+        @LightBlue:           #29B6F6;  (41, 182, 246)
+
+    Neutral Colors:
+        @White:               #FFFFFF;  (255, 255, 255)
+        @LightGray:           #F0F0F0;  (240, 240, 240)
+        @Gray:                #BDBDBD;  (189, 189, 189)
+        @DarkGray:            #757575;  (117, 117, 117)
+        @Black:               #212121;  (33, 33, 33)
+
+    Background Colors:
+        @LightBackground:     #F5F5F5;  (245, 245, 245)
+        @NeutralBackground:   #E0E0E0;  (224, 224, 224)
+        @DarkBackground:      #BDBDBD;  (189, 189, 189)
+
+    Border Colors:
+        @LightBorder:         #E0E0E0;  (224, 224, 224)
+        @NeutralBorder:       #9E9E9E;  (158, 158, 158)
+        @DarkBorder:          #616161;  (97, 97, 97)
+*/
+
+Example#Usage {
+   background-color: transparent; /*@PrimaryColor*/
+   border: 1px solid transparent; /*@DarkBorder*/
+}
+
 QWidget#centralwidget {
-    background-color:#F5F5F5;
+    background-color: transparent; /*@PrimaryColor*/
 }
 QWidget#sideWidget {
     background-color:#78D999;
@@ -10,7 +53,7 @@ QListWidget#historyList,
 IWelcomePage,
 IMarketPage,
 IChatWidget {
-    background-color:#78D999;
+    background-color:#78D999; /*#F5F5F5*/
 }
 
 QTabWidget::pane,
@@ -169,6 +212,8 @@ QPushButton#welInputButton:pressed {
     background-color:rgb(84, 210, 99);
     border-style: inset;
 }
+
+
 /* finish input style */
 
 
