@@ -30,8 +30,6 @@ public:
 
 protected:
     void showEvent(QShowEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
 
 public slots:
     void appendWordToActiveChat(QString reply);

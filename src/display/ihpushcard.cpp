@@ -1,33 +1,33 @@
-#include "ipushcard.h"
+#include "ihpushcard.h"
 #include "imageloader.h"
 #include <QPainter>
 #include <QPainterPath>
 
-IPushCard::IPushCard(QWidget *parent) : QFrame(parent)
+IHPushCard::IHPushCard(QWidget *parent) : QFrame(parent)
 {
     setupUI();
 
     installEventFilter(this);
 }
 
-void IPushCard::setNumber(int num) {
+void IHPushCard::setNumber(int num) {
     itemNumberLabel->setNum(num);
 }
 
 
-void IPushCard::setText(const QString &text) {
+void IHPushCard::setText(const QString &text) {
     itemTextLabel->setText(text);
 }
 
-void IPushCard::setNumberUnused() {
+void IHPushCard::setNumberUnused() {
     itemNumberLabel->close();
 }
 
-void IPushCard::setIcon(const QIcon &icon){
+void IHPushCard::setIcon(const QIcon &icon){
     itemIconLabel->setPixmap(icon.pixmap(itemIconLabel->width()));
 }
 
-bool IPushCard::eventFilter(QObject *watched, QEvent *event)
+bool IHPushCard::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == this)
     {
@@ -45,7 +45,7 @@ bool IPushCard::eventFilter(QObject *watched, QEvent *event)
     return QFrame::eventFilter(watched, event);
 }
 
-void IPushCard::setupUI()
+void IHPushCard::setupUI()
 {
     setMinimumWidth(250);
     setMinimumHeight(90);

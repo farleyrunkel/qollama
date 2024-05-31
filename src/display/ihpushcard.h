@@ -15,13 +15,13 @@
 #include <QDebug>
 #include <QEvent>
 
-class IPushCard : public QFrame
+class IHPushCard : public QFrame
 {
     Q_OBJECT
 
 public:
-    IPushCard(QWidget* parent = nullptr);
-    IPushCard(int num, QWidget* parent = nullptr) : IPushCard(parent) {
+    IHPushCard(QWidget* parent = nullptr);
+    IHPushCard(int num, QWidget* parent = nullptr) : IHPushCard(parent) {
         setNumber(num);
     };
 

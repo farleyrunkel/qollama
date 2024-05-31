@@ -2,29 +2,42 @@
 #define IWELCOMEPAGE_H
 
 #include <QWidget>
-#include "ui_welcomepage.h"
+#include <QLabel>
+#include <QGridLayout>
+#include <QSpacerItem>
 #include <QMouseEvent>
-
-namespace Ui {
-class IWelcomePage;
-}
-
+#include "ilineedit.h"
+#include "ivpushcard.h"
 
 class IWelcomePage : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit IWelcomePage(QWidget *parent = nullptr);
 
 signals:
-    void send(QString);
+    void send(const QString &text);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
 
+private:
+    void setupUi(QWidget *parent);
+
+    void retranslateUi();
+
+    void addPushCardWidgets();
 
 private:
-    Ui::IWelcomePage *ui;
+    QGridLayout *m_mainLayout;
+    QLabel* m_welcomeLogo;
+    ILineEdit *m_inputLine;
 
+    IVPushCard *card1;
+    IVPushCard *card2;
+    IVPushCard *card3;
+    IVPushCard *card4;
 };
+
 #endif // IWELCOMEPAGE_H

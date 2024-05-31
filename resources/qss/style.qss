@@ -41,7 +41,7 @@ Example#Usage {
    border: 1px solid transparent; /*@LightBorder*/
 }
 
-
+QStatusBar,
 QWidget#centralwidget,
 QWidget#marketContainerWidget,
 QWidget#chatPage,

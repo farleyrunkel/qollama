@@ -36,7 +36,7 @@ include_directories("external/ollama/include")
 set(PROJECT_SOURCES
         src/main.cpp
         forms/mainwindow.ui
-        forms/welcomepage.ui
+
 )
 
 if(WIN32)
@@ -55,7 +55,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp
         src/buttons/iwinbuttonswidget.h src/buttons/iwinbuttonswidget.cpp
 
-        src/display/ipushcard.h src/display/ipushcard.cpp
+        src/display/ivpushcard.h src/display/ivpushcard.cpp
+        src/display/ihpushcard.h src/display/ihpushcard.cpp
         src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
 
         src/container/ihistorylist.h  src/container/ihistorylist.cpp
@@ -66,6 +67,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/pages/iwelcomepage.h src/pages/iwelcomepage.cpp
         src/pages/mainwindow.h src/pages/mainwindow.cpp
         src/pages/imarketpage.h src/pages/imarketpage.cpp
+        src/pages/ichatspage.h src/pages/ichatspage.cpp
 
         src/tests/itestwidget.h src/tests/itestwidget.cpp
 
@@ -74,7 +76,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         src/objects/imageloader.h src/objects/imageloader.cpp
         src/objects/stylemanager.h src/objects/stylemanager.cpp
- )
+
+        src/input/ilineedit.h src/input/ilineedit.cpp
+        src/display/ititlebar.h src/display/ititlebar.cpp
+)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)

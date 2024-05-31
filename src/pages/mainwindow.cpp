@@ -22,13 +22,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    rightTitleBar = ui->titleBar;
-
     ui->sendButton->setDisabled(true);
     ui->sendButton->setStatusTip("Nothing");
 
     setWindowIcon(QIcon("://icon/qollama.png"));
-    setShadeBackground();
 
     auto welcome = new IWelcomePage;
     auto newPage = new QWidget;
@@ -37,26 +34,26 @@ MainWindow::MainWindow(QWidget *parent)
     newPage->setContentsMargins(0, 50, 0, 50);
     ui->stackedWidget->addWidget(newPage);
     ui->stackedWidget->setCurrentWidget(newPage);
-
+    ui->statusBar->setStatusTip("AI can make mistakes. Check important info.");
     market = new IMarketPage(this);
+
     auto marketStackWidget = new IWidget;
     marketStackWidget->setLayout(new QHBoxLayout);
     marketStackWidget->layout()->addWidget(market);
     marketStackWidget->setContentsMargins(0, 5, 0, 5);
     ui->stackedWidget->addWidget(marketStackWidget);
-    promoteToMacButtons();
 
     auto userWidget = new QDialog;
-    connect(ui->userButton, &QPushButton::clicked, userWidget, &QDialog::show);
+    //connect(ui->userButton, &QPushButton::clicked, userWidget, &QDialog::show);
     connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
-    connect(ui->chatPage, &IWidget::shown, ui->comboBox, &QComboBox::setVisible);
-    connect(marketStackWidget, &IWidget::shown, ui->exploreLabel, &QComboBox::setVisible);
+   // connect(ui->chatPage, &IWidget::shown, ui->comboBox, &QComboBox::setVisible);
+    //connect(marketStackWidget, &IWidget::shown, ui->exploreLabel, &QComboBox::setVisible);
 
     connect(welcome, &IWelcomePage::send, [&](){ui->stackedWidget->setCurrentIndex(0);});
     connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
     connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
     connect(ui->exploreButton, &QPushButton::pressed, [&](){ui->stackedWidget->setCurrentIndex(2);});
-    connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
+    //connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
     connect(ui->newChatBtn, &QPushButton::pressed,  this, &MainWindow::addNewChat);
 
     connect(chatbot, &ollama::Client::replyReceived, this, &MainWindow::appendWordToActiveChat);
@@ -91,40 +88,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setShadeBackground() {
-    setWindowFlags( windowFlags() | Qt::FramelessWindowHint);
-    setAttribute(Qt::WA_TranslucentBackground);
-
-    // 创建中央小部件
-    QWidget *centralWidget = this->centralWidget();
-    setContentsMargins(4, 4, 4, 4);
-
-    // 创建阴影效果
-    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);
-    shadowEffect->setBlurRadius(10);
-    shadowEffect->setOffset(1, 1);
-    shadowEffect->setColor(Qt::gray);
-
-    // 设置阴影效果到中央小部件
-    this->setGraphicsEffect(shadowEffect);
-}
-
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        clickPosition = event->globalPosition() - frameGeometry().topLeft();
-        event->accept();
-    }
-}
-
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
-{
-    if (event->buttons() & Qt::LeftButton) {
-        move(event->globalPosition().toPoint() - clickPosition.toPoint() );
-        event->accept();
-    }
-}
-
 void MainWindow::on_chatbot_finish() {
     ui->sendButton->setStatusTip("Nothing");
     on_inputLine_textChanged(ui->inputLine->text());
@@ -141,7 +104,7 @@ void MainWindow::on_chatbot_finish() {
 void MainWindow::expandSideWidget()
 {
     ui->left->setVisible(!ui->left->isVisible());
-    ui->expandButton->setVisible(!ui->left->isVisible());
+   // ui->expandButton->setVisible(!ui->left->isVisible());
 
     ui->stack->updateGeometry();
 
@@ -194,9 +157,8 @@ void MainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
 
-    ui->expandButton->hide();
-    ui->comboBox->hide();
-    ui->exploreLabel->hide();
+    //ui->expandButton->hide();
+   // ui->comboBox->hide();
     test->hide();
 }
 
@@ -237,7 +199,7 @@ void MainWindow::addMessage(QString text )
     }
 
     chatListView->addMessage("farley", QIcon("://icon/farley.jpg").pixmap(30), text);
-    chatListView->addMessage(ui->comboBox->currentText(), ui->newChatButton->icon().pixmap(30), "");
+    chatListView->addMessage("llama3", ui->newChatButton->icon().pixmap(30), "");
     chatListView->scrollToBottom();
 
     if (hisItem) {
@@ -248,20 +210,9 @@ void MainWindow::addMessage(QString text )
 
     QJsonObject json ;
     json["prompt"] = text;
-    json["model"] = ui->comboBox->currentText();
+  //  json["model"] = ui->comboBox->currentText();
 
     chatbot->generate(json);
-}
-
-void MainWindow::promoteToMacButtons() {
-#ifdef Q_OS_WIN // Check if the platform is Windows
-    ui->macButtons->close();
-#endif
-
-#ifdef Q_OS_MAC // Check if the platform is macOS
-    ui->winTitles->close();
-    ui->winButtons->close();
-#endif
 }
 
 void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
@@ -277,7 +228,7 @@ void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
 
 void MainWindow::on_comboBox_activated(int index)
 {
-    auto text = ui->comboBox->currentText();
+    auto text = "";//ui->comboBox->currentText();
     ui->inputLine->setPlaceholderText(QString("Message ") + text + "...");
 }
 

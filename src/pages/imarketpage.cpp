@@ -1,5 +1,6 @@
 #include "imarketpage.h"
-#include "ipushcard.h"
+#include "ihpushcard.h"
+#include "ilineedit.h"
 
 IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
 {
@@ -16,6 +17,7 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     setWidgetResizable(true);
     setAlignment(Qt::AlignTop);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
@@ -106,25 +108,25 @@ void IMarketPage::setupSearchLine()
 {
     qDebug() << "Setting up search line";
 
-    searchLineFrame = new QFrame;
-    auto searchLineLayout = new QHBoxLayout;
-    searchLineFrame->setLayout(searchLineLayout);
-    searchLineFrame->setStyleSheet("border: 1px solid gray; border-radius: 15px;");
-    searchLineFrame->setFixedHeight(40);
-    searchLineLayout->setContentsMargins(0, 2, 10, 2);
+    // searchLineFrame = new QFrame;
+    // auto searchLineLayout = new QHBoxLayout;
+    // searchLineFrame->setLayout(searchLineLayout);
+    // searchLineFrame->setStyleSheet("border: 1px solid gray; border-radius: 15px;");
+    // searchLineFrame->setFixedHeight(40);
+    // searchLineLayout->setContentsMargins(0, 2, 10, 2);
 
-    auto searchIconLabel = new QLabel;
-    searchIconLabel->setPixmap(QIcon("://icon/search.svg").pixmap(30));
-    searchIconLabel->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
+    // auto searchIconLabel = new QLabel;
+    // searchIconLabel->setPixmap(QIcon("://icon/search.svg").pixmap(30));
+    // searchIconLabel->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
 
-    auto searchTextEdit = new QLineEdit;
-    searchTextEdit->setPlaceholderText("Search GPT");
-    searchTextEdit->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
-    searchTextEdit->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
-    searchLineLayout->addWidget(searchIconLabel);
-    searchLineLayout->addWidget(searchTextEdit);
+    // auto searchTextEdit = new QLineEdit;
+    // searchTextEdit->setPlaceholderText("Search GPT");
+    // searchTextEdit->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+    // searchTextEdit->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
+    // searchLineLayout->addWidget(searchIconLabel);
+    // searchLineLayout->addWidget(searchTextEdit);
 
-    contentLayout->addWidget(searchLineFrame);
+    contentLayout->addWidget(new ILineEdit);
 }
 
 void IMarketPage::setupNavigator()
@@ -159,7 +161,7 @@ void IMarketPage::addKind(const QString &text)
 
     for (int i = 0; i < 5; i++)
     {
-        kindItemsLayout->addWidget(new IPushCard(kindItemsLayout->count()));
+        kindItemsLayout->addWidget(new IHPushCard(kindItemsLayout->count()));
     }
 
     contentLayout->addWidget(kindItemsWidget);
