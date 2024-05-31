@@ -33,67 +33,65 @@ include_directories("external/json/include")
 include_directories("external/asio/asio/include")
 include_directories("external/ollama/include")
 
-set(PROJECT_SOURCES
-        src/main.cpp
-
-
-)
-
+# 设置主文件
 if(WIN32)
-    list(APPEND PROJECT_SOURCES resources/qollama.rc)
+    set(PROJECT_MAIN_FILE "src/main.cpp")
+else()
+    set(PROJECT_MAIN_FILE "src/main.mm")
 endif()
 
+# 添加项目源文件
+set(PROJECT_SOURCES
+    ${PROJECT_MAIN_FILE}
+
+    # 其他源文件
+    src/network/client.h src/network/client.cpp
+
+    src/buttons/ioverlaybutton.h
+    src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp
+    src/buttons/iwinbuttonswidget.h src/buttons/iwinbuttonswidget.cpp
+
+    src/display/ivpushcard.h src/display/ivpushcard.cpp
+    src/display/ihpushcard.h src/display/ihpushcard.cpp
+    src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
+
+    src/container/ihistorylist.h src/container/ihistorylist.cpp
+    src/container/igallerywidget.h src/container/igallerywidget.cpp
+    src/container/ichatwidget.h src/container/ichatwidget.cpp
+    src/container/iwidget.h src/container/iwidget.cpp
+
+    src/pages/iwelcomepage.h src/pages/iwelcomepage.cpp
+    src/pages/mainwindow.h src/pages/mainwindow.cpp
+    src/pages/imarketpage.h src/pages/imarketpage.cpp
+    src/pages/ichatspage.h src/pages/ichatspage.cpp
+
+    src/tests/itestwidget.h src/tests/itestwidget.cpp
+
+    src/3rdParty/spinner/waitingspinnerwidget.h
+    src/3rdParty/spinner/waitingspinnerwidget.cpp
+
+    src/objects/imageloader.h src/objects/imageloader.cpp
+    src/objects/stylemanager.h src/objects/stylemanager.cpp
+
+    src/input/ilineedit.h src/input/ilineedit.cpp
+    src/display/ititlebar.h src/display/ititlebar.cpp
+    src/pages/irightwindow.h src/pages/irightwindow.cpp
+    src/objects/isignalhub.h src/objects/isignalhub.cpp
+    src/pages/ileftwindow.h src/pages/ileftwindow.cpp
+)
+
+# 创建可执行文件
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(qollama
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/resouces.qrc
-
-        src/network/client.h src/network/client.cpp
-
-        src/buttons/ioverlaybutton.h
-        src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp
-        src/buttons/iwinbuttonswidget.h src/buttons/iwinbuttonswidget.cpp
-
-        src/display/ivpushcard.h src/display/ivpushcard.cpp
-        src/display/ihpushcard.h src/display/ihpushcard.cpp
-        src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
-
-        src/container/ihistorylist.h  src/container/ihistorylist.cpp
-        src/container/igallerywidget.h src/container/igallerywidget.cpp
-        src/container/ichatwidget.h  src/container/ichatwidget.cpp
-        src/container/iwidget.h src/container/iwidget.cpp
-
-        src/pages/iwelcomepage.h src/pages/iwelcomepage.cpp
-        src/pages/mainwindow.h src/pages/mainwindow.cpp
-        src/pages/imarketpage.h src/pages/imarketpage.cpp
-        src/pages/ichatspage.h src/pages/ichatspage.cpp
-
-        src/tests/itestwidget.h src/tests/itestwidget.cpp
-
-        src/3rdParty/spinner/waitingspinnerwidget.h
-        src/3rdParty/spinner/waitingspinnerwidget.cpp
-
-        src/objects/imageloader.h src/objects/imageloader.cpp
-        src/objects/stylemanager.h src/objects/stylemanager.cpp
-
-        src/input/ilineedit.h src/input/ilineedit.cpp
-        src/display/ititlebar.h src/display/ititlebar.cpp
-        src/pages/irightwindow.h src/pages/irightwindow.cpp
-        src/objects/isignalhub.h src/objects/isignalhub.cpp
-        src/pages/ileftwindow.h src/pages/ileftwindow.cpp
-)
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+    )
 else()
     if(ANDROID)
         add_library(qollama SHARED
             ${PROJECT_SOURCES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(qollama
             ${PROJECT_SOURCES}
@@ -101,14 +99,18 @@ else()
     endif()
 endif()
 
-target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.qollama)
+# 只在 Windows 上链接 ws2_32 库
+if(WIN32)
+    target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network ws2_32)
+else()
+    target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
 endif()
+
+# 设置 macOS 下的一些属性
+if(${QT_VERSION} VERSION_LESS 6.1.0)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.qollama)
+endif()
+
 set_target_properties(qollama PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

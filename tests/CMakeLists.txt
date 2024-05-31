@@ -1,4 +1,3 @@
-# Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 cmake_minimum_required(VERSION 3.16)
@@ -23,12 +22,19 @@ set_target_properties(test1 PROPERTIES
     MACOSX_BUNDLE TRUE
 )
 
+# Define platform-specific libraries
+set(PLATFORM_LIBS)
+if(WIN32)
+    list(APPEND PLATFORM_LIBS ws2_32)
+endif()
+
+# Link libraries
 target_link_libraries(test1 PRIVATE
     Qt6::Core
     Qt6::Gui
     Qt6::Test
     Qt6::Widgets
-    ws2_32
+    ${PLATFORM_LIBS}
 )
 
 install(TARGETS test1
