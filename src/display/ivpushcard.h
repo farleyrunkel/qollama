@@ -6,12 +6,15 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QEvent>
+#include "isignalhub.h"
 
 class IVPushCard : public QPushButton {
     Q_OBJECT
 public:
     explicit IVPushCard(QWidget *parent = nullptr) : QPushButton(parent) {
         setupUI();
+
+        connect(this, &IVPushCard::clicked, [&](){emit ISignalHub::instance().on_IVPushCard_clicked(m_textLabel->text());});
     }
 
     explicit IVPushCard(const QString &text, QWidget *parent = nullptr) : IVPushCard(parent){

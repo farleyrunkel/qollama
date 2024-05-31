@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include "isignalhub.h"
 
 namespace ollama {
 
@@ -11,6 +12,9 @@ Client::Client(QObject *parent)
     , m_manager(new QNetworkAccessManager(this))
     , m_reply(nullptr)
     , m_status(Waiting) {
+
+   connect(&ISignalHub::instance(), &ISignalHub::questionReceived, this, &Client::generate);
+
 }
 
 Client::~Client() {

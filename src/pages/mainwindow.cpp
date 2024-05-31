@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
 #include <QVBoxLayout>
 #include <QDialog>
@@ -13,85 +12,82 @@
 #include "itestwidget.h"
 #include "imarketpage.h"
 #include "iwelcomepage.h"
+#include "irightwindow.h"
+#include "ileftwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
     , chatbot (new ollama::Client(this))
     , test(new ITestWidget(this))
 {
-    ui->setupUi(this);
+    setupUi();
 
-    ui->sendButton->setDisabled(true);
-    ui->sendButton->setStatusTip("Nothing");
+    //sendButton->setDisabled(true);
+   // sendButton->setStatusTip("Nothing");
 
     setWindowIcon(QIcon("://icon/qollama.png"));
 
-    auto welcome = new IWelcomePage;
-    auto newPage = new QWidget;
-    newPage->setLayout(new QHBoxLayout);
-    newPage->layout()->addWidget(welcome);
-    newPage->setContentsMargins(0, 50, 0, 50);
-    ui->stackedWidget->addWidget(newPage);
-    ui->stackedWidget->setCurrentWidget(newPage);
-    ui->statusBar->setStatusTip("AI can make mistakes. Check important info.");
-    market = new IMarketPage(this);
+    chats = new IChatsPage;
+    pages->addWidget(chats);
 
-    auto marketStackWidget = new IWidget;
-    marketStackWidget->setLayout(new QHBoxLayout);
-    marketStackWidget->layout()->addWidget(market);
-    marketStackWidget->setContentsMargins(0, 5, 0, 5);
-    ui->stackedWidget->addWidget(marketStackWidget);
+    welcome = new IWelcomePage;
+    pages->addWidget(welcome);
+    pages->setCurrentWidget(welcome);
+
+    statusBar->setStatusTip("AI can make mistakes. Check important info.");
+
+    market = new IMarketPage(this);
+    pages->addWidget(market);
 
     auto userWidget = new QDialog;
-    //connect(ui->userButton, &QPushButton::clicked, userWidget, &QDialog::show);
-    connect(ui->exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
-   // connect(ui->chatPage, &IWidget::shown, ui->comboBox, &QComboBox::setVisible);
-    //connect(marketStackWidget, &IWidget::shown, ui->exploreLabel, &QComboBox::setVisible);
+    //connect(userButton, &QPushButton::clicked, userWidget, &QDialog::show);
+    //connect(exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
+   // connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
+    //connect(marketStackWidget, &IWidget::shown, exploreLabel, &QComboBox::setVisible);
 
-    connect(welcome, &IWelcomePage::send, [&](){ui->stackedWidget->setCurrentIndex(0);});
-    connect(welcome, &IWelcomePage::send, this, &MainWindow::addMessage);
-    connect(ui->newChatButton, &QPushButton::pressed, this, &MainWindow::addNewChat);
-    connect(ui->exploreButton, &QPushButton::pressed, [&](){ui->stackedWidget->setCurrentIndex(2);});
-    //connect(ui->expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
-    connect(ui->newChatBtn, &QPushButton::pressed,  this, &MainWindow::addNewChat);
+   // connect(newChatButton, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
+   // connect(exploreButton, &QPushButton::pressed, [&](){pages->setCurrentWidget(market);});
+    //connect(expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
+   // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
 
     connect(chatbot, &ollama::Client::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(chatbot, &ollama::Client::finished, this,  &MainWindow::on_chatbot_finish);
 
-    connect(ui->sendButton, &QPushButton::clicked,[&](){
-        if (ui->sendButton->statusTip() == "Pending") {
-            chatbot->abort();
-            ui->sendButton->statusTip() = "Nothing";
-            return ;
-        }
-        else if (ui->sendButton->statusTip() == "Waiting") {
-            on_inputLine_returnPressed();
-        }
-    });
+    // connect(sendButton, &QPushButton::clicked,[&](){
+    //     if (sendButton->statusTip() == "Pending") {
+    //         chatbot->abort();
+    //         sendButton->statusTip() = "Nothing";
+    //         return ;
+    //     }
+    //     else if (sendButton->statusTip() == "Waiting") {
+    //         on_inputLine_returnPressed();
+    //     }
+    // });
 
-    connect(ui->inputLine, &QLineEdit::returnPressed, ui->sendButton, &QPushButton::pressed);
+   // connect(inputLine, &QLineEdit::returnPressed, sendButton, &QPushButton::pressed);
 
-    connect(ui->historyList, &IHistoryList::itemClicked, this, &MainWindow::on_historyListItem_clicked);
-    connect(ui->historyList, &IHistoryList::itemDeleted, [&](int row){
-        ui->stack->removeWidget(ui->stack->widget(row));
-        chatbot->abort();
-        ui->stackedWidget->setCurrentIndex(1);
-    });
+   // connect(historyList, &IHistoryList::itemClicked, this, &MainWindow::on_historyListItem_clicked);
+    // connect(historyList, &IHistoryList::itemDeleted, [&](int row){
+    //     pages->removeWidget(pages->widget(row));
+    //     chatbot->abort();
+    //     pages->setCurrentIndex(1);
+    // });
 
-    connect(ui->settingButton, &QPushButton::pressed, test, &QWidget::show);
+    //connect(settingButton, &QPushButton::pressed,  [&](){pages->setCurrentWidget(chats);});
+
+    connect(&ISignalHub::instance(), &ISignalHub::on_IVPushCard_clicked, [&](const QString&){pages->setCurrentWidget(chats);});
+
 }
 
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
 void MainWindow::on_chatbot_finish() {
-    ui->sendButton->setStatusTip("Nothing");
-    on_inputLine_textChanged(ui->inputLine->text());
-    auto *chatListView = currentChatList();
+   // sendButton->setStatusTip("Nothing");
+   // on_inputLine_textChanged(inputLine->text());
+    auto *chatListView = chats->currentChat();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
@@ -103,17 +99,17 @@ void MainWindow::on_chatbot_finish() {
 }
 void MainWindow::expandSideWidget()
 {
-    ui->left->setVisible(!ui->left->isVisible());
-   // ui->expandButton->setVisible(!ui->left->isVisible());
+    left->setVisible(!left->isVisible());
+   // expandButton->setVisible(!left->isVisible());
 
-    ui->stack->updateGeometry();
+    pages->updateGeometry();
 
     QApplication::processEvents();
 }
 
 void MainWindow::appendWordToActiveChat(QString text)
 {
-    auto chatListView = currentChatList();
+    auto chatListView = chats->currentChat();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
@@ -125,40 +121,12 @@ void MainWindow::appendWordToActiveChat(QString text)
     chatListView->scrollToBottom();
 }
 
-void MainWindow::addNewChat()
-{
-    if (ui->stack->count() >= 50) {
-        qDebug() << "Maximum chat tabs reached.";
-        return;
-    }
-
-    IChatWidget *uniqueListWidget = currentChatList();
-
-    if (!uniqueListWidget || uniqueListWidget->isNew()) {
-        qDebug() << "Current chat list is null or already contains a new chat.";
-        ui->stack->setCurrentWidget(uniqueListWidget);
-    }
-
-    ui->stackedWidget->setCurrentIndex(1);
-}
-
-IChatWidget *MainWindow::currentChatList()
-{
-    QWidget *currentTabWidget = ui->stack->currentWidget();
-    if (!currentTabWidget) {
-        qDebug() << "Current tab widget is null.";
-        return nullptr;
-    }
-
-    return qobject_cast<IChatWidget *>(currentTabWidget);
-}
-
 void MainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
 
-    //ui->expandButton->hide();
-   // ui->comboBox->hide();
+    //expandButton->hide();
+   // comboBox->hide();
     test->hide();
 }
 
@@ -172,34 +140,33 @@ void MainWindow::addMessage(QString text )
         qDebug() << "Input text is empty.";
         return;
     }
-    ui->stackedWidget->setCurrentIndex(0);
-    ui->sendButton->setEnabled(true);
-    ui->sendButton->setIcon(QIcon(":/icon/stop.svg"));
-    ui->sendButton->setStatusTip("Pending");
+    // pages->setCurrentIndex(0);
+    // sendButton->setEnabled(true);
+    // sendButton->setIcon(QIcon(":/icon/stop.svg"));
+    // sendButton->setStatusTip("Pending");
 
-    auto chatListView = currentChatList();
-    auto hisItem = ui->historyList->currentItem();
+    auto chatListView = chats->currentChat();
+    auto hisItem = historyList->currentItem();
 
     if (!chatListView  || chatListView && !chatListView->isNew()) {
         qDebug() << "Create new chatList.";
 
         auto newChatList = new IChatWidget();
 
-        ui->stack->addWidget(newChatList);
-        ui->stack->setCurrentWidget(newChatList);
+        // pages->addWidget(newChatList);
+        // pages->setCurrentWidget(newChatList);
 
-        qDebug() << "ui->stack->currentIndex" << ui->stack->currentIndex();
         chatListView = newChatList;
 
-        auto item = new QListWidgetItem(ui->historyList);
-        ui->historyList->addItem(item);
-        ui->historyList->setCurrentItem(item);
+        auto item = new QListWidgetItem(historyList);
+        historyList->addItem(item);
+        historyList->setCurrentItem(item);
 
         hisItem = item;
     }
 
-    chatListView->addMessage("farley", QIcon("://icon/farley.jpg").pixmap(30), text);
-    chatListView->addMessage("llama3", ui->newChatButton->icon().pixmap(30), "");
+    chatListView->addMessage(text, "farley", QIcon("://icon/farley.jpg").pixmap(30));
+    chatListView->addMessage("", "llama3", newChatButton->icon().pixmap(30));
     chatListView->scrollToBottom();
 
     if (hisItem) {
@@ -210,59 +177,59 @@ void MainWindow::addMessage(QString text )
 
     QJsonObject json ;
     json["prompt"] = text;
-  //  json["model"] = ui->comboBox->currentText();
+  //  json["model"] = comboBox->currentText();
 
     chatbot->generate(json);
 }
 
 void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
 {
-    if (item) {
-        ui->stackedWidget->setCurrentIndex(0);
-        qDebug() << "ui->historyList->row(item)" << ui->historyList->row(item);
-        ui->stack->setCurrentIndex(ui->historyList->row(item));
-    } else {
-        qDebug() << "Clicked history list item is null.";
-    }
+    // if (item) {
+    //     pages->setCurrentIndex(0);
+    //     qDebug() << "historyList->row(item)" << historyList->row(item);
+    //     pages->setCurrentIndex(historyList->row(item));
+    // } else {
+    //     qDebug() << "Clicked history list item is null.";
+    // }
 }
 
 void MainWindow::on_comboBox_activated(int index)
 {
-    auto text = "";//ui->comboBox->currentText();
-    ui->inputLine->setPlaceholderText(QString("Message ") + text + "...");
+    auto text = "";//comboBox->currentText();
+   // inputLine->setPlaceholderText(QString("Message ") + text + "...");
 }
 
 void MainWindow::on_inputLine_textChanged(const QString &arg1)
 {
-    if ( ui->sendButton->statusTip() == "Pending") {
-        return;
-    }
-    ui->sendButton->setIcon(QIcon(":/icon/arrow-up-circle.svg"));
-    if (arg1.isEmpty()) {
-        ui->sendButton->setDisabled(true);
-        ui->sendButton->setStatusTip("Nothing");
-    }
-    else {
-        ui->sendButton->setEnabled(true);
-        ui->sendButton->setStatusTip("Waiting");
-    }
+    // if ( sendButton->statusTip() == "Pending") {
+    //     return;
+    // }
+    // sendButton->setIcon(QIcon(":/icon/arrow-up-circle.svg"));
+    // if (arg1.isEmpty()) {
+    //     sendButton->setDisabled(true);
+    //     sendButton->setStatusTip("Nothing");
+    // }
+    // else {
+    //     sendButton->setEnabled(true);
+    //     sendButton->setStatusTip("Waiting");
+    // }
 }
 
 void MainWindow::on_inputLine_returnPressed()
 {
-    if (chatbot->status() == ollama::Client::Receiving
-        || chatbot->status() == ollama::Client::Requesting
-        ) {return;}
+    // if (chatbot->status() == ollama::Client::Receiving
+    //     || chatbot->status() == ollama::Client::Requesting
+    //     ) {return;}
 
-    QString text = ui->inputLine->text().trimmed();
+    // QString text = inputLine->text().trimmed();
 
-    if (text.isEmpty()) {
-        qDebug() << "Input text is empty.";
-        return;
-    }
+    // if (text.isEmpty()) {
+    //     qDebug() << "Input text is empty.";
+    //     return;
+    // }
 
-    addMessage(text);
-    ui->inputLine->clear();
+    // addMessage(text);
+    // inputLine->clear();
 }
 
 
@@ -271,3 +238,64 @@ void MainWindow::on_expandSideBtn_clicked()
     expandSideWidget();
 }
 
+
+void MainWindow::setupUi()
+{
+    if (objectName().isEmpty())
+        setObjectName("MainWindow");
+    setWindowModality(Qt::WindowModal);
+    resize(944, 592);
+    QFont font;
+    font.setPointSize(10);
+    font.setBold(false);
+    setFont(font);
+    setContextMenuPolicy(Qt::ActionsContextMenu);
+    QIcon icon;
+    icon.addFile(QString::fromUtf8(":/icon/ollama.png"), QSize(), QIcon::Normal, QIcon::Off);
+    setWindowIcon(icon);
+    setWindowOpacity(1.000000000000000);
+    setAutoFillBackground(true);
+    setInputMethodHints(Qt::ImhExclusiveInputMask);
+    setDocumentMode(false);
+
+    centralwidget = new QWidget(this);
+    centralwidget->setObjectName("centralwidget");
+    QFont font1;
+    font1.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+    font1.setPointSize(10);
+    font1.setBold(false);
+    centralwidget->setFont(font1);
+    QHBoxLayout *horizontalLayout = new QHBoxLayout(centralwidget);
+    horizontalLayout->setSpacing(1);
+    horizontalLayout->setObjectName("horizontalLayout");
+    horizontalLayout->setContentsMargins(1, 1, 1, 1);
+
+    splitter = new QSplitter(centralwidget);
+    splitter->setObjectName("splitter");
+    splitter->setOrientation(Qt::Horizontal);
+    splitter->setOpaqueResize(false);
+    splitter->setHandleWidth(0);
+    splitter->setChildrenCollapsible(false);
+
+    auto left =  new ILeftWindow;
+    splitter->addWidget(left);
+
+    auto right = new IRightWindow;
+    splitter->addWidget(right);
+    pages = right->pages();
+
+    horizontalLayout->addWidget(splitter);
+
+    setCentralWidget(centralwidget);
+    statusBar = new QStatusBar(this);
+    statusBar->setObjectName("statusBar");
+    setStatusBar(statusBar);
+
+    retranslateUi();
+}
+
+void MainWindow::retranslateUi()
+{
+    setWindowTitle(QCoreApplication::translate("MainWindow", "Ollama", nullptr));
+
+}

@@ -134,7 +134,7 @@ void IChatWidget::setupUI()
     setWidget(chatContainer);
 }
 
-void IChatWidget::addMessage(const QString &userName, const QPixmap &avatar, const QString &message)
+void IChatWidget::addMessage( const QString &message, const QString &userName, const QPixmap &avatar)
 {
     IMessageWidget* messageWidget = new IMessageWidget(userName, avatar, message, this);
     chatContainer->layout()->addWidget(messageWidget);

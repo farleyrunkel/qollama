@@ -17,7 +17,6 @@ public:
     explicit IWelcomePage(QWidget *parent = nullptr);
 
 signals:
-    void send(const QString &text);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

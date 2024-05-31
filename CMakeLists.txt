@@ -35,7 +35,7 @@ include_directories("external/ollama/include")
 
 set(PROJECT_SOURCES
         src/main.cpp
-        forms/mainwindow.ui
+
 
 )
 
@@ -79,6 +79,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         src/input/ilineedit.h src/input/ilineedit.cpp
         src/display/ititlebar.h src/display/ititlebar.cpp
+        src/pages/irightwindow.h src/pages/irightwindow.cpp
+        src/objects/isignalhub.h src/objects/isignalhub.cpp
+        src/pages/ileftwindow.h src/pages/ileftwindow.cpp
 )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qollama APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
