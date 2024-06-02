@@ -77,9 +77,10 @@ QFrame#welcomeFrame4 {
     border-radius:16px;
 }
 
+/*
 QPushButton{
     border: 1px hidden gray;
-    text-align: left; /* 设置文本左对齐 */
+    text-align: left;
 }
 QPushButton:hover {
     background-color: #ececec;
@@ -93,6 +94,7 @@ QPushButton::menu-indicator {
     width: 0px;
     image: none;
 }
+*/
 
 QPushButton#newChatBtn,
 QPushButton#expandSideBtn,
@@ -100,7 +102,7 @@ QPushButton#expandButton
 {
     border: 1px hidden gray;
     border-radius: 10px;
-    text-align: center; /* 设置文本左对齐 */
+    text-align: left; /* 设置文本左对齐 */
 }
 QPushButton#newChatBtn:hover,
 QPushButton#expandSideBtn:hover,
@@ -266,3 +268,27 @@ QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal {
     width: 0;
     height: 0;
 }
+
+/* start welcome page */
+
+ILineEdit {
+    Background-color: gray; /*@LightBackground*/
+    border: 1px hidden;
+    border-radius: 20px;
+    padding-left: 35px;
+}
+QPushButton#welcomePageLeftButton,
+QPushButton#welcomePageRightButton {
+    border: 1px hidden;
+    border-radius: 15px;
+}
+QPushButton#welcomePageLeftButton:hover,
+QPushButton#welcomePageRightButton:hover {
+    background-color: #ececec; /*@NeutralBackground*/
+}
+QPushButton#welcomePageLeftButton:menu-indicator {
+    width: 0px;
+    image: none;
+}
+
+/* end welcome page */

@@ -10,94 +10,123 @@ namespace ollama {
 Client::Client(QObject *parent)
     : QObject(parent)
     , m_manager(new QNetworkAccessManager(this))
-    , m_reply(nullptr)
     , m_status(Waiting) {
 
-   connect(&ISignalHub::instance(), &ISignalHub::questionReceived, this, &Client::generate);
-
+    connect(&ISignalHub::instance(), &ISignalHub::generateRequest, this, &Client::generate);
+    connect(&ISignalHub::instance(), &ISignalHub::listRequest, this, &Client::list);
 }
 
 Client::~Client() {
-
-    if (m_reply) {
-        m_reply->deleteLater();
-    }
+    qDebug() << "Client destroyed.";
 }
 
 void Client::chat(const QJsonObject& json) {
+    qDebug() << "Chat request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/chat", json);
 }
 
 void Client::generate(const QJsonObject& json) {
-    sendRequest("http://localhost:11434/api/generate", json);
+    qDebug() << "Generate request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
+    auto reply = sendRequest("http://localhost:11434/api/generate", json);
+
+    QObject::connect(reply, &QNetworkReply::readyRead, [this, reply]() {
+        m_status = Status::Receiving;
+        qDebug() << "Receiving response. Status:" << m_status;
+
+        QByteArray buffer = reply->readAll();
+        if (buffer.isEmpty()) {
+            qDebug() << "Empty response from server";
+            return;
+        }
+
+        qDebug() << "Response buffer:" << buffer;
+
+        QJsonParseError error;
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(buffer, &error);
+
+        if (error.error != QJsonParseError::NoError) {
+            qDebug() << "Error parsing JSON:" << error.errorString();
+            return;
+        }
+
+        if (!jsonDoc.isObject()) {
+            qDebug() << "JSON data is not an object.";
+            return;
+        }
+
+        auto response = jsonDoc.object().value("response");
+        qDebug() << "Parsed response:" << response.toString();
+        emit replyReceived(response.toString());
+    });
+
+    QObject::connect(reply, &QNetworkReply::finished, [this]() {
+        m_status = Status::Finished;
+        qDebug() << "Request finished. Status:" << m_status;
+        emit finished();
+    });
+
+    QObject::connect(reply, &QNetworkReply::errorOccurred, [this](QNetworkReply::NetworkError error){
+        qDebug() << "Network error occurred:" << error;
+        emit replyReceived("Network error occurred");
+    });
 }
 
 void Client::embeddings(const QJsonObject& json) {
+    qDebug() << "Embeddings request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/embeddings", json);
 }
 
 void Client::pull(const QJsonObject& json) {
+    qDebug() << "Pull request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/pull", json);
 }
 
 void Client::push(const QJsonObject& json) {
+    qDebug() << "Push request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/push", json);
 }
 
+void Client::list() {
+    qDebug() << "Tags request.";
+    auto reply = sendRequest("http://localhost:11434/api/tags");
+    QObject::connect(reply, &QNetworkReply::readyRead, [this, reply]() {
+        m_status = Status::Receiving;
+
+
+        QList<QString> l = {"llama3", "codellama", "ChatGPT-4o", "Gemma"};
+        emit ISignalHub::instance().listReceived(l);
+    });
+
+    QObject::connect(reply, &QNetworkReply::finished, [this]() {
+        m_status = Status::Finished;
+        qDebug() << "Request finished. Status:" << m_status;
+        emit finished();
+    });
+
+    QObject::connect(reply, &QNetworkReply::errorOccurred, [this](QNetworkReply::NetworkError error){
+        qDebug() << "Network error occurred:" << error;
+        emit replyReceived("Network error occurred");
+    });
+}
+
 Client::Status Client::status() const {
+    qDebug() << "Status requested:" << m_status;
     return m_status;
 }
 
-void Client::sendRequest(const QString &url, const QJsonObject& json) {
+QNetworkReply* Client::sendRequest(const QString &url, const QJsonObject& json) {
+    qDebug() << "Sending request to URL:" << url << "with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
 
     QNetworkRequest request;
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setUrl(QUrl(url));
 
-    m_reply = m_manager->post(request, QJsonDocument(json).toJson());
     m_status = Status::Requesting;
+    qDebug() << "Request status:" << m_status;
 
-    QObject::connect(m_reply, &QNetworkReply::readyRead, this, &Client::readResponseData);
-    QObject::connect(m_reply, &QNetworkReply::finished, this, &Client::onFinished);
-    QObject::connect(m_reply, &QNetworkReply::errorOccurred, [&](QNetworkReply::NetworkError){
-        emit replyReceived("Network error occurred");
-    });
+    auto reply = m_manager->post(request, QJsonDocument(json).toJson());
+    qDebug() << "Request sent.";
+    return reply;
 }
 
-void Client::onFinished() {
-    m_status = Status::Finished;
-    emit finished();
-}
-
-void Client::readResponseData() {
-    m_status = Status::Receiving;
-    QByteArray buffer = m_reply->readAll();
-    if (buffer.isEmpty()) {
-        qDebug() << "Empty response from server";
-        return;
-    }
-
-    QJsonParseError error;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(buffer, &error);
-
-    if (error.error != QJsonParseError::NoError) {
-        qDebug() << "Error parsing JSON:" << error.errorString();
-        return;
-    }
-
-    if (!jsonDoc.isObject()) {
-        qDebug() << "JSON data is not an object.";
-        return;
-    }
-
-    auto response = jsonDoc.object().value("response");
-    emit replyReceived(response.toString());
-}
-
-void Client::abort() {
-    if (m_reply) {
-        m_reply->abort();
-    }
-}
-
-}
+} // namespace ollama

@@ -3,17 +3,11 @@
 
 #include <QScrollArea>
 #include <QVBoxLayout>
-#include <QCalendarWidget>
-#include <QSizePolicy>
-#include <QLabel>
-#include <QLineEdit>
-#include <QTextEdit>
 #include <QPushButton>
-#include <QSpacerItem>
-#include <QFrame>
-#include <QScrollBar>
-#include <QDebug>
-#include <QEvent>
+#include <QVector>
+#include <QPair>
+#include <QString>
+
 
 class IMarketPage : public QScrollArea
 {

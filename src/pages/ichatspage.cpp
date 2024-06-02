@@ -23,7 +23,7 @@ void IChatsPage::addQuestion(const QString &text) {
     json["prompt"] = text;
     json["model"] = "llama3";
 
-    emit ISignalHub::instance().questionReceived(json);
+    emit ISignalHub::instance().generateRequest(json);
 }
 
 IChatWidget *IChatsPage::addChat() {

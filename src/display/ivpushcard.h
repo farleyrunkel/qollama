@@ -31,9 +31,14 @@ public:
         setMinimumSize(QSize(120, 120));
         setMaximumSize(QSize(200, 150));
         setStyleSheet("border: 1px solid gray; border-radius: 15px;");
+
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+        setSizePolicy(sizePolicy);
+
         QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
-        this->setLayout(mainLayout);
+        setLayout(mainLayout);
         m_iconLabel = new QLabel(this);
         m_iconLabel->setStyleSheet("border: none;");
         m_iconLabel->setMaximumSize(QSize(30, 30));
@@ -44,7 +49,7 @@ public:
         mainLayout->addWidget(m_iconLabel, 0, Qt::AlignCenter); // 添加图标标签到布局中并居中对齐
 
         m_textLabel = new QLabel(this);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
         m_textLabel->setSizePolicy(sizePolicy);
         m_textLabel->setAlignment(Qt::AlignCenter); // 设置文本标签居中对齐
         m_textLabel->setWordWrap(true);

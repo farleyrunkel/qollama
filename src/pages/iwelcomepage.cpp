@@ -1,55 +1,38 @@
 #include "iwelcomepage.h"
+#include <QMenu>
 
-IWelcomePage::IWelcomePage(QWidget *parent) {
-    setupUi(this);
-    //setStyleSheet("border: 2px solid red;");
-}
+IWelcomePage::IWelcomePage(QWidget *parent)
+{
+    setupLayout();
 
-void IWelcomePage::mousePressEvent(QMouseEvent *event) {
-    QWidget::mousePressEvent(event);
-    // Your custom mouse press event handling here
-}
-
-void IWelcomePage::setupUi(QWidget *parent) {
-    parent->setObjectName("IWelcomePage");
-    parent->resize(831, 544);
-    parent->setAutoFillBackground(false);
-    parent->setContentsMargins(0, 0, 0, 0);
-
-    m_mainLayout = new QGridLayout(parent);
-    m_mainLayout->setObjectName("mainLayout");
-    m_mainLayout->setHorizontalSpacing(11);
-    m_mainLayout->setVerticalSpacing(22);
-    m_mainLayout->setContentsMargins(0, 0, 0, 0);
-    m_mainLayout->setAlignment(Qt::AlignTop);
-    m_welcomeLogo = new QLabel(parent);
-    m_welcomeLogo->setObjectName("welcomeLogo");
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_welcomeLogo->setSizePolicy(sizePolicy);
-    m_welcomeLogo->setMinimumSize(QSize(200, 70));
-    m_welcomeLogo->setMaximumSize(QSize(4000, 100));
-    m_welcomeLogo->setStyleSheet("image: url(:/images/qollama-text.png);");
-    m_welcomeLogo->setAlignment(Qt::AlignCenter);
-    m_welcomeLogo->setFrameShape(QFrame::Shape::NoFrame);
-    m_mainLayout->addWidget(m_welcomeLogo, 0, 1, 1, 2);
-
-    addPushCardWidgets();
-
-    m_inputLine = new ILineEdit(parent);
-    auto m_inputButton = m_inputLine->rightButton();
-    m_inputButton->setObjectName("inputButton");
-    QIcon icon;
-    icon.addFile(":/icon/send.svg", QSize(), QIcon::Normal, QIcon::Off);
-    m_inputButton->setIcon(icon);
-    m_mainLayout->addWidget(m_inputLine, 3, 1, 1, 2);
-
-    auto m_horizontalSpacer1 = new QSpacerItem(40, 20, QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_mainLayout->addItem(m_horizontalSpacer1, 3, 0, 1, 1);
-
-    auto m_horizontalSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_mainLayout->addItem(m_horizontalSpacer2, 3, 3, 1, 1);
+    setupPushCards();
+    setupModelLabel();
+    setupLineEdit();
 
     retranslateUi();
+
+    //setStyleSheet("border: 2px solid red;");
+
+
+}
+
+void IWelcomePage::setupLayout() {
+    setObjectName("IWelcomePage");
+    resize(831, 544);
+    setAutoFillBackground(false);
+    setContentsMargins(0, 0, 0, 0);
+
+    m_mainLayout = new QGridLayout(this);
+    m_mainLayout->setObjectName("mainLayout");
+    m_mainLayout->setHorizontalSpacing(20);
+    m_mainLayout->setVerticalSpacing(40);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+
+    auto m_horizontalSpacer1 = new QSpacerItem(40, 20, QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_mainLayout->addItem(m_horizontalSpacer1, 0, 0, 1, 1);
+
+    auto m_horizontalSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Preferred, QSizePolicy::Preferred);
+    m_mainLayout->addItem(m_horizontalSpacer2, 0, 3, 1, 1);
 }
 
 void IWelcomePage::retranslateUi() {
@@ -57,7 +40,20 @@ void IWelcomePage::retranslateUi() {
     m_welcomeLogo->setText(QString());
 }
 
-void IWelcomePage::addPushCardWidgets() {
+void IWelcomePage::setupModelLabel() {
+    m_welcomeLogo = new QLabel;
+    m_welcomeLogo->setObjectName("welcomeLogo");
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_welcomeLogo->setSizePolicy(sizePolicy);
+    m_welcomeLogo->setMinimumSize(QSize(200, 70));
+    m_welcomeLogo->setMaximumSize(QSize(4000, 100));
+    m_welcomeLogo->setStyleSheet("image: url(://images/qollama-logo-text.jpg);");
+    m_welcomeLogo->setAlignment(Qt::AlignCenter);
+    m_welcomeLogo->setFrameShape(QFrame::Shape::NoFrame);
+    m_mainLayout->addWidget(m_welcomeLogo, 0, 1, 1, 2);
+}
+
+void IWelcomePage::setupPushCards() {
 
      card1 = new IVPushCard;
      card2 = new IVPushCard;
@@ -78,4 +74,34 @@ void IWelcomePage::addPushCardWidgets() {
     m_mainLayout->addWidget(card2, 1, 2, 1, 1);
     m_mainLayout->addWidget(card3, 2, 1, 1, 1);
     m_mainLayout->addWidget(card4, 2, 2, 1, 1);
+}
+
+void IWelcomePage::setupLineEdit() {
+    m_inputLine = new ILineEdit;
+    auto rightButton = m_inputLine->rightButton();
+    rightButton->setIcon(QIcon(":/icon/send.svg"));
+    rightButton->setObjectName("welcomePageRightButton");
+
+    auto leftButton = m_inputLine->leftButton();
+    leftButton->setIcon(QIcon("://icon/more-horiz.svg"));
+    leftButton->setObjectName("welcomePageLeftButton");
+
+    //QAction* action = new QAction;
+    m_menu = new QMenu;
+    leftButton->setMenu(m_menu);
+    emit ISignalHub::instance().listRequest();
+
+    m_mainLayout->addWidget(m_inputLine, 3, 0, 1, 4);
+
+    connect(&ISignalHub::instance(), &ISignalHub::listReceived, [this](const QList<QString>& list) {
+        for (const auto& a : list) {
+            auto action = new QAction(a, this);
+            m_menu->addAction(action);
+            connect(action, &QAction::triggered, this, [this, action]() {
+                this->m_inputLine->setPlaceholderText("Message " + action->text() + "...");
+            });
+
+            emit action->triggered();
+        }
+    });
 }

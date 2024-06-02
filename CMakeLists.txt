@@ -2,32 +2,25 @@ cmake_minimum_required(VERSION 3.5)
 
 project(qollama VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(tests)
-
-list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "forms")
-
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR}Network REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 
-include_directories("src")
+# 包含 src 目录及其所有子目录
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
-include_directories("src/buttons")
-include_directories("src/network")
-include_directories("src/display")
-include_directories("src/input")
-include_directories("src/pages")
-include_directories("src/tests")
-include_directories("src/container")
-include_directories("src/objects")
-include_directories("src/3rdParty")
+# 查找 src 目录下的所有直接子目录
+file(GLOB SUBDIRS RELATIVE ${SRC_DIR} ${SRC_DIR}/*)
+foreach(subdir ${SUBDIRS})
+    if(IS_DIRECTORY ${SRC_DIR}/${subdir})
+        include_directories(${SRC_DIR}/${subdir})
+    endif()
+endforeach()
 
 include_directories("external/json/include")
 include_directories("external/asio/asio/include")
@@ -40,45 +33,15 @@ else()
     set(PROJECT_MAIN_FILE "src/main.mm")
 endif()
 
-# 添加项目源文件
-set(PROJECT_SOURCES
-    ${PROJECT_MAIN_FILE}
 
-    # 其他源文件
-    src/network/client.h src/network/client.cpp
-
-    src/buttons/ioverlaybutton.h
-    src/buttons/imacbuttonswidget.h src/buttons/imacbuttonswidget.cpp
-    src/buttons/iwinbuttonswidget.h src/buttons/iwinbuttonswidget.cpp
-
-    src/display/ivpushcard.h src/display/ivpushcard.cpp
-    src/display/ihpushcard.h src/display/ihpushcard.cpp
-    src/display/iautoresizetextbrowser.h src/display/iautoresizetextbrowser.cpp
-
-    src/container/ihistorylist.h src/container/ihistorylist.cpp
-    src/container/igallerywidget.h src/container/igallerywidget.cpp
-    src/container/ichatwidget.h src/container/ichatwidget.cpp
-    src/container/iwidget.h src/container/iwidget.cpp
-
-    src/pages/iwelcomepage.h src/pages/iwelcomepage.cpp
-    src/pages/mainwindow.h src/pages/mainwindow.cpp
-    src/pages/imarketpage.h src/pages/imarketpage.cpp
-    src/pages/ichatspage.h src/pages/ichatspage.cpp
-
-    src/tests/itestwidget.h src/tests/itestwidget.cpp
-
-    src/3rdParty/spinner/waitingspinnerwidget.h
-    src/3rdParty/spinner/waitingspinnerwidget.cpp
-
-    src/objects/imageloader.h src/objects/imageloader.cpp
-    src/objects/stylemanager.h src/objects/stylemanager.cpp
-
-    src/input/ilineedit.h src/input/ilineedit.cpp
-    src/display/ititlebar.h src/display/ititlebar.cpp
-    src/pages/irightwindow.h src/pages/irightwindow.cpp
-    src/objects/isignalhub.h src/objects/isignalhub.cpp
-    src/pages/ileftwindow.h src/pages/ileftwindow.cpp
+# 查找 src 目录下所有子目录中的所有源文件和头文件
+file(GLOB_RECURSE PROJECT_SOURCES
+    "${SRC_DIR}/*/*.cpp"
+    "${SRC_DIR}/*/*.h"
 )
+
+# 将主文件添加到 PROJECT_SOURCES
+list(APPEND PROJECT_SOURCES ${PROJECT_MAIN_FILE})
 
 # 创建可执行文件
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -86,6 +49,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/resouces.qrc
+
     )
 else()
     if(ANDROID)
@@ -129,3 +93,5 @@ install(TARGETS qollama
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(qollama)
 endif()
+
+add_subdirectory(tests)

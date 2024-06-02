@@ -16,7 +16,9 @@ public:
     }
 
 signals:
-    void questionReceived(const QJsonObject&);
+    void generateRequest(const QJsonObject&);
+    void listRequest();
+    void listReceived(const QList<QString>);
     void on_IVPushCard_clicked(const QString&) ;
     void newChatAdded(int);
 

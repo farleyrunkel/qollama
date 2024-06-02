@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include "ihistorylist.h"
 #include "ioverlaybutton.h"
+#include <QResizeEvent>
 
 ILeftWindow::ILeftWindow(QWidget *parent) : IWidget(parent) {
 
@@ -57,7 +58,7 @@ void ILeftWindow::setupUi() {
 
     verticalLayout->addWidget(leftTitleBar);
 
-    m_newChatButton = new INewChatButton(sideWidget);
+    m_newChatButton = new IOverlayButton(sideWidget);
     m_newChatButton->setObjectName("newChatButton");
     m_newChatButton->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
     m_newChatButton->setMinimumSize(QSize(0, 34));

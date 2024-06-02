@@ -16,14 +16,14 @@ public:
     ILeftWindow(QWidget* parent = nullptr);;
 
     QPushButton* exploreButton(){return m_exploreButton;};
-    INewChatButton* newChatButton(){return m_newChatButton;};
+    IOverlayButton* newChatButton(){return m_newChatButton;};
     QPushButton* expandButton(){return m_expandButton;};
 
     void setupUi();
 private:
     QPushButton* m_exploreButton;
         QPushButton* m_expandButton;
-   INewChatButton* m_newChatButton;
+   IOverlayButton* m_newChatButton;
 };
 
 #endif // ILEFTWINDOW_H

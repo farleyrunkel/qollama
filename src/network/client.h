@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QJsonObject>
 
 namespace ollama {
 
@@ -23,24 +24,23 @@ public:
     void embeddings(const QJsonObject &json);
     void pull(const QJsonObject &json);
     void push(const QJsonObject &json);
+    void list();
 
     Status status() const;
 
 signals:
-    void replyReceived(QString);
+    void replyReceived(const QString&);
     void finished();
 
+    void listReceived(const QList<QString>& );
+
 public:
-    void readResponseData();
-    void abort();
-    void onFinished();
 
 private:
-    void sendRequest(const QString &url, const QJsonObject &json);
+    QNetworkReply * sendRequest(const QString &url, const QJsonObject &json = QJsonObject());
 
 private:
     QNetworkAccessManager *m_manager;
-    QNetworkReply *m_reply;
     Status m_status;
 };
 }
