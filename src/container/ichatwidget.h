@@ -11,7 +11,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QPropertyAnimation>
-#include "waitingspinnerwidget.h"
+#include "spinner/waitingspinnerwidget.h"
 #include "iautoresizetextbrowser.h"
 
 class IMessageWidget : public QWidget {

@@ -41,13 +41,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     auto userWidget = new QDialog;
     //connect(userButton, &QPushButton::clicked, userWidget, &QDialog::show);
-    //connect(exploreButton, &QPushButton::clicked, market, &IMarketPage::show);
-   // connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
-    //connect(marketStackWidget, &IWidget::shown, exploreLabel, &QComboBox::setVisible);
+   //connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
+   // connect(marketStackWidget, &IWidget::shown, exploreLabel, &QComboBox::setVisible);
 
-   // connect(newChatButton, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
-   // connect(exploreButton, &QPushButton::pressed, [&](){pages->setCurrentWidget(market);});
-    //connect(expandButton, &QPushButton::pressed, this, &MainWindow::expandSideWidget);
+    connect(left->newChatButton(), &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
+    connect(left->exploreButton(), &QPushButton::pressed, [&](){pages->setCurrentWidget(market);});
+    connect(left->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
+    connect(right->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
+
+
    // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
 
     connect(chatbot, &ollama::Client::replyReceived, this, &MainWindow::appendWordToActiveChat);
@@ -97,10 +99,10 @@ void MainWindow::on_chatbot_finish() {
     curr->finish();
 
 }
-void MainWindow::expandSideWidget()
+void MainWindow::setLeftWindowVisible()
 {
     left->setVisible(!left->isVisible());
-   // expandButton->setVisible(!left->isVisible());
+    right->expandButton()->setVisible(!left->isVisible());
 
     pages->updateGeometry();
 
@@ -166,7 +168,7 @@ void MainWindow::addMessage(QString text )
     }
 
     chatListView->addMessage(text, "farley", QIcon("://icon/farley.jpg").pixmap(30));
-    chatListView->addMessage("", "llama3", newChatButton->icon().pixmap(30));
+    chatListView->addMessage("", "llama3", left->newChatButton()->icon().pixmap(30));
     chatListView->scrollToBottom();
 
     if (hisItem) {
@@ -235,7 +237,7 @@ void MainWindow::on_inputLine_returnPressed()
 
 void MainWindow::on_expandSideBtn_clicked()
 {
-    expandSideWidget();
+    setLeftWindowVisible();
 }
 
 
@@ -277,12 +279,13 @@ void MainWindow::setupUi()
     splitter->setHandleWidth(0);
     splitter->setChildrenCollapsible(false);
 
-    auto left =  new ILeftWindow;
+    left =  new ILeftWindow;
     splitter->addWidget(left);
 
-    auto right = new IRightWindow;
+    right = new IRightWindow;
     splitter->addWidget(right);
     pages = right->pages();
+    right->expandButton()->hide();
 
     horizontalLayout->addWidget(splitter);
 

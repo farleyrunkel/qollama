@@ -34,13 +34,13 @@ void IRightWindow::setupUi()
     mainLayout->addWidget(rightContainer);
 
     // 初始化按钮并添加到左侧和右侧
-    expandButton = new QPushButton;
-    expandButton->setIcon(QIcon("://icon/farley.jpg"));
-    setLeftWidget(expandButton);
+    m_expandButton = new QPushButton;
+    m_expandButton->setIcon(QIcon("://icon/farley.jpg"));
+    setLeftWidget(m_expandButton);
 
-    userButton = new QPushButton;
-    userButton->setIcon(QIcon("://icon/farley.jpg"));
-    setRightWidget(userButton);
+    m_userButton = new QPushButton;
+    m_userButton->setIcon(QIcon("://icon/farley.jpg"));
+    setRightWidget(m_userButton);
 }
 
 void IRightWindow::setLeftWidget(QWidget* widget)

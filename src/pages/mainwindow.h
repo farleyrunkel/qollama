@@ -20,6 +20,8 @@
 #include "ioverlaybutton.h"
 #include "iwelcomepage.h"
 #include "ichatspage.h"
+#include "ileftwindow.h"
+#include "irightwindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -30,7 +32,7 @@ public:
     ~MainWindow();
 
     void on_historyListItem_clicked(QListWidgetItem *item);
-    void expandSideWidget();
+    void setLeftWindowVisible();
     void addMessage(QString text);
 
 protected:
@@ -59,20 +61,19 @@ private:
 
     ITestWidget* test;
 
+    QStackedWidget *pages;
+
     IMarketPage* market;
     IWelcomePage* welcome;
     IChatsPage* chats;
 
+    ILeftWindow *left;
+    IRightWindow* right;
+
     QWidget *centralwidget;
     QSplitter *splitter;
-    QFrame *left;
-    QStackedWidget *pages;
+
     QStatusBar *statusBar;
-    QPushButton *expandSideBtn;
-    QPushButton *newChatBtn;
-    INewChatButton *newChatButton;
-    QPushButton *exploreButton;
-    QPushButton *settingButton;
 };
 
 #endif // MAINWINDOW_H

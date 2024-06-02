@@ -27,7 +27,7 @@ include_directories("src/pages")
 include_directories("src/tests")
 include_directories("src/container")
 include_directories("src/objects")
-include_directories("src/3rdParty/spinner")
+include_directories("src/3rdParty")
 
 include_directories("external/json/include")
 include_directories("external/asio/asio/include")

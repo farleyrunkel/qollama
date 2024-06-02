@@ -11,10 +11,6 @@
 #include <QRegularExpression>
 
 
-//{"#DD0000", "#AA8800", "#008800"};
-
-
-
 class IMacButton: public QPushButton
 {
     Q_OBJECT

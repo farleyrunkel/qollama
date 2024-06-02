@@ -1,6 +1,5 @@
 #include "ichatwidget.h"
 #include <QPainter>
-#include "waitingspinnerwidget.h"
 
 IMessageWidget::IMessageWidget(const QString &userName, const QPixmap &avatar, const QString &message, QWidget *parent)
     : QWidget(parent)

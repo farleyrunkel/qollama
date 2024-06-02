@@ -4,7 +4,7 @@
 #include "ihistorylist.h"
 #include "ioverlaybutton.h"
 
-ILeftWindow::ILeftWindow(QWidget *parent) : QWidget(parent) {
+ILeftWindow::ILeftWindow(QWidget *parent) : IWidget(parent) {
 
     setupUi();
 }
@@ -31,16 +31,16 @@ void ILeftWindow::setupUi() {
     horizontalLayout_5->setObjectName("horizontalLayout_5");
     horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
 
-    auto expandSideBtn = new QPushButton(leftTitleBar);
-    expandSideBtn->setObjectName("expandSideBtn");
+    m_expandButton = new QPushButton(leftTitleBar);
+    m_expandButton->setObjectName("expandSideBtn");
     QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
-    expandSideBtn->setSizePolicy(sizePolicy);
-    expandSideBtn->setMinimumSize(QSize(30, 30));
-    expandSideBtn->setMaximumSize(QSize(30, 30));
+    m_expandButton->setSizePolicy(sizePolicy);
+    m_expandButton->setMinimumSize(QSize(30, 30));
+    m_expandButton->setMaximumSize(QSize(30, 30));
     QIcon icon1;
     icon1.addFile(QString::fromUtf8(":/icon/sidebar-left.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    expandSideBtn->setIcon(icon1);
-    horizontalLayout_5->addWidget(expandSideBtn);
+    m_expandButton->setIcon(icon1);
+    horizontalLayout_5->addWidget(m_expandButton);
 
     QSpacerItem *horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
     horizontalLayout_5->addItem(horizontalSpacer_5);
@@ -57,30 +57,30 @@ void ILeftWindow::setupUi() {
 
     verticalLayout->addWidget(leftTitleBar);
 
-    auto newChatButton = new INewChatButton(sideWidget);
-    newChatButton->setObjectName("newChatButton");
-    newChatButton->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-    newChatButton->setMinimumSize(QSize(0, 34));
-    newChatButton->setMaximumSize(QSize(16777215, 34));
+    m_newChatButton = new INewChatButton(sideWidget);
+    m_newChatButton->setObjectName("newChatButton");
+    m_newChatButton->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
+    m_newChatButton->setMinimumSize(QSize(0, 34));
+    m_newChatButton->setMaximumSize(QSize(16777215, 34));
     QFont font2;
     font2.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
     font2.setPointSize(10);
     font2.setWeight(QFont::Medium);
-    newChatButton->setFont(font2);
-    newChatButton->setFocusPolicy(Qt::NoFocus);
-    newChatButton->setLayoutDirection(Qt::LeftToRight);
+    m_newChatButton->setFont(font2);
+    m_newChatButton->setFocusPolicy(Qt::NoFocus);
+    m_newChatButton->setLayoutDirection(Qt::LeftToRight);
     //newChatButton->setIcon(icon);
-    verticalLayout->addWidget(newChatButton);
+    verticalLayout->addWidget(m_newChatButton);
 
-    auto exploreButton = new QPushButton(sideWidget);
-    exploreButton->setObjectName("exploreButton");
-    exploreButton->setMinimumSize(QSize(0, 34));
-    exploreButton->setMaximumSize(QSize(16777215, 34));
-    exploreButton->setFont(font2);
+    m_exploreButton = new QPushButton(sideWidget);
+    m_exploreButton->setObjectName("exploreButton");
+    m_exploreButton->setMinimumSize(QSize(0, 34));
+    m_exploreButton->setMaximumSize(QSize(16777215, 34));
+    m_exploreButton->setFont(font2);
     QIcon icon3;
     icon3.addFile(QString::fromUtf8(":/icon/sparkles.png"), QSize(), QIcon::Normal, QIcon::Off);
-    exploreButton->setIcon(icon3);
-    verticalLayout->addWidget(exploreButton);
+    m_exploreButton->setIcon(icon3);
+    verticalLayout->addWidget(m_exploreButton);
 
     auto historyList = new IHistoryList(sideWidget);
     historyList->setObjectName("historyList");
@@ -105,9 +105,9 @@ void ILeftWindow::setupUi() {
 
     verticalLayout_3->addWidget(sideWidget);
 
-    expandSideBtn->setToolTip(QCoreApplication::translate("MainWindow", "Expand", nullptr));
+    m_expandButton->setToolTip(QCoreApplication::translate("MainWindow", "Expand", nullptr));
     newChatBtn->setToolTip(QCoreApplication::translate("MainWindow", "Llama3", nullptr));
-    newChatButton->setText(QCoreApplication::translate("MainWindow", "Llama3", nullptr));
-    exploreButton->setText(QCoreApplication::translate("MainWindow", "Explore", nullptr));
+    m_newChatButton->setText(QCoreApplication::translate("MainWindow", "Llama3", nullptr));
+    m_exploreButton->setText(QCoreApplication::translate("MainWindow", "Explore", nullptr));
     settingButton->setText(QCoreApplication::translate("MainWindow", "Settings", nullptr));
 }
