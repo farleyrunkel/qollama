@@ -1,6 +1,6 @@
-#include "imarketpage.h"
-#include "ihpushcard.h"
-#include "ilineedit.h"
+#include "IMarketPage.h"
+#include "IHPushCard.h"
+#include "ILineEdit.h"
 
 IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
 {
@@ -11,13 +11,13 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     containerWidget->setLayout(contentLayout);
     contentLayout->setContentsMargins(80, 0, 80, 0);
     containerWidget->setObjectName("marketContainerWidget");
-    containerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     setWidget(containerWidget);
     setWidgetResizable(true);
     setAlignment(Qt::AlignTop);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
@@ -28,67 +28,11 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     setupTitle();
     setupSearchLine();
     setupNavigator();
-    setupKinds();
     setupTopSearchArea();
-}
+    setupCategories();
 
-void IMarketPage::setupTopSearchArea()
-{
-    qDebug() << "Setting up top search area";
-
-    topSearchArea = new QWidget;
-
-    auto topSearchAreaLayout = new QVBoxLayout;
-    topSearchArea->setLayout(topSearchAreaLayout);
-    topSearchArea->setStyleSheet("background-color: white;");
-    topSearchAreaLayout->setContentsMargins(0, 0, 0, 5);
-
-    auto searchLineFrame = new QFrame;
-    auto searchLineLayout = new QHBoxLayout;
-    searchLineFrame->setLayout(searchLineLayout);
-    searchLineFrame->setStyleSheet("border: 1px solid gray; border-radius: 15px;");
-    searchLineFrame->setFixedHeight(40);
-    searchLineLayout->setContentsMargins(0, 2, 10, 2);
-
-    auto searchIconLabel = new QLabel;
-    searchIconLabel->setPixmap(QIcon("://icon/search.svg").pixmap(30));
-    searchIconLabel->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
-
-    auto searchTextEdit = new QLineEdit;
-    searchTextEdit->setPlaceholderText("Search GPT");
-    searchTextEdit->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
-    searchTextEdit->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
-    searchLineLayout->addWidget(searchIconLabel);
-    searchLineLayout->addWidget(searchTextEdit);
-
-    topSearchAreaLayout->addWidget(searchLineFrame);
-
-    auto buttonLayout = new QHBoxLayout;
-    buttonLayout->setAlignment(Qt::AlignLeft);
-    buttonLayout->setSpacing(15);
-
-    for (auto a : kindButtons) {
-        if (!a.first || !a.second) {
-            qDebug() << "Invalid kind button or subtitle";
-            continue;
-        }
-        auto kindButton = new QPushButton(a.first->text());
-        buttonLayout->addWidget(kindButton);
-
-        auto kindSubtitle = a.second;
-        connect(kindButton, &QPushButton::clicked, this, [this, kindSubtitle]()
-                {
-                    if (kindSubtitle) {
-                        qDebug() << "Scrolling to kind subtitle";
-                        verticalScrollBar()->setValue(kindSubtitle->geometry().top() - topSearchArea->height());
-                    }
-                });
-    }
-    topSearchAreaLayout->addLayout(buttonLayout);
-
-    mainLayout->addWidget(topSearchArea);
-    mainLayout->addStretch(1);
-    topSearchArea->hide();
+    // Calculate the initial width difference
+    initialWidthDifference = width() - containerWidget->width();
 }
 
 void IMarketPage::setupTitle()
@@ -108,95 +52,142 @@ void IMarketPage::setupSearchLine()
 {
     qDebug() << "Setting up search line";
 
-    // searchLineFrame = new QFrame;
-    // auto searchLineLayout = new QHBoxLayout;
-    // searchLineFrame->setLayout(searchLineLayout);
-    // searchLineFrame->setStyleSheet("border: 1px solid gray; border-radius: 15px;");
-    // searchLineFrame->setFixedHeight(40);
-    // searchLineLayout->setContentsMargins(0, 2, 10, 2);
+    searchLineEdit = createSearchLineEdit();
+    contentLayout->addWidget(searchLineEdit);
+}
 
-    // auto searchIconLabel = new QLabel;
-    // searchIconLabel->setPixmap(QIcon("://icon/search.svg").pixmap(30));
-    // searchIconLabel->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
+ILineEdit* IMarketPage::createSearchLineEdit()
+{
+    qDebug() << "Creating new ILineEdit";
 
-    // auto searchTextEdit = new QLineEdit;
-    // searchTextEdit->setPlaceholderText("Search GPT");
-    // searchTextEdit->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
-    // searchTextEdit->setStyleSheet("border: 1px hidden gray; border-radius: 15px;");
-    // searchLineLayout->addWidget(searchIconLabel);
-    // searchLineLayout->addWidget(searchTextEdit);
+    auto lineEdit = new ILineEdit;
+    lineEdit->setObjectName("marketPageSearchLine");
+    lineEdit->setPlaceholderText("Search GPT");
+    lineEdit->rightButton()->hide();
+    lineEdit->leftButton()->setFlat(true);
+    QIcon searchIcon;
+    searchIcon.addPixmap(QPixmap("://icon/search.svg"), QIcon::Disabled, QIcon::On);
+    lineEdit->leftButton()->setIcon(searchIcon);
+    lineEdit->leftButton()->setDisabled(true);
 
-    contentLayout->addWidget(new ILineEdit);
+    return lineEdit;
 }
 
 void IMarketPage::setupNavigator()
 {
     qDebug() << "Setting up navigator";
 
-    navigatorWidget = new QWidget;
-    auto navigatorLayout = new QHBoxLayout;
-    navigatorWidget->setLayout(navigatorLayout);
-    navigatorLayout->setAlignment(Qt::AlignLeft);
-    navigatorLayout->setSpacing(15);
-    contentLayout->addWidget(navigatorWidget);
+    m_navigator = new INavigetrorBar;
+
+    contentLayout->addWidget(m_navigator);
+
+    connect(m_navigator, &INavigetrorBar::buttonClicked, [this](QPushButton *button) {
+        qDebug() << "INavigetrorBar button clicked:" << button->text();
+        m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel(button->text()));
+        navigateToCategory(button->text());
+    });
 }
 
-void IMarketPage::addKind(const QString &text)
+
+void IMarketPage::setupTopSearchArea()
 {
-    qDebug() << "Adding kind:" << text;
+    qDebug() << "Setting up top search area";
 
-    auto kindButton = new QPushButton(text);
-    navigatorWidget->layout()->addWidget(kindButton);
+    topSearchArea = new QWidget;
 
-    auto kindSubtitleLabel = new QLabel;
-    kindSubtitleLabel->setText(QString("<p style='text-align: left; font-size: 20px; font-weight: bold; color: black;'>%1</p>").arg(text));
-    contentLayout->addWidget(kindSubtitleLabel);
+    auto topSearchAreaLayout = new QVBoxLayout;
+    topSearchArea->setLayout(topSearchAreaLayout);
+    topSearchArea->setStyleSheet("background-color: white;");
+    topSearchAreaLayout->setContentsMargins(0, 0, 0, 5);
 
-    auto kindItemsWidget = new QWidget;
-    auto kindItemsLayout = new QGridLayout(kindItemsWidget);
-    kindItemsWidget->setLayout(kindItemsLayout);
-    kindItemsLayout->setAlignment(Qt::AlignLeft);
-    kindItemsLayout->addItem(new QSpacerItem(0, 0), 0, 1);
-    kindItemsLayout->setSpacing(10);
+    auto lineEdit = createSearchLineEdit();
+    topSearchAreaLayout->addWidget(lineEdit);
 
-    for (int i = 0; i < 5; i++)
+
+    m_topNavigator = new INavigetrorBar;
+
+    topSearchAreaLayout->addWidget(m_topNavigator);
+
+    mainLayout->addWidget(topSearchArea);
+    mainLayout->addStretch(1);
+    topSearchArea->hide();
+
+    connect(m_topNavigator, &INavigetrorBar::buttonClicked, this, [this](QPushButton *button) {
+        qDebug() << "INavigetrorBar button clicked:" << button->text();
+        m_navigator->showUnderline(m_navigator->getUnderlineLabel(button->text()));
+        navigateToCategory(button->text());
+    });
+}
+
+QWidget* IMarketPage::createCategoryCard(const QString &categoryName)
+{
+    qDebug() << "Creating new category card for:" << categoryName;
+
+    auto categoryWidget = new QWidget(containerWidget);
+
+    categoryMap[categoryName] = categoryWidget;
+
+    auto categoryLayout = new QGridLayout(categoryWidget);
+    categoryWidget->setLayout(categoryLayout);
+    categoryLayout->setAlignment(Qt::AlignLeft);
+    categoryLayout->addItem(new QSpacerItem(0, 0), 0, 1);
+    categoryLayout->setSpacing(10);
+
+    return categoryWidget;
+}
+
+void IMarketPage::addCategory(const QString &categoryName)
+{
+    qDebug() << "Adding category:" << categoryName;
+
+    auto categoryLabel = new QLabel;
+    categoryLabel->setText(QString("<p style='text-align: left; font-size: 20px; font-weight: bold; color: black;'>%1</p>").arg(categoryName));
+    contentLayout->addWidget(categoryLabel);
+
+    auto categoryWidget = createCategoryCard(categoryName);
+    contentLayout->addWidget(categoryWidget);
+
+    for (int i = 0;i < 5;  ++i)
     {
-        kindItemsLayout->addWidget(new IHPushCard(kindItemsLayout->count()));
+        qDebug() << "Adding IHPushCard to category:" << categoryName << "index:" << i;
+        categoryWidget->layout()->addWidget(new IHPushCard(categoryWidget->layout()->count()));
     }
 
-    contentLayout->addWidget(kindItemsWidget);
-
-    kindButtons.append(qMakePair(kindButton, kindSubtitleLabel));
-
-    connect(kindButton, &QPushButton::clicked, this, [this, kindSubtitleLabel]()
-            {
-                if (kindSubtitleLabel) {
-                    qDebug() << "Scrolling to kind subtitle";
-                    verticalScrollBar()->setValue(kindSubtitleLabel->geometry().top() - topSearchArea->height());
-                }
-            });
+    m_navigator->addButton(categoryName);
+    m_topNavigator->addButton(categoryName);
 }
 
-void IMarketPage::setupKinds()
+void IMarketPage::navigateToCategory(const QString &categoryName)
 {
-    qDebug() << "Setting up kinds";
+    qDebug() << "Navigating to category:" << categoryName;
 
-    addKind("Suggestions");
-    addKind("Write");
-    addKind("Productivity");
-    addKind("Research");
-    addKind("Education");
-    addKind("Play");
-    addKind("Life");
-    addKind("Program");
+    auto categoryWidget = categoryMap.value(categoryName);
+    if (categoryWidget) {
+        qDebug() << "Scrolling to category:" << categoryName;
+        verticalScrollBar()->setValue(categoryWidget->geometry().top() - topSearchArea->height() - 40);
+    }
+}
+
+void IMarketPage::setupCategories()
+{
+    qDebug() << "Setting up categories";
+
+    addCategory("Suggestions");
+    addCategory("Write");
+    addCategory("Productivity");
+    addCategory("Research");
+    addCategory("Education");
+    addCategory("Play");
+    addCategory("Life");
+    addCategory("Program");
 }
 
 void IMarketPage::scrollContentsBy(int dx, int dy)
 {
     QScrollArea::scrollContentsBy(dx, dy);
     qDebug() << "Scrolling contents by dx:" << dx << "dy:" << dy;
-    if (navigatorWidget && topSearchArea) {
-        if (verticalScrollBar()->value() >= (navigatorWidget->y() - topSearchArea->y() - this->contentsMargins().top())) {
+    if (m_navigator && topSearchArea) {
+        if (verticalScrollBar()->value() >= (m_navigator->y() - topSearchArea->y() - this->contentsMargins().top())) {
             qDebug() << "Showing top search area";
             topSearchArea->show();
         } else {
@@ -204,4 +195,12 @@ void IMarketPage::scrollContentsBy(int dx, int dy)
             topSearchArea->hide();
         }
     }
+}
+
+void IMarketPage::resizeEvent(QResizeEvent *event)
+{
+    QScrollArea::resizeEvent(event);
+    int newWidth = this->width() - initialWidthDifference;
+    containerWidget->setMinimumWidth(newWidth);
+    containerWidget->setMaximumWidth(newWidth);
 }

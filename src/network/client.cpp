@@ -93,7 +93,7 @@ void Client::list() {
         m_status = Status::Receiving;
 
 
-        QList<QString> l = {"llama3", "codellama", "ChatGPT-4o", "Gemma"};
+        QList<QString> l = {"Gemma", "codellama", "ChatGPT-4o", "llama3"};
         emit ISignalHub::instance().listReceived(l);
     });
 

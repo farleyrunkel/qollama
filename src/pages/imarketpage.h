@@ -3,45 +3,55 @@
 
 #include <QScrollArea>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QLabel>
 #include <QPushButton>
-#include <QVector>
-#include <QPair>
-#include <QString>
+#include <QLineEdit>
+#include <QWidget>
+#include <QMap>
+#include <QDebug>
+#include "inavigetrorbar.h"
 
+class ILineEdit;
+class IHPushCard;
 
 class IMarketPage : public QScrollArea
 {
     Q_OBJECT
 
 public:
-    IMarketPage(QWidget* parent = nullptr);
+    explicit IMarketPage(QWidget *parent = nullptr);
 
 private:
-    void setupTopSearchArea();
-
     void setupTitle();
-
     void setupSearchLine();
-
     void setupNavigator();
+    void setupTopSearchArea();
+    void setupCategories();
 
-    void addKind(const QString& text);
+    ILineEdit* createSearchLineEdit();
+    QWidget* createCategoryCard(const QString &text);
+    void addCategory(const QString &text);
+    void navigateToCategory(const QString &categoryName);
 
-    void setupKinds();
+    QWidget *containerWidget;
+    QVBoxLayout *contentLayout;
+    QVBoxLayout *mainLayout;
+    QWidget *topSearchArea;
+    QHBoxLayout *topAreaButtonsLayout;
+    QWidget *navigatorWidget;
+    QLabel *titleWidget;
+    ILineEdit *searchLineEdit;
+    INavigetrorBar* m_navigator;
+    INavigetrorBar* m_topNavigator;
 
+    QMap<QString, QWidget*> categoryMap;
+
+    int initialWidthDifference;
 protected:
     void scrollContentsBy(int dx, int dy) override;
-
-private:
-    QVBoxLayout* contentLayout;
-    QVBoxLayout* mainLayout;
-    QWidget* containerWidget;
-    QWidget* topSearchArea;
-    QWidget* titleWidget;
-    QWidget* searchLineFrame;
-    QWidget* navigatorWidget;
-
-    QVector<QPair<QPushButton*, QWidget*>> kindButtons;
+    void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // IMARKETPAGE_H

@@ -98,7 +98,7 @@ void IWelcomePage::setupLineEdit() {
             auto action = new QAction(a, this);
             m_menu->addAction(action);
             connect(action, &QAction::triggered, this, [this, action]() {
-                this->m_inputLine->setPlaceholderText("Message " + action->text() + "...");
+                this->m_inputLine->setPlaceholderText("Message " + action->text() + " ...");
             });
 
             emit action->triggered();

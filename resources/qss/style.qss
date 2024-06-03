@@ -69,13 +69,6 @@ QSplitter::handle {
     border: none;
 }
 
-QFrame#welcomeFrame1,
-QFrame#welcomeFrame2,
-QFrame#welcomeFrame3,
-QFrame#welcomeFrame4 {
-    border: 1px solid gray;
-    border-radius:16px;
-}
 
 /*
 QPushButton{
@@ -273,13 +266,13 @@ QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal {
 
 ILineEdit {
     Background-color: gray; /*@LightBackground*/
-    border: 1px hidden;
+    border-style: hidden;
     border-radius: 20px;
-    padding-left: 35px;
+    padding-left: 40px;
 }
 QPushButton#welcomePageLeftButton,
 QPushButton#welcomePageRightButton {
-    border: 1px hidden;
+    border-style: hidden;
     border-radius: 15px;
 }
 QPushButton#welcomePageLeftButton:hover,
@@ -291,4 +284,54 @@ QPushButton#welcomePageLeftButton:menu-indicator {
     image: none;
 }
 
+
 /* end welcome page */
+
+
+
+/* start market page */
+
+
+ILineEdit#marketPageSearchLine {
+    Background-color: gray; /*@White*/
+    border: 1px solid gray; /*@DarkBorder*/
+    border-radius: 10px;
+    padding-left: 40px;
+}
+
+
+QPushButton#navigatorButton {
+    border: none;
+    border-radius: 5px;
+    font-size: 14px; /* Set the font size to 12 pixels */
+}
+QPushButton#navigatorButton:hover {
+    background-color: #ececec;   /*@LightBackground*/
+    border: 1px Outset gray;     /*@LightBorder*/
+}
+
+QLabel#underlineLabel {
+    background-color: gray; /*@PrimaryColor*/
+}
+
+/* end market page */
+
+
+/* start IPushCard */
+
+IVPushCard {
+    border: 1px solid gray; /*@LightBorder*/
+    border-radius: 20px;
+}
+IVPushCard:hover{
+    background-color: #ececec; /*@LightBackground*/
+    border: 1px Outset gray; /*@LightBorder*/
+}
+IVPushCard:pressed{
+    background-color: #ececec; /*@LightBackground*/
+    border: 1px solid gray; /*@LightBorder*/
+}
+/* end IPushCard */
+
+
+
