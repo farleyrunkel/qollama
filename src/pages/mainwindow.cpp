@@ -260,19 +260,7 @@ void MainWindow::setupUi()
     setInputMethodHints(Qt::ImhExclusiveInputMask);
     setDocumentMode(false);
 
-    centralwidget = new QWidget(this);
-    centralwidget->setObjectName("centralwidget");
-    QFont font1;
-    font1.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
-    font1.setPointSize(10);
-    font1.setBold(false);
-    centralwidget->setFont(font1);
-    QHBoxLayout *horizontalLayout = new QHBoxLayout(centralwidget);
-    horizontalLayout->setSpacing(1);
-    horizontalLayout->setObjectName("horizontalLayout");
-    horizontalLayout->setContentsMargins(1, 1, 1, 1);
-
-    splitter = new QSplitter(centralwidget);
+    splitter = new QSplitter(this);
     splitter->setObjectName("splitter");
     splitter->setOrientation(Qt::Horizontal);
     splitter->setOpaqueResize(false);
@@ -287,9 +275,7 @@ void MainWindow::setupUi()
     pages = right->pages();
     right->expandButton()->hide();
 
-    horizontalLayout->addWidget(splitter);
-
-    setCentralWidget(centralwidget);
+    setCentralWidget(splitter);
     statusBar = new QStatusBar(this);
     statusBar->setObjectName("statusBar");
     setStatusBar(statusBar);

@@ -48,7 +48,6 @@ private:
 
     QMap<QString, QWidget*> categoryMap;
 
-    int initialWidthDifference;
 protected:
     void scrollContentsBy(int dx, int dy) override;
     void resizeEvent(QResizeEvent *event) override;

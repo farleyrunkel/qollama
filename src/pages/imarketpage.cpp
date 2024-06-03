@@ -6,33 +6,33 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
 {
     qDebug() << "IMarketPage constructor called";
 
-    containerWidget = new QWidget(this);
-    contentLayout = new QVBoxLayout(containerWidget);
-    containerWidget->setLayout(contentLayout);
-    contentLayout->setContentsMargins(80, 0, 80, 0);
-    containerWidget->setObjectName("marketContainerWidget");
-
-    setWidget(containerWidget);
     setWidgetResizable(true);
     setAlignment(Qt::AlignTop);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setContentsMargins(0, 0, 0, 0);
+
+    containerWidget = new QWidget(this);
+    containerWidget->setObjectName("marketContainerWidget");
+    contentLayout = new QVBoxLayout(containerWidget);
+    contentLayout->setContentsMargins(60, 0, 40, 0);
+    contentLayout->setSpacing(15);
+    containerWidget->setLayout(contentLayout);
+    containerWidget->setContentsMargins(0, 0, 0, 0);
+    setWidget(containerWidget);
 
     mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->setSpacing(0);
     mainLayout->setAlignment(Qt::AlignTop);
-    mainLayout->setContentsMargins(80, 0, 80, 0);
+    mainLayout->setContentsMargins(60, 0, 60, 0);
 
     setupTitle();
     setupSearchLine();
     setupNavigator();
     setupTopSearchArea();
     setupCategories();
-
-    // Calculate the initial width difference
-    initialWidthDifference = width() - containerWidget->width();
 }
 
 void IMarketPage::setupTitle()
@@ -58,8 +58,6 @@ void IMarketPage::setupSearchLine()
 
 ILineEdit* IMarketPage::createSearchLineEdit()
 {
-    qDebug() << "Creating new ILineEdit";
-
     auto lineEdit = new ILineEdit;
     lineEdit->setObjectName("marketPageSearchLine");
     lineEdit->setPlaceholderText("Search GPT");
@@ -98,12 +96,11 @@ void IMarketPage::setupTopSearchArea()
     auto topSearchAreaLayout = new QVBoxLayout;
     topSearchArea->setLayout(topSearchAreaLayout);
     topSearchArea->setStyleSheet("background-color: white;");
-    topSearchAreaLayout->setContentsMargins(0, 0, 0, 5);
 
     auto lineEdit = createSearchLineEdit();
     topSearchAreaLayout->addWidget(lineEdit);
-
-
+    topSearchAreaLayout->setContentsMargins(0, 0, 0, 15);
+    topSearchAreaLayout->setSpacing(contentLayout->spacing());
     m_topNavigator = new INavigetrorBar;
 
     topSearchAreaLayout->addWidget(m_topNavigator);
@@ -164,7 +161,7 @@ void IMarketPage::navigateToCategory(const QString &categoryName)
     auto categoryWidget = categoryMap.value(categoryName);
     if (categoryWidget) {
         qDebug() << "Scrolling to category:" << categoryName;
-        verticalScrollBar()->setValue(categoryWidget->geometry().top() - topSearchArea->height() - 40);
+        verticalScrollBar()->setValue(categoryWidget->geometry().top() - m_topNavigator->height() - 80);
     }
 }
 
@@ -172,12 +169,11 @@ void IMarketPage::setupCategories()
 {
     qDebug() << "Setting up categories";
 
-    addCategory("Suggestions");
+    addCategory("Recommend");
     addCategory("Write");
     addCategory("Productivity");
     addCategory("Research");
     addCategory("Education");
-    addCategory("Play");
     addCategory("Life");
     addCategory("Program");
 }
@@ -186,8 +182,8 @@ void IMarketPage::scrollContentsBy(int dx, int dy)
 {
     QScrollArea::scrollContentsBy(dx, dy);
     qDebug() << "Scrolling contents by dx:" << dx << "dy:" << dy;
-    if (m_navigator && topSearchArea) {
-        if (verticalScrollBar()->value() >= (m_navigator->y() - topSearchArea->y() - this->contentsMargins().top())) {
+    if (m_navigator && m_topNavigator) {
+        if (verticalScrollBar()->value() >= (m_navigator->y() - m_topNavigator->y())) {
             qDebug() << "Showing top search area";
             topSearchArea->show();
         } else {
@@ -200,7 +196,5 @@ void IMarketPage::scrollContentsBy(int dx, int dy)
 void IMarketPage::resizeEvent(QResizeEvent *event)
 {
     QScrollArea::resizeEvent(event);
-    int newWidth = this->width() - initialWidthDifference;
-    containerWidget->setMinimumWidth(newWidth);
-    containerWidget->setMaximumWidth(newWidth);
+    containerWidget->setFixedWidth( this->width() - 19);
 }

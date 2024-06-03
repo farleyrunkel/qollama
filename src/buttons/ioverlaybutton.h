@@ -22,6 +22,7 @@ public:
         auto button = new QPushButton;
         button->setIcon(QIcon("://icon/create-new.svg"));
         mainLayout->addWidget(button);
+        button->hide();
     }
 
 private:

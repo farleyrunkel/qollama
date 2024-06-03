@@ -1,114 +1,130 @@
 #include "ileftwindow.h"
 #include <QVBoxLayout>
-#include <QPushButton>
-#include "ihistorylist.h"
-#include "ioverlaybutton.h"
-#include <QResizeEvent>
+#include <QHBoxLayout>
+#include <QSpacerItem>
+#include <QFile>
 
 ILeftWindow::ILeftWindow(QWidget *parent) : IWidget(parent) {
-
     setupUi();
 }
 
 void ILeftWindow::setupUi() {
-
     setMaximumSize(QSize(200, 16777215));
+    setObjectName("leftWindow");
 
-    QVBoxLayout *verticalLayout_3 = new QVBoxLayout(this);
-    verticalLayout_3->setSpacing(0);
-    verticalLayout_3->setObjectName("verticalLayout_3");
-    verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setSpacing(2);
 
-    QWidget *sideWidget = new QWidget(this);
-    sideWidget->setObjectName("sideWidget");
-    QVBoxLayout *verticalLayout = new QVBoxLayout(sideWidget);
-    verticalLayout->setObjectName("verticalLayout");
-    verticalLayout->setContentsMargins(-1, 0, -1, -1);
+    setupTitleBar(mainLayout);
+    setupButtons(mainLayout);
+    setupHistoryList(mainLayout);
+    setupSettingButton(mainLayout);
+}
 
-    QWidget *leftTitleBar = new QWidget(sideWidget);
-    leftTitleBar->setObjectName("leftTitleBar");
-    QHBoxLayout *horizontalLayout_5 = new QHBoxLayout(leftTitleBar);
-    horizontalLayout_5->setSpacing(0);
-    horizontalLayout_5->setObjectName("horizontalLayout_5");
-    horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
+void ILeftWindow::setupTitleBar(QVBoxLayout *layout) {
+    QWidget *titleBar = createButtonContainer(this, "leftTitleBar", ":/icon/sidebar-left.svg", QSize(30, 30), layout);
+    QHBoxLayout *titleBarLayout = qobject_cast<QHBoxLayout*>(titleBar->layout());
 
-    m_expandButton = new QPushButton(leftTitleBar);
-    m_expandButton->setObjectName("expandSideBtn");
-    QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
-    m_expandButton->setSizePolicy(sizePolicy);
-    m_expandButton->setMinimumSize(QSize(30, 30));
-    m_expandButton->setMaximumSize(QSize(30, 30));
-    QIcon icon1;
-    icon1.addFile(QString::fromUtf8(":/icon/sidebar-left.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    m_expandButton->setIcon(icon1);
-    horizontalLayout_5->addWidget(m_expandButton);
+    m_expandButton = createButton(titleBar, "smallButton", ":/icon/sidebar-left.svg", QSize(30, 30));
+    titleBarLayout->addWidget(m_expandButton);
 
-    QSpacerItem *horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
-    horizontalLayout_5->addItem(horizontalSpacer_5);
+    QSpacerItem *spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    titleBarLayout->addItem(spacer);
 
-    auto newChatBtn = new QPushButton(leftTitleBar);
-    newChatBtn->setObjectName("newChatBtn");
-    newChatBtn->setSizePolicy(sizePolicy);
-    newChatBtn->setMinimumSize(QSize(30, 30));
-    newChatBtn->setMaximumSize(QSize(30, 30));
-    QIcon icon2;
-    icon2.addFile(QString::fromUtf8(":/icon/create-new.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    newChatBtn->setIcon(icon2);
-    horizontalLayout_5->addWidget(newChatBtn);
+    QPushButton *m_newChatButton = createButton(titleBar, "smallButton", ":/icon/create-new.svg", QSize(30, 30));
+    titleBarLayout->addWidget(m_newChatButton);
 
-    verticalLayout->addWidget(leftTitleBar);
+    // Set tool tips
+    m_expandButton->setToolTip(tr("Expand"));
+    m_newChatButton->setToolTip(tr("Llama3"));
+}
 
-    m_newChatButton = new IOverlayButton(sideWidget);
-    m_newChatButton->setObjectName("newChatButton");
-    m_newChatButton->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-    m_newChatButton->setMinimumSize(QSize(0, 34));
-    m_newChatButton->setMaximumSize(QSize(16777215, 34));
-    QFont font2;
-    font2.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
-    font2.setPointSize(10);
-    font2.setWeight(QFont::Medium);
-    m_newChatButton->setFont(font2);
-    m_newChatButton->setFocusPolicy(Qt::NoFocus);
-    m_newChatButton->setLayoutDirection(Qt::LeftToRight);
-    //newChatButton->setIcon(icon);
-    verticalLayout->addWidget(m_newChatButton);
+void ILeftWindow::setupButtons(QVBoxLayout *layout) {
+    QFont buttonFont;
+    buttonFont.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+    buttonFont.setPointSize(10);
+    buttonFont.setWeight(QFont::Medium);
 
-    m_exploreButton = new QPushButton(sideWidget);
-    m_exploreButton->setObjectName("exploreButton");
-    m_exploreButton->setMinimumSize(QSize(0, 34));
-    m_exploreButton->setMaximumSize(QSize(16777215, 34));
-    m_exploreButton->setFont(font2);
-    QIcon icon3;
-    icon3.addFile(QString::fromUtf8(":/icon/sparkles.png"), QSize(), QIcon::Normal, QIcon::Off);
-    m_exploreButton->setIcon(icon3);
-    verticalLayout->addWidget(m_exploreButton);
+    m_modelButton = createOverlayButton(this, "newChatButton", buttonFont, QSize(0, 34));
+    layout->addWidget(m_modelButton);
+    m_modelButton->setText(tr("Llama3"));
 
-    auto historyList = new IHistoryList(sideWidget);
-    historyList->setObjectName("historyList");
-    historyList->setFocusPolicy(Qt::NoFocus);
-    historyList->setFrameShape(QFrame::NoFrame);
-    historyList->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    historyList->setProperty("showDropIndicator", QVariant(false));
-    historyList->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-    verticalLayout->addWidget(historyList);
+    m_exploreButton = createButton(this, "exploreButton", ":/icon/sparkles.png", QSize(0, 34), false);
+    m_exploreButton->setFont(buttonFont);
+    layout->addWidget(m_exploreButton);
+    m_exploreButton->setText(tr("Explore"));
+}
 
-    auto settingButton = new QPushButton(sideWidget);
-    settingButton->setObjectName("settingButton");
-    settingButton->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
-    settingButton->setMinimumSize(QSize(0, 40));
-    settingButton->setMaximumSize(QSize(16777215, 40));
-    settingButton->setFont(font2);
-    QIcon icon4;
-    icon4.addFile(QString::fromUtf8(":/icon/gear.svg"), QSize(), QIcon::Normal, QIcon::Off);
-    settingButton->setIcon(icon4);
-    settingButton->setIconSize(QSize(20, 20));
-    verticalLayout->addWidget(settingButton);
+void ILeftWindow::setupHistoryList(QVBoxLayout *layout) {
+    m_historyList = new IHistoryList(this);
+    m_historyList->setObjectName("historyList");
+    m_historyList->setFocusPolicy(Qt::NoFocus);
+    m_historyList->setFrameShape(QFrame::NoFrame);
+    m_historyList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_historyList->setProperty("showDropIndicator", QVariant(false));
+    m_historyList->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    layout->addWidget(m_historyList);
+}
 
-    verticalLayout_3->addWidget(sideWidget);
+void ILeftWindow::setupSettingButton(QVBoxLayout *layout) {
+    QFont buttonFont;
+    buttonFont.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
+    buttonFont.setPointSize(10);
+    buttonFont.setWeight(QFont::Medium);
 
-    m_expandButton->setToolTip(QCoreApplication::translate("MainWindow", "Expand", nullptr));
-    newChatBtn->setToolTip(QCoreApplication::translate("MainWindow", "Llama3", nullptr));
-    m_newChatButton->setText(QCoreApplication::translate("MainWindow", "Llama3", nullptr));
-    m_exploreButton->setText(QCoreApplication::translate("MainWindow", "Explore", nullptr));
-    settingButton->setText(QCoreApplication::translate("MainWindow", "Settings", nullptr));
+    m_settingButton = createButton(this, "settingButton", ":/icon/gear.svg", QSize(0, 40), false);
+    m_settingButton->setFont(buttonFont);
+    m_settingButton->setIconSize(QSize(20, 20));
+    layout->addWidget(m_settingButton);
+    m_settingButton->setText(tr("Settings"));
+}
+
+QWidget* ILeftWindow::createButtonContainer(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, QVBoxLayout *layout) {
+    QWidget *container = new QWidget(parent);
+    container->setObjectName(objectName);
+    QHBoxLayout *containerLayout = new QHBoxLayout(container);
+    containerLayout->setSpacing(0);
+    containerLayout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(container);
+    return container;
+}
+
+QPushButton* ILeftWindow::createButton(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, bool isFixedSize) {
+    QPushButton *button = new QPushButton(parent);
+    button->setObjectName(objectName);
+    button->setIcon(QIcon(iconPath));
+    if (isFixedSize) {
+        button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        button->setMinimumSize(size);
+        button->setMaximumSize(size);
+    } else {
+        button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        button->setMinimumSize(size);
+        button->setMaximumSize(QSize(16777215, size.height()));
+    }
+    return button;
+}
+
+IOverlayButton* ILeftWindow::createOverlayButton(QWidget *parent, const QString &objectName, const QFont &font, const QSize &size) {
+    IOverlayButton *button = new IOverlayButton(parent);
+    button->setObjectName(objectName);
+    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    button->setMinimumSize(size);
+    button->setMaximumSize(QSize(16777215, size.height()));
+    button->setFont(font);
+    button->setFocusPolicy(Qt::NoFocus);
+    button->setLayoutDirection(Qt::LeftToRight);
+    return button;
+}
+
+QPushButton* ILeftWindow::expandButton() const {
+    return m_expandButton;
+}
+
+IOverlayButton* ILeftWindow::newChatButton() const {
+    return m_modelButton;
+}
+
+QPushButton* ILeftWindow::exploreButton() const {
+    return m_exploreButton;
 }

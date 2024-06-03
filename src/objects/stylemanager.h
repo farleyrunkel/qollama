@@ -2,8 +2,9 @@
 #define STYLEMANAGER_H
 
 #include <QObject>
-#include <QString>
 #include <QMap>
+
+class QWidget;
 
 class StyleManager : public QObject {
     Q_OBJECT
@@ -13,20 +14,16 @@ public:
 
     void loadStyleSheet(const QString &filePath);
     void applyStyleSheet(QWidget *widget);
-
-    void setModifyQssFile(bool isModified = true) {
-
-    }
+    void enableBorders(bool enable);
 
 private:
-
     QString replaceColors(const QString &styleSheet);
     QMap<QString, QString> parseColorPalette(const QString &styleSheet);
-
-private:
+    QString addBorderStyles() const;
 
     QString currentStyleSheet;
     QMap<QString, QString> colorPalette;
+    bool showBorders;
 };
 
 #endif // STYLEMANAGER_H

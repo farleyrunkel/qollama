@@ -42,91 +42,30 @@ Example#Usage {
 }
 
 QStatusBar,
-QWidget#centralwidget,
-QWidget#marketContainerWidget,
-QWidget#chatPage,
-QWidget#chatContainer,
-IWelcomePage,
+QSplitter,
 IMarketPage,
 IChatWidget {
     background-color: #78D999; /*@White*/
     border: none;
 }
 
-QStackedWidget#stack {
-    background-color: red;
+ILeftWindow,
+IHistoryList {
+    background-color: #78D999; /*@LightBackground*/
     border: none;
 }
 
-QWidget#sideWidget,
-QListWidget#historyList {
-    background-color: #78D999;  /*@LightGreen*/
-    border: 1px hidden;
-}
-
-QTabWidget::pane,
-QSplitter::handle {
-    border: none;
-}
-
-
-/*
-QPushButton{
+QPushButton#smallButton {
     border: 1px hidden gray;
-    text-align: left;
-}
-QPushButton:hover {
-    background-color: #ececec;
-    color: black;
-}
-QPushButton:pressed {
-    background-color:#ececec;
-    border-style: hidden;
-}
-QPushButton::menu-indicator {
-    width: 0px;
-    image: none;
-}
-*/
-
-QPushButton#newChatBtn,
-QPushButton#expandSideBtn,
-QPushButton#expandButton
-{
-    border: 1px hidden gray;
-    border-radius: 10px;
-    text-align: left; /* 设置文本左对齐 */
-}
-QPushButton#newChatBtn:hover,
-QPushButton#expandSideBtn:hover,
-QPushButton#expandButton:hover {
-    background-color: #ececec;
-    color: black;
-}
-QPushButton#newChatBtn:pressed,
-QPushButton#expandSideBtn:pressed,
-QPushButton#expandButton:pressed {
-    background-color:#ececec;
-    border-style: hidden;
-     border-style: outset;
-}
-
-QPushButton#userButton {
-    border: 1px solid gray;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
-    border-image:url(:/icon/farley.jpg)
 }
-QPushButton#userButton:hover {
-border: 1px solid gray;
-border-radius: 10px;
-        border-style: outset;
+QPushButton#smallButton:hover {
+    background-color: #ececec;  /*@NeutralBackground*/
 }
-QPushButton#userButton:pressed {
-    background-color:#ececec;
+QPushButton#smallButton:pressed {
     border-style: outset;
 }
-
 
 QPushButton#exploreButton,
 QPushButton#settingButton,
@@ -134,11 +73,12 @@ QPushButton#newChatButton {
     border: 1px hidden;
     border-radius: 10px;
     padding-left: 10px;
+    text-align: left;
 }
 QPushButton#settingButton:hover,
 QPushButton#exploreButton:hover,
 QPushButton#newChatButton:hover  {
-    background-color: #ececec;
+    background-color: #ececec; /*@LightGreen*/
 }
 QPushButton#settingButton:pressed,
 QPushButton#exploreButton:pressed,
@@ -150,16 +90,16 @@ QPushButton#newChatButton:pressed  {
 }
 
 
-QComboBox { /* 编辑框的样式 */
+QComboBox {
     border: 1px hidden black;
     border-radius: 5px;
 }
 
-QComboBox::drop-down { /* 下拉按钮样式，默认在编辑框右上角 */
+QComboBox::drop-down {
     border: hidden;
 }
-QComboBox::down-arrow { /* 下拉按钮中的箭头样式，默认在下拉按钮的居中位置 */
-    image: url(:/icon/down.svg); /* 箭头png为8x8大小，不要超过下拉按钮宽度 */
+QComboBox::down-arrow {
+    image: url(:/icon/down.svg);
 }
 QComboBox::menu-indicator {
     width: 0px;
@@ -184,42 +124,6 @@ QListWidget#historyList::item::selected {
     border-style: hidden;
 }
 
-
-/* set input style */
-
-QFrame#inputFrame,
-QFrame#welInputFrame {
-    background-color:#F5F5F5;
-    border: 1px solid #a6a6a6;
-    border-radius: 25px;
-}
-QLineEdit#inputLine,
-QLineEdit#welInputLine {
-    background-color:#F5F5F5;
-    border: 1px hidden #a6a6a6;
-    border-radius: 24px;
-}
-QPushButton#sendButton,
-QPushButton#welInputButton {
-    border: 1px hidden rgb(84, 210, 99);
-    border-radius:15px;
-    text-align: center;
-}
-QPushButton#sendButton:hover,
-QPushButton#welInputButton:hover {
-    background-color: rgb(84, 210, 99);
-    color: black;
-}
-QPushButton#sendButton:pressed,
-QPushButton#welInputButton:pressed {
-    background-color:rgb(84, 210, 99);
-    border-style: inset;
-}
-
-
-/* finish input style */
-
-
 QPushButton#shareButton,
 QPushButton#expandButton {
     border: 1px hidden gray;
@@ -239,9 +143,8 @@ QPushButton#expandButton:pressed{
 
 
 QScrollBar:vertical {
-    width: 8px;
-    border-radius:5px;
-    background-color:#f7f7f5;
+    background-color: #f7f7f5; /*@White*/
+    width: 8px;  
 }
 QScrollBar:horizontal {
     height: 8px;
@@ -249,12 +152,12 @@ QScrollBar:horizontal {
 }
 QScrollBar::handle:vertical,
 QScrollBar::handle:horizontal {
-    background: #AAA;
+    background-color: #f7f7f5;  /*@LightBackground*/
     border-radius:4px;
 }
 QScrollBar::handle:vertical:hover,
 QScrollBar::handle:horizontal:hover {
-    background: #888;
+    background-color: #f7f7f5;  /*@NeutralBackground*/
 }
 QScrollBar::sub-line:vertical, QScrollBar::add-line:vertical,
 QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal {
@@ -334,4 +237,22 @@ IVPushCard:pressed{
 /* end IPushCard */
 
 
+/*
+QPushButton{
+    border: 1px hidden gray;
+    text-align: left;
+}
+QPushButton:hover {
+    background-color: #ececec;
+    color: black;
+}
+QPushButton:pressed {
+    background-color:#ececec;
+    border-style: hidden;
+}
+QPushButton::menu-indicator {
+    width: 0px;
+    image: none;
+}
+*/
 

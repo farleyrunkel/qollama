@@ -19,7 +19,6 @@ IWelcomePage::IWelcomePage(QWidget *parent)
 void IWelcomePage::setupLayout() {
     setObjectName("IWelcomePage");
     resize(831, 544);
-    setAutoFillBackground(false);
     setContentsMargins(0, 0, 0, 0);
 
     m_mainLayout = new QGridLayout(this);

@@ -4,8 +4,8 @@
 #include <QRegularExpression>
 #include <QWidget>
 
-StyleManager::StyleManager( QObject *parent)
-    : QObject(parent) {
+StyleManager::StyleManager(QObject *parent)
+    : QObject(parent), showBorders(false) {
 }
 
 void StyleManager::loadStyleSheet(const QString &filePath) {
@@ -24,6 +24,10 @@ void StyleManager::loadStyleSheet(const QString &filePath) {
 
     // Replace color variables with actual values
     currentStyleSheet = replaceColors(styleSheet);
+
+    if (showBorders) {
+        currentStyleSheet += addBorderStyles();
+    }
 }
 
 void StyleManager::applyStyleSheet(QWidget *widget) {
@@ -65,4 +69,23 @@ QMap<QString, QString> StyleManager::parseColorPalette(const QString &styleSheet
         }
     }
     return palette;
+}
+
+void StyleManager::enableBorders(bool enable) {
+    showBorders = enable;
+    if (showBorders) {
+        currentStyleSheet += addBorderStyles();
+    } else {
+        // Remove border styles if they exist
+        QRegularExpression borderRegex(R"((\*|QWidget)[^{}]*{[^{}]*border:[^{}]*}[^{}]*)");
+        currentStyleSheet.remove(borderRegex);
+    }
+}
+
+QString StyleManager::addBorderStyles() const {
+    return R"(
+    * {
+        border: 1px solid red;
+    }
+    )";
 }

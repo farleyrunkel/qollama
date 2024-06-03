@@ -47,7 +47,7 @@ bool IHPushCard::eventFilter(QObject *watched, QEvent *event)
 
 void IHPushCard::setupUI()
 {
-    setMinimumWidth(250);
+    setMinimumWidth(100);
     setMinimumHeight(90);
     setStyleSheet("border: 1px hidden gray; border-radius: 10px;");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
