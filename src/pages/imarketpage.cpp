@@ -8,13 +8,15 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
 
     setWidgetResizable(true);
     setAlignment(Qt::AlignTop);
+    setFrameShape(QFrame::NoFrame);
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setContentsMargins(0, 0, 0, 0);
-
+    setStyleSheet("background-color:white;");
     containerWidget = new QWidget(this);
     containerWidget->setObjectName("marketContainerWidget");
+    containerWidget->setStyleSheet("background-color:white;");
     contentLayout = new QVBoxLayout(containerWidget);
     contentLayout->setContentsMargins(60, 0, 40, 0);
     contentLayout->setSpacing(15);

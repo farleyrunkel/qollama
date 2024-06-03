@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     styleManager.loadStyleSheet(":/qss/style.qss");
 
     MainWindow w;
-    styleManager.enableBorders(true);  // Enable borders
+    //styleManager.enableBorders(true);  // Enable borders
     styleManager.applyStyleSheet(&w);
 
     w.show();

@@ -7,10 +7,10 @@ ILineEdit::ILineEdit(QWidget *parent) : QLineEdit(parent) {
 
     m_leftButton = new QPushButton("", this);
     m_leftButton->setFixedSize(30, 30); // 设置按钮大小
-
+    m_leftButton->setObjectName("circleButton");
     m_rightButton = new QPushButton("", this);
     m_rightButton->setFixedSize(30, 30); // 设置按钮大小
-
+    m_rightButton->setObjectName("circleButton");
     QHBoxLayout *hLayout = new QHBoxLayout(this);
     hLayout->setContentsMargins(5, 0, 5, 0); // 设置布局边距为0
     hLayout->setSpacing(5); // 设置控件之间的间距

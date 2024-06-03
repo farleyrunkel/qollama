@@ -1,7 +1,7 @@
 #include "iwelcomepage.h"
-#include <QMenu>
 
 IWelcomePage::IWelcomePage(QWidget *parent)
+    :IWidget(parent)
 {
     setupLayout();
 
@@ -79,11 +79,9 @@ void IWelcomePage::setupLineEdit() {
     m_inputLine = new ILineEdit;
     auto rightButton = m_inputLine->rightButton();
     rightButton->setIcon(QIcon(":/icon/send.svg"));
-    rightButton->setObjectName("welcomePageRightButton");
 
     auto leftButton = m_inputLine->leftButton();
     leftButton->setIcon(QIcon("://icon/more-horiz.svg"));
-    leftButton->setObjectName("welcomePageLeftButton");
 
     //QAction* action = new QAction;
     m_menu = new QMenu;

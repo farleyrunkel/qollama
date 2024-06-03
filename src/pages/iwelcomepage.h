@@ -9,8 +9,9 @@
 #include "ilineedit.h"
 #include "ivpushcard.h"
 #include <Qmenu>
+#include "iwidget.h"
 
-class IWelcomePage : public QWidget
+class IWelcomePage : public IWidget
 {
     Q_OBJECT
 

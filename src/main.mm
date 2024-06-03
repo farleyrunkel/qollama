@@ -46,11 +46,11 @@ int main(int argc, char *argv[]) {
     styleManager.loadStyleSheet(":/qss/style.qss");
 
     MainWindow w;
+    //styleManager.enableBorders(true);  // Enable borders
     styleManager.applyStyleSheet(&w);
 
     w.show();
 
-    // 使用单次定时器在事件循环中稍后调用 setMacWindowStyle 函数
     QTimer::singleShot(0, [&w]() {
         setMacWindowStyle(&w);
     });

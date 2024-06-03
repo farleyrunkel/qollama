@@ -43,6 +43,7 @@ Example#Usage {
 
 QStatusBar,
 QSplitter,
+IWelcomePage
 IMarketPage,
 IChatWidget {
     background-color: #78D999; /*@White*/
@@ -173,16 +174,14 @@ ILineEdit {
     border-radius: 20px;
     padding-left: 40px;
 }
-QPushButton#welcomePageLeftButton,
-QPushButton#welcomePageRightButton {
+QPushButton#circleButton{
     border-style: hidden;
     border-radius: 15px;
 }
-QPushButton#welcomePageLeftButton:hover,
-QPushButton#welcomePageRightButton:hover {
+QPushButton#circleButton:hover {
     background-color: #ececec; /*@NeutralBackground*/
 }
-QPushButton#welcomePageLeftButton:menu-indicator {
+QPushButton#circleButton:menu-indicator {
     width: 0px;
     image: none;
 }
@@ -236,23 +235,4 @@ IVPushCard:pressed{
 }
 /* end IPushCard */
 
-
-/*
-QPushButton{
-    border: 1px hidden gray;
-    text-align: left;
-}
-QPushButton:hover {
-    background-color: #ececec;
-    color: black;
-}
-QPushButton:pressed {
-    background-color:#ececec;
-    border-style: hidden;
-}
-QPushButton::menu-indicator {
-    width: 0px;
-    image: none;
-}
-*/
 
