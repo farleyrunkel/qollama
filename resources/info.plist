@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleIconFile</key>
-    <string>icon</string> 
+    <string>icon.icns</string>
 </dict>
 </plist>

@@ -31,14 +31,26 @@ if(APPLE)
     # 设置 macOS 上的应用图标
     set(MACOSX_BUNDLE_ICON_FILE icon.icns)
     set(app_icon_macos ${CMAKE_SOURCE_DIR}/resources/icon.icns)
-    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    # 输出图标路径以便调试
+    message(STATUS "Icon file path: ${app_icon_macos}")
 
+    # 确保图标文件路径正确
+    if(NOT EXISTS ${app_icon_macos})
+        message(FATAL_ERROR "Icon file not found: ${app_icon_macos}")
+    else()
+        message(STATUS "Icon file found: ${app_icon_macos}")
+    endif()
+    
+    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    
     # 设置 Info.plist 文件
     set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist)
+
     set(PROJECT_MAIN_FILE "src/main.mm")
 else()
     set(PROJECT_MAIN_FILE "src/main.cpp")
 endif()
+
 
 # 查找 src 目录下所有子目录中的所有源文件和头文件
 file(GLOB_RECURSE PROJECT_SOURCES
@@ -48,6 +60,10 @@ file(GLOB_RECURSE PROJECT_SOURCES
 
 # 将主文件添加到 PROJECT_SOURCES
 list(APPEND PROJECT_SOURCES ${PROJECT_MAIN_FILE})
+
+if(APPLE)
+    list(APPEND PROJECT_SOURCES ${app_icon_macos})
+endif()
 
 # 创建可执行文件
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -88,11 +104,13 @@ set_target_properties(qollama PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-# 添加图标文件
+
+
 if(APPLE)
-    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-    list(APPEND PROJECT_SOURCES ${app_icon_macos})
+    install(FILES ${app_icon_macos} DESTINATION ${CMAKE_INSTALL_PREFIX}/Contents/Resources)
+    install(FILES ${MACOSX_BUNDLE_INFO_PLIST} DESTINATION ${CMAKE_INSTALL_PREFIX}/Contents)
 endif()
+
 
 include(GNUInstallDirs)
 install(TARGETS qollama

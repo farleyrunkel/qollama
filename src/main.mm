@@ -3,7 +3,7 @@
 #include <QWindow>
 #include <QTimer>
 #include <objc/objc-runtime.h>
-#include "stylemanager.h"
+#include "istylemanager.h"
 #include "mainwindow.h"
 
 #import <Cocoa/Cocoa.h>
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     // Load and apply the stylesheet
-    StyleManager styleManager;
+    IStyleManager styleManager;
     styleManager.loadStyleSheet(":/qss/style.qss");
 
     MainWindow w;
