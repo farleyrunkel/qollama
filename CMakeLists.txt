@@ -71,6 +71,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/resources.qrc
+        src/objects/initializer.h src/objects/initializer.cpp
     )
 else()
     if(ANDROID)

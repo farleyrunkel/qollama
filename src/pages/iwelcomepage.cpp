@@ -83,14 +83,13 @@ void IWelcomePage::setupLineEdit() {
     auto leftButton = m_inputLine->leftButton();
     leftButton->setIcon(QIcon("://icon/more-horiz.svg"));
 
-    //QAction* action = new QAction;
     m_menu = new QMenu;
     leftButton->setMenu(m_menu);
-    emit ISignalHub::instance().listRequest();
+    emit SignalHub::instance().listRequest();
 
     m_mainLayout->addWidget(m_inputLine, 3, 0, 1, 4);
 
-    connect(&ISignalHub::instance(), &ISignalHub::listReceived, [this](const QList<QString>& list) {
+    connect(&SignalHub::instance(), &SignalHub::listReceived, this, [this](const QList<QString>& list) {
         for (const auto& a : list) {
             auto action = new QAction(a, this);
             m_menu->addAction(action);

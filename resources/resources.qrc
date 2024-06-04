@@ -23,7 +23,6 @@
         <file>icon/share-box.svg</file>
         <file>icon/sparkles.png</file>
         <file>icon/ollama.png</file>
-        <file>icon/farley.jpg</file>
         <file>icon/full-screen.svg</file>
         <file>icon/full-screen-zoom.svg</file>
         <file>icon/gear.svg</file>
@@ -31,9 +30,6 @@
         <file>icon/art-palette.svg</file>
         <file>icon/terminal.svg</file>
         <file>icon/electric-light-bulb.svg</file>
-        <file>icon/electric-light-bulb.png</file>
-        <file>icon/terminal.png</file>
-        <file>icon/heart-balloon.png</file>
         <file>icon/qollama.png</file>
         <file>images/qollama-text.png</file>
         <file>icon/delete.svg</file>
@@ -49,5 +45,6 @@
         <file>icon/window-restore-line.svg</file>
         <file>images/qollama-logo-name.png</file>
         <file>icon.icns</file>
+        <file>icon.png</file>
     </qresource>
 </RCC>

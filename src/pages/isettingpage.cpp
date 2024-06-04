@@ -1,5 +1,5 @@
 #include "isettingpage.h"
-#include "iconfigmanager.h"
+#include "configmanager.h"
 
 ISettingPage::ISettingPage(QWidget *parent) : QWidget(parent)
 {
@@ -15,7 +15,7 @@ void ISettingPage::setupUi()
     avatarLabel = new QLabel(this);
     avatarLabel->setFixedSize(100, 100);
     avatarLabel->setAlignment(Qt::AlignCenter);
-    avatarLabel->setPixmap(IConfigManager::instance().getAvatar().scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    avatarLabel->setPixmap(ConfigManager::instance().avatar().scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     // 更改头像按钮
     changeAvatarButton = new QPushButton("更改头像", this);
@@ -23,7 +23,7 @@ void ISettingPage::setupUi()
     // 用户名输入框
     usernameLineEdit = new QLineEdit(this);
     usernameLineEdit->setPlaceholderText("输入用户名");
-    usernameLineEdit->setText(IConfigManager::instance().getUsername());
+    usernameLineEdit->setText(ConfigManager::instance().username());
 
     // 保存按钮
     saveButton = new QPushButton("保存", this);
@@ -41,8 +41,8 @@ void ISettingPage::setupConnections()
     connect(saveButton, &QPushButton::clicked, this, &ISettingPage::changeUsername);
 
     // 连接 IConfigManager 信号以更新界面
-    connect(&IConfigManager::instance(), &IConfigManager::avatarChanged, this, &ISettingPage::updateAvatarDisplay);
-    connect(&IConfigManager::instance(), &IConfigManager::usernameChanged, this, &ISettingPage::updateUsernameDisplay);
+    connect(&ConfigManager::instance(), &ConfigManager::avatarChanged, this, &ISettingPage::updateAvatarDisplay);
+    connect(&ConfigManager::instance(), &ConfigManager::usernameChanged, this, &ISettingPage::updateUsernameDisplay);
 }
 
 void ISettingPage::changeAvatar()
@@ -50,7 +50,7 @@ void ISettingPage::changeAvatar()
     QString fileName = QFileDialog::getOpenFileName(this, "选择头像", "", "图片文件 (*.png *.jpg *.bmp)");
     if (!fileName.isEmpty()) {
         QPixmap newAvatar(fileName);
-        IConfigManager::instance().setAvatar(newAvatar);
+        ConfigManager::instance().setAvatar(newAvatar);
     }
 }
 
@@ -58,7 +58,7 @@ void ISettingPage::changeUsername()
 {
     QString newUsername = usernameLineEdit->text();
     if (!newUsername.isEmpty()) {
-        IConfigManager::instance().setUsername(newUsername);
+        ConfigManager::instance().setUsername(newUsername);
     }
 }
 

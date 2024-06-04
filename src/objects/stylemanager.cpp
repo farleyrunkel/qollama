@@ -1,14 +1,14 @@
-#include "istylemanager.h"
+#include "stylemanager.h"
 #include <QFile>
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QWidget>
 
-IStyleManager::IStyleManager(QObject *parent)
+StyleManager::StyleManager(QObject *parent)
     : QObject(parent), showBorders(false) {
 }
 
-void IStyleManager::loadStyleSheet(const QString &filePath) {
+void StyleManager::loadStyleSheet(const QString &filePath) {
     QFile file(filePath);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Failed to open file for reading:" << filePath;
@@ -30,11 +30,11 @@ void IStyleManager::loadStyleSheet(const QString &filePath) {
     }
 }
 
-void IStyleManager::applyStyleSheet(QWidget *widget) {
+void StyleManager::applyStyleSheet(QWidget *widget) {
     widget->setStyleSheet(currentStyleSheet);
 }
 
-QString IStyleManager::replaceColors(const QString &styleSheet) {
+QString StyleManager::replaceColors(const QString &styleSheet) {
     QString newStyleSheet = styleSheet;
 
     QRegularExpression regex(R"([\s:]([^\s;]+)\s*;\s*/\*\s*@(\w+)\s*\*/)");
@@ -55,7 +55,7 @@ QString IStyleManager::replaceColors(const QString &styleSheet) {
     return newStyleSheet;
 }
 
-QMap<QString, QString> IStyleManager::parseColorPalette(const QString &styleSheet) {
+QMap<QString, QString> StyleManager::parseColorPalette(const QString &styleSheet) {
     QMap<QString, QString> palette;
     QRegularExpression regex(R"(@(\w+):\s*#([0-9a-fA-F]{6});\s*\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)\s*)");
     QRegularExpressionMatchIterator it = regex.globalMatch(styleSheet);
@@ -71,7 +71,7 @@ QMap<QString, QString> IStyleManager::parseColorPalette(const QString &styleShee
     return palette;
 }
 
-void IStyleManager::enableBorders(bool enable) {
+void StyleManager::enableBorders(bool enable) {
     showBorders = enable;
     if (showBorders) {
         currentStyleSheet += addBorderStyles();
@@ -82,7 +82,7 @@ void IStyleManager::enableBorders(bool enable) {
     }
 }
 
-QString IStyleManager::addBorderStyles() const {
+QString StyleManager::addBorderStyles() const {
     return R"(
     * {
         border: 1px solid red;

@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QFile>
-#include "istylemanager.h"
+#include "stylemanager.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // Load and apply the stylesheet
-    IStyleManager styleManager;
+    StyleManager styleManager;
     styleManager.loadStyleSheet(":/qss/style.qss");
 
     MainWindow w;

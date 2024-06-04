@@ -6,30 +6,30 @@
 #include <QVariant>
 #include <QMap>
 
-class IConfigManager : public QObject
+class ConfigManager : public QObject
 {
     Q_OBJECT
 
 public:
-    static IConfigManager& instance() {
-        static IConfigManager instance;
+    static ConfigManager& instance() {
+        static ConfigManager instance;
         return instance;
     }
 
-    QPixmap appAvatar() const { return avatar; }
-    QPixmap getAvatar() const { return avatar; }
+    QPixmap appIcon() const { return m_appIcon; }
+    QPixmap avatar() const { return m_userAvatar; }
     void setAvatar(const QPixmap& newAvatar) {
-        avatar = newAvatar;
-        emit avatarChanged(avatar);
+        m_userAvatar = newAvatar;
+        emit avatarChanged(m_userAvatar);
     }
 
-    QString getUsername() const { return username; }
+    QString username() const { return m_username; }
     void setUsername(const QString& newUsername) {
-        username = newUsername;
-        emit usernameChanged(username);
+        m_username = newUsername;
+        emit usernameChanged(m_username);
     }
 
-    QVariant getConfig(const QString& key) const {
+    QVariant value(const QString& key) const {
         return configs.value(key);
     }
 
@@ -44,14 +44,16 @@ signals:
     void configChanged(const QString& key, const QVariant& value);
 
 private:
-    IConfigManager() { initializeDefaults(); }
-    IConfigManager(const IConfigManager&) = delete;
-    IConfigManager& operator=(const IConfigManager&) = delete;
+    ConfigManager() { initializeDefaults(); }
+    ConfigManager(const ConfigManager&) = delete;
+    ConfigManager& operator=(const ConfigManager&) = delete;
 
     void initializeDefaults();
-    QPixmap app;
-    QPixmap avatar;
-    QString username;
+
+private:
+    QPixmap m_appIcon;
+    QPixmap m_userAvatar;
+    QString m_username;
     QMap<QString, QVariant> configs;
 };
 

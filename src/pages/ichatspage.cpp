@@ -1,16 +1,16 @@
 #include "ichatspage.h"
-#include "isignalhub.h"
-#include "iconfigmanager.h"
+#include "signalhub.h"
+#include "configmanager.h"
 
 IChatsPage::IChatsPage(QWidget *parent) : IWidget(parent)
 {
     setupUI();
-    auto signalHub = &ISignalHub::instance();
+    auto signalHub = &SignalHub::instance();
 
-    connect(signalHub, &ISignalHub::on_IVPushCard_clicked, this, &IChatsPage::sendMessage);
+    connect(signalHub, &SignalHub::on_IVPushCard_clicked, this, &IChatsPage::sendMessage);
     connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this, &IChatsPage::handleSendMessage);
     connect(m_messageLineEdit, &ILineEdit::returnPressed, this, &IChatsPage::handleSendMessage);
-    connect(signalHub, &ISignalHub::listReceived, this, &IChatsPage::updateMenu);
+    connect(signalHub, &SignalHub::listReceived, this, &IChatsPage::updateMenu);
 }
 
 void IChatsPage::setupUI()
@@ -41,13 +41,13 @@ void IChatsPage::sendMessage(const QString &text)
         chat = addChat();
     }
 
-    chat->addMessage(text, IConfigManager::instance().getUsername(), IConfigManager::instance().getAvatar());
+    chat->addMessage(text, ConfigManager::instance().username(), ConfigManager::instance().avatar());
     chat->addMessage("", "llama3");
 
     QJsonObject json;
     json["prompt"] = text;
     json["model"] = "llama3";
-    emit ISignalHub::instance().generateRequest(json);
+    emit SignalHub::instance().generateRequest(json);
 }
 
 void IChatsPage::handleSendMessage()
@@ -61,7 +61,7 @@ IChatWidget* IChatsPage::addChat()
 {
     IChatWidget* chat = new IChatWidget(this);
     m_chatContainer->addWidget(chat);
-    emit ISignalHub::instance().newChatAdded(m_chatContainer->count());
+    emit SignalHub::instance().newChatAdded(m_chatContainer->count());
     return chat;
 }
 

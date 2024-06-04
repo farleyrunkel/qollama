@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QJsonObject>
 #include <QJsonDocument>
-#include "isignalhub.h"
+#include "signalhub.h"
 
 namespace ollama {
 
@@ -12,8 +12,8 @@ Client::Client(QObject *parent)
     , m_manager(new QNetworkAccessManager(this))
     , m_status(Waiting) {
 
-    connect(&ISignalHub::instance(), &ISignalHub::generateRequest, this, &Client::generate);
-    connect(&ISignalHub::instance(), &ISignalHub::listRequest, this, &Client::list);
+    connect(&SignalHub::instance(), &SignalHub::generateRequest, this, &Client::generate);
+    connect(&SignalHub::instance(), &SignalHub::listRequest, this, &Client::list);
 }
 
 Client::~Client() {
@@ -94,7 +94,7 @@ void Client::list() {
         // todo: finish get list from ollama
 
         QList<QString> list = {"Gemma", "codellama", "ChatGPT-4o", "llama3"};
-        emit ISignalHub::instance().listReceived(list);
+        emit SignalHub::instance().listReceived(list);
     });
 
     QObject::connect(reply, &QNetworkReply::finished, this, [this]() {

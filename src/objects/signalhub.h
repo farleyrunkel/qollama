@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QJsonObject>
 
-class ISignalHub : public QObject
+class SignalHub : public QObject
 {
     Q_OBJECT
 
 public:
-    static ISignalHub& instance()
+    static SignalHub& instance()
     {
-        static ISignalHub instance;
+        static SignalHub instance;
         return instance;
     }
 
@@ -23,9 +23,9 @@ signals:
     void newChatAdded(int);
 
 private:
-    ISignalHub() {}
-    ISignalHub(const ISignalHub&) = delete;
-    ISignalHub& operator=(const ISignalHub&) = delete;
+    SignalHub() {}
+    SignalHub(const SignalHub&) = delete;
+    SignalHub& operator=(const SignalHub&) = delete;
 };
 
 

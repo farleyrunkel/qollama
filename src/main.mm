@@ -3,7 +3,7 @@
 #include <QWindow>
 #include <QTimer>
 #include <objc/objc-runtime.h>
-#include "istylemanager.h"
+#include "stylemanager.h"
 #include "mainwindow.h"
 
 #import <Cocoa/Cocoa.h>

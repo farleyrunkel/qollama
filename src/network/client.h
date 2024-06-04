@@ -8,7 +8,7 @@
 
 namespace ollama {
 
-class Client : public QObject
+class Client: public QObject
 {
     Q_OBJECT
 
@@ -32,9 +32,7 @@ signals:
     void replyReceived(const QString&);
     void finished();
 
-    void listReceived(const QList<QString>& );
-
-public:
+    void listReceived(const QList<QString>&);
 
 private:
     QNetworkReply * sendRequest(const QString &url, const QJsonObject &json = QJsonObject());
@@ -42,6 +40,8 @@ private:
 private:
     QNetworkAccessManager *m_manager;
     Status m_status;
+
+    QJsonObject m_modelList;
 };
 }
 #endif // OLLAMACLIENT_H

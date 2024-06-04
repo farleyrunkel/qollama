@@ -15,7 +15,7 @@
 #include "irightwindow.h"
 #include "ileftwindow.h"
 #include "isettingpage.h"
-#include "iconfigmanager.h"
+#include "configmanager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //connect(settingButton, &QPushButton::pressed,  [&](){pages->setCurrentWidget(chats);});
 
-    connect(&ISignalHub::instance(), &ISignalHub::on_IVPushCard_clicked, [&](const QString&){pages->setCurrentWidget(chats);});
+    connect(&SignalHub::instance(), &SignalHub::on_IVPushCard_clicked, [&](const QString&){pages->setCurrentWidget(chats);});
 
 }
 
@@ -229,7 +229,7 @@ void MainWindow::setupUi()
     if (objectName().isEmpty())
         setObjectName("MainWindow");
     setWindowModality(Qt::WindowModal);
-    setWindowIcon(QIcon(IConfigManager::instance().appAvatar()));
+    setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
 
     resize(944, 592);
     QFont font;

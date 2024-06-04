@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QEvent>
-#include "isignalhub.h"
+#include "signalhub.h"
 
 class IVPushCard : public QPushButton {
     Q_OBJECT
