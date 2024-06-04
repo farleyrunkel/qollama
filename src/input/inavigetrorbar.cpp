@@ -3,8 +3,9 @@
 #include <QDebug>
 
 INavigetrorBar::INavigetrorBar(QWidget *parent)
-    : QWidget(parent), m_currentUnderlineLabel(nullptr)
+    : IWidget(parent), m_currentUnderlineLabel(nullptr)
 {
+
     m_buttonLayout = new QGridLayout(this);
     m_buttonLayout->setContentsMargins(0, 10, 0, 0);
 

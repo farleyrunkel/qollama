@@ -210,11 +210,12 @@ ILineEdit#marketPageSearchLine {
 QPushButton#navigatorButton {
     border: none;
     border-radius: 5px;
-    font-size: 14px; /* Set the font size to 12 pixels */
+    font-size: 14px;
+    text-margin: 5px;
 }
 QPushButton#navigatorButton:hover {
-    background-color: #ececec;   /*@LightBackground*/
-    border: 1px Outset gray;     /*@LightBorder*/
+    background-color: red; /*@LightBackground*/
+    border: 1px solid gray; /*@LightBorder*/
 }
 
 QLabel#underlineLabel {

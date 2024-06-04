@@ -6,8 +6,9 @@
 #include <QMap>
 #include <QPushButton>
 #include <QLabel>
+#include "iwidget.h"
 
-class INavigetrorBar : public QWidget {
+class INavigetrorBar : public IWidget {
     Q_OBJECT
 
 public:

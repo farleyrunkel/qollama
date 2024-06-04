@@ -178,6 +178,9 @@ void IMarketPage::setupCategories()
     addCategory("Education");
     addCategory("Life");
     addCategory("Program");
+
+    m_navigator->showUnderline(m_navigator->getUnderlineLabel("Recommend"));
+    m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("Recommend"));
 }
 
 void IMarketPage::scrollContentsBy(int dx, int dy)
