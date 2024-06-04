@@ -34,6 +34,8 @@ private:
     QVBoxLayout* mainLayout;
     QStackedWidget* chatsContainer;
     ILineEdit* lineEdit;
+
+    QMenu* m_menu;
 };
 
 #endif // ICHATSPAGE_H

@@ -11,6 +11,7 @@ void IConfigManager::initializeDefaults() {
         avatar.fill(Qt::gray); // 用灰色填充
     }
 
+    app = QPixmap("://icon/qollama.png");
     // 设置默认用户名
     username = "QOllama"; // 您可以在这里设置默认用户名
 

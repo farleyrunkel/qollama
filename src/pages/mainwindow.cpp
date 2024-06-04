@@ -15,6 +15,7 @@
 #include "irightwindow.h"
 #include "ileftwindow.h"
 #include "isettingpage.h"
+#include "iconfigmanager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -228,7 +229,7 @@ void MainWindow::setupUi()
     if (objectName().isEmpty())
         setObjectName("MainWindow");
     setWindowModality(Qt::WindowModal);
-    setWindowIcon(QIcon("://icon/qollama.png"));
+    setWindowIcon(QIcon(IConfigManager::instance().appAvatar()));
 
     resize(944, 592);
     QFont font;
@@ -236,11 +237,7 @@ void MainWindow::setupUi()
     font.setBold(false);
     setFont(font);
     setContextMenuPolicy(Qt::ActionsContextMenu);
-    QIcon icon;
-    icon.addFile(QString::fromUtf8(":/icon/ollama.png"), QSize(), QIcon::Normal, QIcon::Off);
-    setWindowIcon(icon);
     setWindowOpacity(1.000000000000000);
-    setAutoFillBackground(true);
     setInputMethodHints(Qt::ImhExclusiveInputMask);
     setDocumentMode(false);
 
@@ -251,7 +248,7 @@ void MainWindow::setupUi()
     splitter->setHandleWidth(0);
     splitter->setChildrenCollapsible(false);
 
-    left =  new ILeftWindow;
+    left = new ILeftWindow;
     splitter->addWidget(left);
 
     right = new IRightWindow;
@@ -262,7 +259,13 @@ void MainWindow::setupUi()
     setCentralWidget(splitter);
     statusBar = new QStatusBar(this);
     statusBar->setObjectName("statusBar");
-    statusBar->setStatusTip("AI can make mistakes. Check important info.");
+    setStatusBar(statusBar);
+
+    auto statusLabel = new QLabel("AI can make mistakes. Check important info.", this);
+    statusLabel->setAlignment(Qt::AlignCenter);
+    statusLabel->setObjectName("statusLabel");
+
+    statusBar->addPermanentWidget(statusLabel, 1);
 
     setStatusBar(statusBar);
 

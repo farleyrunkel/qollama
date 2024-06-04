@@ -46,7 +46,7 @@ void IWelcomePage::setupModelLabel() {
     m_welcomeLogo->setSizePolicy(sizePolicy);
     m_welcomeLogo->setMinimumSize(QSize(200, 70));
     m_welcomeLogo->setMaximumSize(QSize(4000, 100));
-    m_welcomeLogo->setStyleSheet("image: url(://images/qollama-logo-text.jpg);");
+    m_welcomeLogo->setStyleSheet("image: url(://images/qollama-logo-name.png);");
     m_welcomeLogo->setAlignment(Qt::AlignCenter);
     m_welcomeLogo->setFrameShape(QFrame::Shape::NoFrame);
     m_mainLayout->addWidget(m_welcomeLogo, 0, 1, 1, 2);

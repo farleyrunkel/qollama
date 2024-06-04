@@ -56,6 +56,11 @@ IHistoryList {
     border: none;
 }
 
+QLabel#statusLabel {
+    color: #777777;
+    font-size: 9px;
+    qproperty-alignment: 'AlignCenter';
+}
 QPushButton#smallButton {
     border: 1px hidden gray;
     border-radius: 5px;

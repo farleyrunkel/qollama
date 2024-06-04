@@ -16,6 +16,7 @@ public:
         return instance;
     }
 
+    QPixmap appAvatar() const { return avatar; }
     QPixmap getAvatar() const { return avatar; }
     void setAvatar(const QPixmap& newAvatar) {
         avatar = newAvatar;
@@ -48,6 +49,7 @@ private:
     IConfigManager& operator=(const IConfigManager&) = delete;
 
     void initializeDefaults();
+    QPixmap app;
     QPixmap avatar;
     QString username;
     QMap<QString, QVariant> configs;

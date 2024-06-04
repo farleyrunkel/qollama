@@ -49,5 +49,6 @@
         <file>icon/window-minimize.svg</file>
         <file>icon/window-restore-line.svg</file>
         <file>images/qollama-logo-text.jpg</file>
+        <file>images/qollama-logo-name.png</file>
     </qresource>
 </RCC>
