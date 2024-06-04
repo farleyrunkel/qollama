@@ -33,10 +33,6 @@ void ILeftWindow::setupTitleBar(QVBoxLayout *layout) {
 
     QPushButton *m_newChatButton = createButton(titleBar, "smallButton", ":/icon/create-new.svg", QSize(30, 30));
     titleBarLayout->addWidget(m_newChatButton);
-
-    // Set tool tips
-    m_expandButton->setToolTip(tr("Expand"));
-    m_newChatButton->setToolTip(tr("Llama3"));
 }
 
 void ILeftWindow::setupButtons(QVBoxLayout *layout) {
@@ -47,12 +43,12 @@ void ILeftWindow::setupButtons(QVBoxLayout *layout) {
 
     m_modelButton = createOverlayButton(this, "newChatButton", buttonFont, QSize(0, 34));
     layout->addWidget(m_modelButton);
-    m_modelButton->setText(tr("Llama3"));
+    m_modelButton->setText(tr("Message llama3"));
 
-    m_exploreButton = createButton(this, "exploreButton", ":/icon/sparkles.png", QSize(0, 34), false);
+    m_exploreButton = createButton(this, "exploreButton", "://icon/grid.svg", QSize(0, 34), false);
     m_exploreButton->setFont(buttonFont);
     layout->addWidget(m_exploreButton);
-    m_exploreButton->setText(tr("Explore"));
+    m_exploreButton->setText(tr("Explore GPTs"));
 }
 
 void ILeftWindow::setupHistoryList(QVBoxLayout *layout) {
@@ -76,7 +72,7 @@ void ILeftWindow::setupSettingButton(QVBoxLayout *layout) {
     m_settingButton->setFont(buttonFont);
     m_settingButton->setIconSize(QSize(20, 20));
     layout->addWidget(m_settingButton);
-    m_settingButton->setText(tr("Settings"));
+    m_settingButton->setText(tr("User Settings"));
 }
 
 QWidget* ILeftWindow::createButtonContainer(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, QVBoxLayout *layout) {
@@ -107,6 +103,7 @@ QPushButton* ILeftWindow::createButton(QWidget *parent, const QString &objectNam
 
 IOverlayButton* ILeftWindow::createOverlayButton(QWidget *parent, const QString &objectName, const QFont &font, const QSize &size) {
     IOverlayButton *button = new IOverlayButton(parent);
+    button->setIcon(QIcon("://icon/ollama.png"));
     button->setObjectName(objectName);
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     button->setMinimumSize(size);

@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //connect(settingButton, &QPushButton::pressed,  [&](){pages->setCurrentWidget(chats);});
 
-    connect(&SignalHub::instance(), &SignalHub::on_IVPushCard_clicked, [&](const QString&){pages->setCurrentWidget(chats);});
+    connect(&SignalHub::instance(), &SignalHub::on_message_sent, [&](const QString&){pages->setCurrentWidget(chats);});
 
 }
 

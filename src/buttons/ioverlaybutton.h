@@ -12,8 +12,6 @@ public:
     IOverlayButton(QWidget* parent)
         : QPushButton(parent)
     {
-        setIcon(QIcon("://icon/qollama.png"));
-
         mainLayout = new QHBoxLayout;
         setLayout(mainLayout);
 

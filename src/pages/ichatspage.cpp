@@ -5,12 +5,11 @@
 IChatsPage::IChatsPage(QWidget *parent) : IWidget(parent)
 {
     setupUI();
-    auto signalHub = &SignalHub::instance();
 
-    connect(signalHub, &SignalHub::on_IVPushCard_clicked, this, &IChatsPage::sendMessage);
+    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this, &IChatsPage::sendMessage);
     connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this, &IChatsPage::handleSendMessage);
     connect(m_messageLineEdit, &ILineEdit::returnPressed, this, &IChatsPage::handleSendMessage);
-    connect(signalHub, &SignalHub::listReceived, this, &IChatsPage::updateMenu);
+    connect(&SignalHub::instance(), &SignalHub::listReceived, this, &IChatsPage::updateMenu);
 }
 
 void IChatsPage::setupUI()
@@ -18,6 +17,7 @@ void IChatsPage::setupUI()
     m_mainLayout = new QVBoxLayout(this);
     m_chatContainer = new QStackedWidget(this);
     m_messageLineEdit = new ILineEdit(this);
+    m_messageLineEdit->setPlaceholderText("Message llama3 ...");
 
     auto sendButton = m_messageLineEdit->rightButton();
     sendButton->setIcon(QIcon(":/icon/send.svg"));

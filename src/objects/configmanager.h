@@ -37,6 +37,7 @@ public:
         configs[key] = value;
         emit configChanged(key, value);
     }
+    void initializeDefaults();
 
 signals:
     void avatarChanged(const QPixmap& newAvatar);
@@ -47,8 +48,6 @@ private:
     ConfigManager() { initializeDefaults(); }
     ConfigManager(const ConfigManager&) = delete;
     ConfigManager& operator=(const ConfigManager&) = delete;
-
-    void initializeDefaults();
 
 private:
     QPixmap m_appIcon;

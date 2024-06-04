@@ -46,5 +46,6 @@
         <file>images/qollama-logo-name.png</file>
         <file>icon.icns</file>
         <file>icon.png</file>
+        <file>icon/grid.svg</file>
     </qresource>
 </RCC>

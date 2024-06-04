@@ -1,21 +1,18 @@
 #include <QApplication>
 #include <QFile>
-#include "stylemanager.h"
 #include "mainwindow.h"
+#include "initializer.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
 
-    // Load and apply the stylesheet
-    StyleManager styleManager;
-    styleManager.loadStyleSheet(":/qss/style.qss");
+    Initializer initializer;
 
-    MainWindow w;
-    //styleManager.enableBorders(true);  // Enable borders
-    styleManager.applyStyleSheet(&w);
+    MainWindow mainWindow;
 
-    w.show();
+    // 开始初始化
+    initializer.initialize(&mainWindow);
 
-    return a.exec();
+    return app.exec();
 }

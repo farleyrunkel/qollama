@@ -19,7 +19,7 @@ signals:
     void generateRequest(const QJsonObject&);
     void listRequest();
     void listReceived(const QList<QString>);
-    void on_IVPushCard_clicked(const QString&) ;
+    void on_message_sent(const QString&) ;
     void newChatAdded(int);
 
 private:

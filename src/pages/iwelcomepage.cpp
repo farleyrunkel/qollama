@@ -1,19 +1,50 @@
 #include "iwelcomepage.h"
+#include "signalhub.h"
+#include "stylemanager.h"
 
 IWelcomePage::IWelcomePage(QWidget *parent)
-    :IWidget(parent)
+    : IWidget(parent)
 {
-    setupLayout();
+    applyStyleSheet();
 
+    setupLayout();
     setupPushCards();
     setupModelLabel();
     setupLineEdit();
 
+    setupConnections();
+
     retranslateUi();
+}
 
-    //setStyleSheet("border: 2px solid red;");
+void IWelcomePage::applyStyleSheet() {
+    StyleManager styleManager;
+    styleManager.loadStyleSheet(":/qss/style.qss");
+    styleManager.applyStyleSheet(this);
+}
 
+void IWelcomePage::setupConnections() {
+    auto sendInputText = [this]() {
+        if (!m_inputLine->text().isEmpty()) {
+            emit SignalHub::instance().on_message_sent(m_inputLine->text());
+        }
+    };
 
+    connect(m_inputLine->rightButton(), &QPushButton::clicked, this, sendInputText);
+    connect(m_inputLine, &ILineEdit::returnPressed, this, sendInputText);
+    connect(&SignalHub::instance(), &SignalHub::listReceived, this, &IWelcomePage::updateMenu);
+}
+
+void IWelcomePage::updateMenu(const QList<QString>& list)
+{
+    m_menu->clear();
+    for (const QString& item : list) {
+        QAction* action = new QAction(item, this);
+        m_menu->addAction(action);
+        connect(action, &QAction::triggered, this, [this, action]() {
+            m_inputLine->setPlaceholderText("Message " + action->text() + " ...");
+        });
+    }
 }
 
 void IWelcomePage::setupLayout() {
@@ -53,11 +84,10 @@ void IWelcomePage::setupModelLabel() {
 }
 
 void IWelcomePage::setupPushCards() {
-
-     card1 = new IVPushCard;
-     card2 = new IVPushCard;
-     card3 = new IVPushCard;
-     card4 = new IVPushCard;
+    card1 = new IVPushCard;
+    card2 = new IVPushCard;
+    card3 = new IVPushCard;
+    card4 = new IVPushCard;
 
     card1->setText("Why the sky is blue?");
     card2->setText("Create a personal webpage for me, all in a single file. Ask me 3 questions first on whatever you need to know.");
@@ -77,6 +107,8 @@ void IWelcomePage::setupPushCards() {
 
 void IWelcomePage::setupLineEdit() {
     m_inputLine = new ILineEdit;
+    m_inputLine->setPlaceholderText("Message llama3 ...");
+
     auto rightButton = m_inputLine->rightButton();
     rightButton->setIcon(QIcon(":/icon/send.svg"));
 
@@ -85,19 +117,6 @@ void IWelcomePage::setupLineEdit() {
 
     m_menu = new QMenu;
     leftButton->setMenu(m_menu);
-    emit SignalHub::instance().listRequest();
 
     m_mainLayout->addWidget(m_inputLine, 3, 0, 1, 4);
-
-    connect(&SignalHub::instance(), &SignalHub::listReceived, this, [this](const QList<QString>& list) {
-        for (const auto& a : list) {
-            auto action = new QAction(a, this);
-            m_menu->addAction(action);
-            connect(action, &QAction::triggered, this, [this, action]() {
-                this->m_inputLine->setPlaceholderText("Message " + action->text() + " ...");
-            });
-
-            emit action->triggered();
-        }
-    });
 }

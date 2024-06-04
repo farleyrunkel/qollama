@@ -2,31 +2,52 @@
 #define INITIALIZER_H
 
 #include <QObject>
+#include <QApplication>
 #include <configmanager.h>
+#include <signalhub.h>
+#include "stylemanager.h"
+#include <QMainWindow>
+#include "signalhub.h"
 
 class Initializer : public QObject {
     Q_OBJECT
 
 public:
-    Initializer(QObject* parent = nullptr) : QObject(parent) {
-       // connect(&dataLoader, &DataLoader::dataLoaded, this, &Initializer::onDataLoaded);
+    Initializer(QObject* parent = nullptr) : QObject(parent), mainWindow(nullptr) {
+        // connect(&dataLoader, &DataLoader::dataLoaded, this, &Initializer::onDataLoaded);
     }
 
-    void initialize() {
-        // 加载配置文件
-        // IConfigManager::instance().loadInitialData();
+    void initialize(QMainWindow* window) {
 
-        // 异步加载数据
-        // dataLoader.loadData();
+        mainWindow = window;
+
+        ConfigManager::instance().initializeDefaults();
+
+        onDataLoaded();
+
+        emit SignalHub::instance().listRequest();
+        //dataLoader.loadData();
     }
+
+signals:
+    void initializationComplete();
 
 private slots:
     void onDataLoaded() {
-        // 数据加载完成后的处理逻辑
+
+
+        styleManager.loadStyleSheet(":/qss/style.qss");
+        styleManager.applyStyleSheet(mainWindow);
+
+        mainWindow->show();
+
+        emit initializationComplete();
     }
 
 private:
-    // DataLoader dataLoader;
+    //DataLoader dataLoader;
+    StyleManager styleManager;
+    QMainWindow* mainWindow;
 };
 
 #endif // INITIALIZER_H

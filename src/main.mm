@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     // Load and apply the stylesheet
-    IStyleManager styleManager;
+    StyleManager styleManager;
     styleManager.loadStyleSheet(":/qss/style.qss");
 
     MainWindow w;

@@ -41,7 +41,7 @@ void IRightWindow::setupUi()
     setLeftWidget(m_expandButton);
 
     m_userButton = new QPushButton;
-    m_userButton->setIcon(QIcon(ConfigManager::instance().avatar()));
+    m_userButton->setIcon(QIcon("://icon/qollama.png"));
     m_userButton->setFixedSize(QSize(30, 30));
     m_userButton->setObjectName("smallButton");
     setRightWidget(m_userButton);

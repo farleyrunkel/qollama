@@ -28,6 +28,7 @@ private:
     void setupPushCards();
     void setupLineEdit();
     void setupModelLabel();
+    void updateMenu(const QList<QString> &list);
 
 private:
 
@@ -41,6 +42,9 @@ private:
     IVPushCard *card4;
 
     QMenu* m_menu;
+
+    void setupConnections();
+    void applyStyleSheet();
 };
 
 #endif // IWELCOMEPAGE_H
