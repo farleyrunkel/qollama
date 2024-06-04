@@ -52,7 +52,7 @@ class IChatWidget : public QScrollArea {
 public:
     IChatWidget(QWidget* parent = nullptr);
 
-    void addMessage(const QString& message, const QString& userName, const QPixmap& avatar = QIcon("://icon/ollama.png").pixmap(30));
+    void addMessage(const QString& message, const QString& userName, const QPixmap& avatar = QPixmap("://icon/ollama.png"));
 
     bool isNew();
 

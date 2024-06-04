@@ -1,14 +1,27 @@
 #include "ichatspage.h"
-
+#include "iconfigmanager.h"
+#include <QIcon>
 
 IChatsPage::IChatsPage(QWidget *parent): QWidget(parent)
 {
     setupUI();
 
-    connect(&ISignalHub::instance(), &ISignalHub::on_IVPushCard_clicked, this, &IChatsPage::addQuestion);
+    connect(&ISignalHub::instance(), &ISignalHub::on_IVPushCard_clicked, this, &IChatsPage::sendMessage);
 }
 
-void IChatsPage::addQuestion(const QString &text) {
+void IChatsPage::setupUI() {
+
+    mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+
+    chatsContainer = new QStackedWidget;
+
+    mainLayout->addWidget(chatsContainer);
+
+    mainLayout->addWidget(new ILineEdit);
+}
+
+void IChatsPage::sendMessage(const QString &text) {
 
     if (text.isEmpty()) {return;}
 
@@ -16,7 +29,7 @@ void IChatsPage::addQuestion(const QString &text) {
         addChat();
     }
 
-    currentChat()->addMessage(text, "user");
+    currentChat()->addMessage(text, IConfigManager::instance().getUsername(), IConfigManager::instance().getAvatar());
     currentChat()->addMessage("", "llama3");
 
     QJsonObject json ;
@@ -39,14 +52,3 @@ IChatWidget *IChatsPage::currentChat() {
     return qobject_cast<IChatWidget*>(chatsContainer->currentWidget());
 }
 
-void IChatsPage::setupUI() {
-
-    mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
-
-    chatsContainer = new QStackedWidget;
-
-    mainLayout->addWidget(chatsContainer);
-
-    mainLayout->addWidget(new ILineEdit);
-}

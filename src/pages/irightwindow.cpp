@@ -1,5 +1,6 @@
 #include "irightwindow.h"
 #include <QLabel>
+#include "iconfigmanager.h"
 
 IRightWindow::IRightWindow()
 {
@@ -40,10 +41,14 @@ void IRightWindow::setupUi()
     setLeftWidget(m_expandButton);
 
     m_userButton = new QPushButton;
-    m_userButton->setIcon(QIcon("://icon/farley.jpg"));
+    m_userButton->setIcon(QIcon(IConfigManager::instance().getAvatar()));
     m_userButton->setFixedSize(QSize(30, 30));
     m_userButton->setObjectName("smallButton");
     setRightWidget(m_userButton);
+
+    connect(&IConfigManager::instance(), &IConfigManager::avatarChanged, this,[&](const QPixmap& newAvatar){
+        m_userButton->setIcon(QIcon(newAvatar));
+        ;});
 }
 
 void IRightWindow::setLeftWidget(QWidget* widget)

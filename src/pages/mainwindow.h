@@ -13,15 +13,14 @@
 #include <QIcon>
 
 #include "client.h"
-#include "ichatwidget.h"
 #include "itestwidget.h"
 #include "imarketpage.h"
 #include "ihistorylist.h"
-#include "ioverlaybutton.h"
 #include "iwelcomepage.h"
 #include "ichatspage.h"
 #include "ileftwindow.h"
 #include "irightwindow.h"
+#include "isettingpage.h"
 
 class MainWindow : public QMainWindow
 {
@@ -66,6 +65,7 @@ private:
     IMarketPage* market;
     IWelcomePage* welcome;
     IChatsPage* chats;
+    ISettingPage* settings;
 
     ILeftWindow *left;
     IRightWindow* right;

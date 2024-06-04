@@ -17,6 +17,7 @@ public:
     QPushButton* expandButton() const;
     IOverlayButton* newChatButton() const;
     QPushButton* exploreButton() const;
+    QPushButton *settingButton() const;
 
 private:
     void setupUi();
@@ -34,6 +35,7 @@ private:
     QPushButton *m_exploreButton;
     QPushButton *m_settingButton;
     IHistoryList *m_historyList;
+
 };
 
 #endif // ILEFTWINDOW_H

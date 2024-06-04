@@ -18,7 +18,7 @@ class IChatsPage : public QWidget
 public:
     explicit IChatsPage(QWidget *parent = nullptr);;
 
-    void addQuestion(const QString& text);
+    void sendMessage(const QString& text);
 
    IChatWidget* addChat();
 

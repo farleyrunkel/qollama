@@ -19,7 +19,7 @@ IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
     containerWidget->setStyleSheet("background-color:white;");
     contentLayout = new QVBoxLayout(containerWidget);
     contentLayout->setContentsMargins(60, 0, 40, 0);
-    contentLayout->setSpacing(15);
+    contentLayout->setSpacing(10);
     containerWidget->setLayout(contentLayout);
     containerWidget->setContentsMargins(0, 0, 0, 0);
     setWidget(containerWidget);
@@ -163,7 +163,7 @@ void IMarketPage::navigateToCategory(const QString &categoryName)
     auto categoryWidget = categoryMap.value(categoryName);
     if (categoryWidget) {
         qDebug() << "Scrolling to category:" << categoryName;
-        verticalScrollBar()->setValue(categoryWidget->geometry().top() - m_topNavigator->height() - 80);
+        verticalScrollBar()->setValue(categoryWidget->geometry().top() - m_topNavigator->height() - 96);
     }
 }
 

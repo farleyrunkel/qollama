@@ -14,6 +14,7 @@
 #include "iwelcomepage.h"
 #include "irightwindow.h"
 #include "ileftwindow.h"
+#include "isettingpage.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,33 +23,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setupUi();
 
-    //sendButton->setDisabled(true);
-   // sendButton->setStatusTip("Nothing");
-
-    setWindowIcon(QIcon("://icon/qollama.png"));
-
-    chats = new IChatsPage;
-    pages->addWidget(chats);
-
-    welcome = new IWelcomePage;
-    pages->addWidget(welcome);
-    pages->setCurrentWidget(welcome);
-
-    statusBar->setStatusTip("AI can make mistakes. Check important info.");
-
-    market = new IMarketPage(this);
-    pages->addWidget(market);
-
-    auto userWidget = new QDialog;
-    //connect(userButton, &QPushButton::clicked, userWidget, &QDialog::show);
    //connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
    // connect(marketStackWidget, &IWidget::shown, exploreLabel, &QComboBox::setVisible);
 
+    connect(left->settingButton(), &QPushButton::pressed, [&](){pages->setCurrentWidget(settings);});
     connect(left->newChatButton(), &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
     connect(left->exploreButton(), &QPushButton::pressed, [&](){pages->setCurrentWidget(market);});
     connect(left->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
     connect(right->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
-
 
    // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
 
@@ -246,6 +228,8 @@ void MainWindow::setupUi()
     if (objectName().isEmpty())
         setObjectName("MainWindow");
     setWindowModality(Qt::WindowModal);
+    setWindowIcon(QIcon("://icon/qollama.png"));
+
     resize(944, 592);
     QFont font;
     font.setPointSize(10);
@@ -278,7 +262,23 @@ void MainWindow::setupUi()
     setCentralWidget(splitter);
     statusBar = new QStatusBar(this);
     statusBar->setObjectName("statusBar");
+    statusBar->setStatusTip("AI can make mistakes. Check important info.");
+
     setStatusBar(statusBar);
+
+    chats = new IChatsPage;
+    pages->addWidget(chats);
+
+    welcome = new IWelcomePage;
+    pages->addWidget(welcome);
+    pages->setCurrentWidget(welcome);
+
+    market = new IMarketPage(this);
+    pages->addWidget(market);
+
+
+    settings = new ISettingPage(this);
+    pages->addWidget(settings);
 
     retranslateUi();
 }

@@ -6,7 +6,7 @@ INavigetrorBar::INavigetrorBar(QWidget *parent)
     : QWidget(parent), m_currentUnderlineLabel(nullptr)
 {
     m_buttonLayout = new QGridLayout(this);
-    m_buttonLayout->setContentsMargins(0, 0, 0, 0); // Remove any margins
+    m_buttonLayout->setContentsMargins(0, 10, 0, 0);
 
     qDebug() << "INavigetrorBar created and UI setup completed";
 }

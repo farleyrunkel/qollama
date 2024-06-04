@@ -117,6 +117,10 @@ IOverlayButton* ILeftWindow::createOverlayButton(QWidget *parent, const QString 
     return button;
 }
 
+QPushButton* ILeftWindow::settingButton() const {
+    return m_settingButton;
+}
+
 QPushButton* ILeftWindow::expandButton() const {
     return m_expandButton;
 }
