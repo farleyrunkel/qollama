@@ -288,6 +288,6 @@ void MainWindow::setupUi()
 
 void MainWindow::retranslateUi()
 {
-    setWindowTitle(QCoreApplication::translate("MainWindow", "Ollama", nullptr));
+    setWindowTitle(QCoreApplication::translate("MainWindow", "QOllama", nullptr));
 
 }
