@@ -24,7 +24,7 @@ void setMacWindowStyle(QMainWindow *mainWindow) {
                 [nsWindow setBackgroundColor:[NSColor whiteColor]];
 
                 // 移除窗口阴影
-                [nsWindow setHasShadow:NO];
+                [nsWindow setHasShadow:YES];
                 
                 // 如果需要其他样式设置，可以在这里添加
             } else {

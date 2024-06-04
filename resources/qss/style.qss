@@ -56,6 +56,11 @@ IHistoryList {
     border: none;
 }
 
+QSplitter::handle {
+    background-color: gray;
+    border: none;
+}
+
 QLabel#statusLabel {
     color: #777777;
     font-size: 9px;

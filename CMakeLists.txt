@@ -27,10 +27,18 @@ include_directories("external/asio/asio/include")
 include_directories("external/ollama/include")
 
 # 设置主文件
-if(WIN32)
-    set(PROJECT_MAIN_FILE "src/main.cpp")
-else()
+
+if(APPLE)
+    # 设置 macOS 上的应用图标
+    set(MACOSX_BUNDLE_ICON_FILE icon.icns)
+    set(app_icon_macos ${CMAKE_SOURCE_DIR}/resources/icon.icns)
+    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "resources")
+
+    # 设置 Info.plist 文件
+    set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist)
     set(PROJECT_MAIN_FILE "src/main.mm")
+else()
+    set(PROJECT_MAIN_FILE "src/main.cpp")
 endif()
 
 
