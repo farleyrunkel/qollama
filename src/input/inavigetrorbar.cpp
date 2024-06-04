@@ -1,4 +1,4 @@
-#include "INavigetrorBar.h"
+#include "inavigetrorbar.h"
 #include <QGridLayout>
 #include <QDebug>
 

@@ -6,11 +6,11 @@
 
 class QWidget;
 
-class StyleManager : public QObject {
+class IStyleManager : public QObject {
     Q_OBJECT
 
 public:
-    explicit StyleManager(QObject *parent = nullptr);
+    explicit IStyleManager(QObject *parent = nullptr);
 
     void loadStyleSheet(const QString &filePath);
     void applyStyleSheet(QWidget *widget);

@@ -27,12 +27,11 @@ include_directories("external/asio/asio/include")
 include_directories("external/ollama/include")
 
 # 设置主文件
-
 if(APPLE)
     # 设置 macOS 上的应用图标
     set(MACOSX_BUNDLE_ICON_FILE icon.icns)
     set(app_icon_macos ${CMAKE_SOURCE_DIR}/resources/icon.icns)
-    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "resources")
+    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
     # 设置 Info.plist 文件
     set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist)
@@ -40,7 +39,6 @@ if(APPLE)
 else()
     set(PROJECT_MAIN_FILE "src/main.cpp")
 endif()
-
 
 # 查找 src 目录下所有子目录中的所有源文件和头文件
 file(GLOB_RECURSE PROJECT_SOURCES
@@ -56,7 +54,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(qollama
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        resources/resouces.qrc
+        resources/resources.qrc
     )
 else()
     if(ANDROID)
@@ -89,6 +87,12 @@ set_target_properties(qollama PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+# 添加图标文件
+if(APPLE)
+    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    list(APPEND PROJECT_SOURCES ${app_icon_macos})
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS qollama

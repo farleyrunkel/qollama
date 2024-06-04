@@ -1,14 +1,14 @@
-#include "StyleManager.h"
+#include "istylemanager.h"
 #include <QFile>
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QWidget>
 
-StyleManager::StyleManager(QObject *parent)
+IStyleManager::IStyleManager(QObject *parent)
     : QObject(parent), showBorders(false) {
 }
 
-void StyleManager::loadStyleSheet(const QString &filePath) {
+void IStyleManager::loadStyleSheet(const QString &filePath) {
     QFile file(filePath);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         qDebug() << "Failed to open file for reading:" << filePath;
@@ -30,11 +30,11 @@ void StyleManager::loadStyleSheet(const QString &filePath) {
     }
 }
 
-void StyleManager::applyStyleSheet(QWidget *widget) {
+void IStyleManager::applyStyleSheet(QWidget *widget) {
     widget->setStyleSheet(currentStyleSheet);
 }
 
-QString StyleManager::replaceColors(const QString &styleSheet) {
+QString IStyleManager::replaceColors(const QString &styleSheet) {
     QString newStyleSheet = styleSheet;
 
     QRegularExpression regex(R"([\s:]([^\s;]+)\s*;\s*/\*\s*@(\w+)\s*\*/)");
@@ -55,7 +55,7 @@ QString StyleManager::replaceColors(const QString &styleSheet) {
     return newStyleSheet;
 }
 
-QMap<QString, QString> StyleManager::parseColorPalette(const QString &styleSheet) {
+QMap<QString, QString> IStyleManager::parseColorPalette(const QString &styleSheet) {
     QMap<QString, QString> palette;
     QRegularExpression regex(R"(@(\w+):\s*#([0-9a-fA-F]{6});\s*\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)\s*)");
     QRegularExpressionMatchIterator it = regex.globalMatch(styleSheet);
@@ -71,7 +71,7 @@ QMap<QString, QString> StyleManager::parseColorPalette(const QString &styleSheet
     return palette;
 }
 
-void StyleManager::enableBorders(bool enable) {
+void IStyleManager::enableBorders(bool enable) {
     showBorders = enable;
     if (showBorders) {
         currentStyleSheet += addBorderStyles();
@@ -82,7 +82,7 @@ void StyleManager::enableBorders(bool enable) {
     }
 }
 
-QString StyleManager::addBorderStyles() const {
+QString IStyleManager::addBorderStyles() const {
     return R"(
     * {
         border: 1px solid red;

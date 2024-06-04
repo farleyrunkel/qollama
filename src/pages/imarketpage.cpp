@@ -1,6 +1,6 @@
-#include "IMarketPage.h"
-#include "IHPushCard.h"
-#include "ILineEdit.h"
+#include "imarketpage.h"
+#include "ihpushcard.h"
+#include "ilineedit.h"
 
 IMarketPage::IMarketPage(QWidget *parent) : QScrollArea(parent)
 {
