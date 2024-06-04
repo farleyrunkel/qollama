@@ -1,80 +1,83 @@
 #include "ichatspage.h"
+#include "isignalhub.h"
 #include "iconfigmanager.h"
-#include <QIcon>
-#include <QMenu>
 
-IChatsPage::IChatsPage(QWidget *parent): QWidget(parent)
+IChatsPage::IChatsPage(QWidget *parent) : IWidget(parent)
 {
     setupUI();
+    auto signalHub = &ISignalHub::instance();
 
-    connect(&ISignalHub::instance(), &ISignalHub::on_IVPushCard_clicked, this, &IChatsPage::sendMessage);
+    connect(signalHub, &ISignalHub::on_IVPushCard_clicked, this, &IChatsPage::sendMessage);
+    connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this, &IChatsPage::handleSendMessage);
+    connect(m_messageLineEdit, &ILineEdit::returnPressed, this, &IChatsPage::handleSendMessage);
+    connect(signalHub, &ISignalHub::listReceived, this, &IChatsPage::updateMenu);
 }
 
-void IChatsPage::setupUI() {
+void IChatsPage::setupUI()
+{
+    m_mainLayout = new QVBoxLayout(this);
+    m_chatContainer = new QStackedWidget(this);
+    m_messageLineEdit = new ILineEdit(this);
 
-    mainLayout = new QVBoxLayout;
-    setLayout(mainLayout);
+    auto sendButton = m_messageLineEdit->rightButton();
+    sendButton->setIcon(QIcon(":/icon/send.svg"));
 
-    chatsContainer = new QStackedWidget;
+    auto optionButton = m_messageLineEdit->leftButton();
+    optionButton->setIcon(QIcon(":/icon/more-horiz.svg"));
 
-    mainLayout->addWidget(chatsContainer);
+    m_optionMenu = new QMenu(this);
+    optionButton->setMenu(m_optionMenu);
 
-    lineEdit = new ILineEdit;
-
-    lineEdit = new ILineEdit;
-    auto rightButton = lineEdit->rightButton();
-    rightButton->setIcon(QIcon(":/icon/send.svg"));
-
-    auto leftButton = lineEdit->leftButton();
-    leftButton->setIcon(QIcon("://icon/more-horiz.svg"));
-
-    m_menu = new QMenu;
-    leftButton->setMenu(m_menu);
-    emit ISignalHub::instance().listRequest();
-
-    connect(&ISignalHub::instance(), &ISignalHub::listReceived, [this](const QList<QString>& list) {
-        for (const auto& a : list) {
-            auto action = new QAction(a, this);
-            m_menu->addAction(action);
-            connect(action, &QAction::triggered, this, [this, action]() {
-                this->lineEdit->setPlaceholderText("Message " + action->text() + " ...");
-            });
-
-            emit action->triggered();
-        }
-    });
-
-    mainLayout->addWidget(lineEdit);
+    m_mainLayout->addWidget(m_chatContainer);
+    m_mainLayout->addWidget(m_messageLineEdit);
 }
 
-void IChatsPage::sendMessage(const QString &text) {
+void IChatsPage::sendMessage(const QString &text)
+{
+    if (text.isEmpty()) return;
 
-    if (text.isEmpty()) {return;}
-
-    if (currentChat() == nullptr) {
-        addChat();
+    IChatWidget* chat = currentChat();
+    if (!chat) {
+        chat = addChat();
     }
 
-    currentChat()->addMessage(text, IConfigManager::instance().getUsername(), IConfigManager::instance().getAvatar());
-    currentChat()->addMessage("", "llama3");
+    chat->addMessage(text, IConfigManager::instance().getUsername(), IConfigManager::instance().getAvatar());
+    chat->addMessage("", "llama3");
 
-    QJsonObject json ;
+    QJsonObject json;
     json["prompt"] = text;
     json["model"] = "llama3";
-
     emit ISignalHub::instance().generateRequest(json);
 }
 
-IChatWidget *IChatsPage::addChat() {
-    auto chat  = new IChatWidget;
-    chatsContainer->addWidget(chat);
+void IChatsPage::handleSendMessage()
+{
+    QString text = m_messageLineEdit->text();
+    sendMessage(text);
+    m_messageLineEdit->clear();
+}
 
-    emit ISignalHub::instance().newChatAdded(chatsContainer->count());
-
+IChatWidget* IChatsPage::addChat()
+{
+    IChatWidget* chat = new IChatWidget(this);
+    m_chatContainer->addWidget(chat);
+    emit ISignalHub::instance().newChatAdded(m_chatContainer->count());
     return chat;
 }
 
-IChatWidget *IChatsPage::currentChat() {
-    return qobject_cast<IChatWidget*>(chatsContainer->currentWidget());
+IChatWidget* IChatsPage::currentChat()
+{
+    return qobject_cast<IChatWidget*>(m_chatContainer->currentWidget());
 }
 
+void IChatsPage::updateMenu(const QList<QString>& list)
+{
+    m_optionMenu->clear();
+    for (const QString& item : list) {
+        QAction* action = new QAction(item, this);
+        m_optionMenu->addAction(action);
+        connect(action, &QAction::triggered, this, [this, action]() {
+            m_messageLineEdit->setPlaceholderText("Message " + action->text() + " ...");
+        });
+    }
+}

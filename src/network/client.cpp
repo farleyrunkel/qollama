@@ -29,7 +29,7 @@ void Client::generate(const QJsonObject& json) {
     qDebug() << "Generate request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
     auto reply = sendRequest("http://localhost:11434/api/generate", json);
 
-    QObject::connect(reply, &QNetworkReply::readyRead, [this, reply]() {
+    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
         m_status = Status::Receiving;
         qDebug() << "Receiving response. Status:" << m_status;
 
@@ -59,13 +59,13 @@ void Client::generate(const QJsonObject& json) {
         emit replyReceived(response.toString());
     });
 
-    QObject::connect(reply, &QNetworkReply::finished, [this]() {
+    QObject::connect(reply, &QNetworkReply::finished, this, [this]() {
         m_status = Status::Finished;
         qDebug() << "Request finished. Status:" << m_status;
         emit finished();
     });
 
-    QObject::connect(reply, &QNetworkReply::errorOccurred, [this](QNetworkReply::NetworkError error){
+    QObject::connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError error){
         qDebug() << "Network error occurred:" << error;
         emit replyReceived("Network error occurred");
     });
@@ -89,21 +89,21 @@ void Client::push(const QJsonObject& json) {
 void Client::list() {
     qDebug() << "Tags request.";
     auto reply = sendRequest("http://localhost:11434/api/tags");
-    QObject::connect(reply, &QNetworkReply::readyRead, [this, reply]() {
+    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
         m_status = Status::Receiving;
+        // todo: finish get list from ollama
 
-
-        QList<QString> l = {"Gemma", "codellama", "ChatGPT-4o", "llama3"};
-        emit ISignalHub::instance().listReceived(l);
+        QList<QString> list = {"Gemma", "codellama", "ChatGPT-4o", "llama3"};
+        emit ISignalHub::instance().listReceived(list);
     });
 
-    QObject::connect(reply, &QNetworkReply::finished, [this]() {
+    QObject::connect(reply, &QNetworkReply::finished, this, [this]() {
         m_status = Status::Finished;
         qDebug() << "Request finished. Status:" << m_status;
         emit finished();
     });
 
-    QObject::connect(reply, &QNetworkReply::errorOccurred, [this](QNetworkReply::NetworkError error){
+    QObject::connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError error){
         qDebug() << "Network error occurred:" << error;
         emit replyReceived("Network error occurred");
     });

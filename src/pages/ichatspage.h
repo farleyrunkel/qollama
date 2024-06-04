@@ -2,40 +2,37 @@
 #define ICHATSPAGE_H
 
 #include <QWidget>
-#include <QScrollArea>
 #include <QVBoxLayout>
-#include "iwidget.h"
 #include <QStackedWidget>
+#include <QMenu>
+#include <QAction>
+#include <QJsonObject>
 #include "ilineedit.h"
 #include "ichatwidget.h"
-#include "isignalhub.h"
-#include <QJsonObject>
+#include "iwidget.h"
 
-class IChatsPage : public QWidget
+class IChatsPage : public IWidget
 {
     Q_OBJECT
 
 public:
-    explicit IChatsPage(QWidget *parent = nullptr);;
+    explicit IChatsPage(QWidget *parent = nullptr);
 
-    void sendMessage(const QString& text);
+    IChatWidget* currentChat();
 
-   IChatWidget* addChat();
-
-   IChatWidget* currentChat();
-
-signals:
+private slots:
+    void sendMessage(const QString &text);
+    void handleSendMessage();
+    void updateMenu(const QList<QString>& list);
 
 private:
     void setupUI();
+    IChatWidget* addChat();
 
-
-private:
-    QVBoxLayout* mainLayout;
-    QStackedWidget* chatsContainer;
-    ILineEdit* lineEdit;
-
-    QMenu* m_menu;
+    QVBoxLayout* m_mainLayout;
+    QStackedWidget* m_chatContainer;
+    ILineEdit* m_messageLineEdit;
+    QMenu* m_optionMenu;
 };
 
 #endif // ICHATSPAGE_H
