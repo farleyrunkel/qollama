@@ -11,7 +11,6 @@ void ISettingPage::setupUi()
 {
     mainLayout = new QVBoxLayout(this);
 
-    // 头像显示
     avatarLabel = new QLabel(this);
     avatarLabel->setFixedSize(100, 100);
     avatarLabel->setAlignment(Qt::AlignCenter);

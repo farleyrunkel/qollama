@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QJsonObject>
+#include <ichatwidget.h>
 
 class SignalHub : public QObject
 {
@@ -19,8 +20,8 @@ signals:
     void generateRequest(const QJsonObject&);
     void listRequest();
     void listReceived(const QList<QString>);
-    void on_message_sent(const QString&) ;
-    void newChatAdded(int);
+    void on_message_sent(const QString&, bool isNewChat);
+    void newChatAdded(IChatWidget *);
 
 private:
     SignalHub() {}

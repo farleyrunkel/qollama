@@ -26,6 +26,7 @@ public:
     void push(const QJsonObject &json);
     void list();
 
+    void abort() {m_manager->disconnect();}
     Status status() const;
 
 signals:

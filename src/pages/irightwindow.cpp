@@ -5,6 +5,11 @@
 IRightWindow::IRightWindow()
 {
     setupUi();
+
+    connect(&ConfigManager::instance(), &ConfigManager::avatarChanged, this, [&](const QPixmap& newAvatar){
+        m_userButton->setIcon(QIcon(newAvatar));
+        ;}
+    );
 }
 
 void IRightWindow::setupUi()
@@ -45,10 +50,6 @@ void IRightWindow::setupUi()
     m_userButton->setFixedSize(QSize(30, 30));
     m_userButton->setObjectName("smallButton");
     setRightWidget(m_userButton);
-
-    connect(&ConfigManager::instance(), &ConfigManager::avatarChanged, this,[&](const QPixmap& newAvatar){
-        m_userButton->setIcon(QIcon(newAvatar));
-        ;});
 }
 
 void IRightWindow::setLeftWidget(QWidget* widget)

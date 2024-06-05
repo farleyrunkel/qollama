@@ -4,16 +4,6 @@
 
 IChatsPage::IChatsPage(QWidget *parent) : IWidget(parent)
 {
-    setupUI();
-
-    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this, &IChatsPage::sendMessage);
-    connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this, &IChatsPage::handleSendMessage);
-    connect(m_messageLineEdit, &ILineEdit::returnPressed, this, &IChatsPage::handleSendMessage);
-    connect(&SignalHub::instance(), &SignalHub::listReceived, this, &IChatsPage::updateMenu);
-}
-
-void IChatsPage::setupUI()
-{
     m_mainLayout = new QVBoxLayout(this);
     m_chatContainer = new QStackedWidget(this);
     m_messageLineEdit = new ILineEdit(this);
@@ -30,14 +20,20 @@ void IChatsPage::setupUI()
 
     m_mainLayout->addWidget(m_chatContainer);
     m_mainLayout->addWidget(m_messageLineEdit);
+
+    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this, &IChatsPage::sendMessage);
+    connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this, &IChatsPage::handleSendMessage);
+    connect(m_messageLineEdit, &ILineEdit::returnPressed, this, &IChatsPage::handleSendMessage);
+    connect(&SignalHub::instance(), &SignalHub::listReceived, this, &IChatsPage::updateMenu);
 }
 
-void IChatsPage::sendMessage(const QString &text)
+void IChatsPage::sendMessage(const QString &text, bool isNewChat)
 {
     if (text.isEmpty()) return;
 
     IChatWidget* chat = currentChat();
-    if (!chat) {
+
+    if (isNewChat || !chat) {
         chat = addChat();
     }
 
@@ -61,7 +57,9 @@ IChatWidget* IChatsPage::addChat()
 {
     IChatWidget* chat = new IChatWidget(this);
     m_chatContainer->addWidget(chat);
-    emit SignalHub::instance().newChatAdded(m_chatContainer->count());
+    m_chatContainer->setCurrentWidget(chat);
+    qDebug() << "add new chat: " << m_chatContainer->indexOf(chat);
+    emit SignalHub::instance().newChatAdded(chat);
     return chat;
 }
 
@@ -69,6 +67,8 @@ IChatWidget* IChatsPage::currentChat()
 {
     return qobject_cast<IChatWidget*>(m_chatContainer->currentWidget());
 }
+
+QStackedWidget *IChatsPage::chats() const {return m_chatContainer;}
 
 void IChatsPage::updateMenu(const QList<QString>& list)
 {

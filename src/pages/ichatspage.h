@@ -18,16 +18,16 @@ class IChatsPage : public IWidget
 public:
     explicit IChatsPage(QWidget *parent = nullptr);
 
+    IChatWidget* addChat();
     IChatWidget* currentChat();
+    QStackedWidget* chats() const;
 
 private slots:
-    void sendMessage(const QString &text);
+    void sendMessage(const QString &text, bool isNewChat = false);
     void handleSendMessage();
     void updateMenu(const QList<QString>& list);
 
 private:
-    void setupUI();
-    IChatWidget* addChat();
 
     QVBoxLayout* m_mainLayout;
     QStackedWidget* m_chatContainer;

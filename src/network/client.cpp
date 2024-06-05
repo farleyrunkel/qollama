@@ -26,7 +26,6 @@ void Client::chat(const QJsonObject& json) {
 }
 
 void Client::generate(const QJsonObject& json) {
-    qDebug() << "Generate request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
     auto reply = sendRequest("http://localhost:11434/api/generate", json);
 
     QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {

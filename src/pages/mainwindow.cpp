@@ -24,8 +24,18 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setupUi();
 
-   //connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
-   // connect(marketStackWidget, &IWidget::shown, exploreLabel, &QComboBox::setVisible);
+    setupConnections();
+}
+
+
+MainWindow::~MainWindow()
+{
+}
+
+
+void MainWindow::setupConnections() {
+    //connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
+    //connect(marketStackWidget, &IWidget::shown, exploreLabel, &QComboBox::setVisible);
 
     connect(left->settingButton(), &QPushButton::pressed, [&](){pages->setCurrentWidget(settings);});
     connect(left->newChatButton(), &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
@@ -33,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(left->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
     connect(right->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
 
-   // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
+    // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
 
     connect(chatbot, &ollama::Client::replyReceived, this, &MainWindow::appendWordToActiveChat);
     connect(chatbot, &ollama::Client::finished, this,  &MainWindow::on_chatbot_finish);
@@ -49,24 +59,30 @@ MainWindow::MainWindow(QWidget *parent)
     //     }
     // });
 
-   // connect(inputLine, &QLineEdit::returnPressed, sendButton, &QPushButton::pressed);
+    // connect(inputLine, &QLineEdit::returnPressed, sendButton, &QPushButton::pressed);
 
-   // connect(historyList, &IHistoryList::itemClicked, this, &MainWindow::on_historyListItem_clicked);
-    // connect(historyList, &IHistoryList::itemDeleted, [&](int row){
-    //     pages->removeWidget(pages->widget(row));
-    //     chatbot->abort();
-    //     pages->setCurrentIndex(1);
-    // });
+    connect(left->historyList(), &IHistoryList::itemClicked, this,[this](QListWidgetItem *item)
+            {
+                if (item) {
+                    pages->setCurrentWidget(chats);
+                    chats->chats()->setCurrentIndex(left->historyList()->row(item));
+                } else {
+                    qDebug() << "Clicked history list item is null.";
+                }
+            }
+            );
+    connect(left->historyList(), &IHistoryList::itemDeleted, [&](int row){
+        chats->chats()->removeWidget(chats->chats()->widget(row));
+        pages->setCurrentWidget(welcome);
+    });
+
+    connect(&SignalHub::instance(), &SignalHub::newChatAdded, this,[this](IChatWidget* chat) {
+        left->historyList()->addItem("test");}
+    );
 
     //connect(settingButton, &QPushButton::pressed,  [&](){pages->setCurrentWidget(chats);});
 
     connect(&SignalHub::instance(), &SignalHub::on_message_sent, [&](const QString&){pages->setCurrentWidget(chats);});
-
-}
-
-
-MainWindow::~MainWindow()
-{
 }
 
 void MainWindow::on_chatbot_finish() {
@@ -80,8 +96,8 @@ void MainWindow::on_chatbot_finish() {
 
     IMessageWidget* curr = chatListView->getLatestMessageWidget();
     curr->finish();
-
 }
+
 void MainWindow::setLeftWindowVisible()
 {
     left->setVisible(!left->isVisible());
@@ -167,16 +183,6 @@ void MainWindow::addMessage(QString text )
     chatbot->generate(json);
 }
 
-void MainWindow::on_historyListItem_clicked(QListWidgetItem *item)
-{
-    // if (item) {
-    //     pages->setCurrentIndex(0);
-    //     qDebug() << "historyList->row(item)" << historyList->row(item);
-    //     pages->setCurrentIndex(historyList->row(item));
-    // } else {
-    //     qDebug() << "Clicked history list item is null.";
-    // }
-}
 
 void MainWindow::on_comboBox_activated(int index)
 {
@@ -216,13 +222,6 @@ void MainWindow::on_inputLine_returnPressed()
     // addMessage(text);
     // inputLine->clear();
 }
-
-
-void MainWindow::on_expandSideBtn_clicked()
-{
-    setLeftWindowVisible();
-}
-
 
 void MainWindow::setupUi()
 {
@@ -289,5 +288,4 @@ void MainWindow::setupUi()
 void MainWindow::retranslateUi()
 {
     setWindowTitle(QCoreApplication::translate("MainWindow", "QOllama", nullptr));
-
 }

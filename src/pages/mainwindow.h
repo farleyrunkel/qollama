@@ -30,7 +30,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void on_historyListItem_clicked(QListWidgetItem *item);
     void setLeftWindowVisible();
     void addMessage(QString text);
 
@@ -44,7 +43,6 @@ private slots:
     void on_inputLine_returnPressed();
     void on_comboBox_activated(int index);
     void on_inputLine_textChanged(const QString &arg1);
-    void on_expandSideBtn_clicked();
 
 private:
     void setupUi();
@@ -74,6 +72,7 @@ private:
     QSplitter *splitter;
 
     QStatusBar *statusBar;
+    void setupConnections();
 };
 
 #endif // MAINWINDOW_H

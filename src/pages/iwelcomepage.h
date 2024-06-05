@@ -1,14 +1,11 @@
 #ifndef IWELCOMEPAGE_H
 #define IWELCOMEPAGE_H
 
-#include <QWidget>
 #include <QLabel>
 #include <QGridLayout>
-#include <QSpacerItem>
-#include <QMouseEvent>
+
 #include "ilineedit.h"
 #include "ivpushcard.h"
-#include <Qmenu>
 #include "iwidget.h"
 
 class IWelcomePage : public IWidget
@@ -28,6 +25,8 @@ private:
     void setupPushCards();
     void setupLineEdit();
     void setupModelLabel();
+
+    void setupConnections();
     void updateMenu(const QList<QString> &list);
 
 private:
@@ -36,15 +35,12 @@ private:
     QLabel* m_welcomeLogo;
     ILineEdit *m_inputLine;
 
-    IVPushCard *card1;
-    IVPushCard *card2;
-    IVPushCard *card3;
-    IVPushCard *card4;
+    IVPushCard *m_card1;
+    IVPushCard *m_card2;
+    IVPushCard *m_card3;
+    IVPushCard *m_card4;
 
     QMenu* m_menu;
-
-    void setupConnections();
-    void applyStyleSheet();
 };
 
 #endif // IWELCOMEPAGE_H

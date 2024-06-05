@@ -4,7 +4,7 @@
 IVPushCard::IVPushCard(QWidget *parent) : QPushButton(parent) {
     setupUI();
 
-    connect(this, &IVPushCard::clicked, [&](){emit SignalHub::instance().on_message_sent(m_textLabel->text());});
+    connect(this, &IVPushCard::clicked, [&](){emit SignalHub::instance().on_message_sent(m_textLabel->text(), true);});
 }
 
 IVPushCard::IVPushCard(const QString &text, QWidget *parent) : IVPushCard(parent){

@@ -18,9 +18,10 @@ public:
     IOverlayButton* newChatButton() const;
     QPushButton* exploreButton() const;
     QPushButton *settingButton() const;
+    IHistoryList* historyList() const;
 
 private:
-    void setupUi();
+    void setupConnections();
     void setupTitleBar(QVBoxLayout *layout);
     void setupButtons(QVBoxLayout *layout);
     void setupHistoryList(QVBoxLayout *layout);
@@ -35,6 +36,7 @@ private:
     QPushButton *m_exploreButton;
     QPushButton *m_settingButton;
     IHistoryList *m_historyList;
+
 
 };
 

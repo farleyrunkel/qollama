@@ -1,12 +1,14 @@
+#include <Qmenu>
+#include <QSpacerItem>
+#include <QMouseEvent>
 #include "iwelcomepage.h"
 #include "signalhub.h"
 #include "stylemanager.h"
 
+
 IWelcomePage::IWelcomePage(QWidget *parent)
     : IWidget(parent)
 {
-    applyStyleSheet();
-
     setupLayout();
     setupPushCards();
     setupModelLabel();
@@ -17,16 +19,11 @@ IWelcomePage::IWelcomePage(QWidget *parent)
     retranslateUi();
 }
 
-void IWelcomePage::applyStyleSheet() {
-    StyleManager styleManager;
-    styleManager.loadStyleSheet(":/qss/style.qss");
-    styleManager.applyStyleSheet(this);
-}
-
 void IWelcomePage::setupConnections() {
+
     auto sendInputText = [this]() {
         if (!m_inputLine->text().isEmpty()) {
-            emit SignalHub::instance().on_message_sent(m_inputLine->text());
+            emit SignalHub::instance().on_message_sent(m_inputLine->text(), true);
         }
     };
 
@@ -84,25 +81,25 @@ void IWelcomePage::setupModelLabel() {
 }
 
 void IWelcomePage::setupPushCards() {
-    card1 = new IVPushCard;
-    card2 = new IVPushCard;
-    card3 = new IVPushCard;
-    card4 = new IVPushCard;
+    m_card1 = new IVPushCard;
+    m_card2 = new IVPushCard;
+    m_card3 = new IVPushCard;
+    m_card4 = new IVPushCard;
 
-    card1->setText("Why the sky is blue?");
-    card2->setText("Create a personal webpage for me, all in a single file. Ask me 3 questions first on whatever you need to know.");
-    card3->setText("Write a short-and-sweet text message inviting my neighbor to a barbecue.");
-    card4->setText("Tell me a random fun fact about the Roman Empire");
+    m_card1->setText("Why the sky is blue?");
+    m_card2->setText("Create a personal webpage for me, all in a single file. Ask me 3 questions first on whatever you need to know.");
+    m_card3->setText("Write a short-and-sweet text message inviting my neighbor to a barbecue.");
+    m_card4->setText("Tell me a random fun fact about the Roman Empire");
 
-    card1->setPixmap(QPixmap("://icon/heart-balloon.svg"));
-    card2->setPixmap(QPixmap("://icon/art-palette.svg"));
-    card3->setPixmap(QPixmap("://icon/electric-light-bulb.svg"));
-    card4->setPixmap(QPixmap("://icon/terminal.svg"));
+    m_card1->setPixmap(QPixmap("://icon/heart-balloon.svg"));
+    m_card2->setPixmap(QPixmap("://icon/art-palette.svg"));
+    m_card3->setPixmap(QPixmap("://icon/electric-light-bulb.svg"));
+    m_card4->setPixmap(QPixmap("://icon/terminal.svg"));
 
-    m_mainLayout->addWidget(card1, 1, 1, 1, 1);
-    m_mainLayout->addWidget(card2, 1, 2, 1, 1);
-    m_mainLayout->addWidget(card3, 2, 1, 1, 1);
-    m_mainLayout->addWidget(card4, 2, 2, 1, 1);
+    m_mainLayout->addWidget(m_card1, 1, 1, 1, 1);
+    m_mainLayout->addWidget(m_card2, 1, 2, 1, 1);
+    m_mainLayout->addWidget(m_card3, 2, 1, 1, 1);
+    m_mainLayout->addWidget(m_card4, 2, 2, 1, 1);
 }
 
 void IWelcomePage::setupLineEdit() {

@@ -3,12 +3,10 @@
 #include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QFile>
+#include "signalhub.h"
 
 ILeftWindow::ILeftWindow(QWidget *parent) : IWidget(parent) {
-    setupUi();
-}
 
-void ILeftWindow::setupUi() {
     setMaximumSize(QSize(200, 16777215));
     setObjectName("leftWindow");
 
@@ -19,6 +17,12 @@ void ILeftWindow::setupUi() {
     setupButtons(mainLayout);
     setupHistoryList(mainLayout);
     setupSettingButton(mainLayout);
+
+    setupConnections();
+}
+
+void ILeftWindow::setupConnections() {
+
 }
 
 void ILeftWindow::setupTitleBar(QVBoxLayout *layout) {
@@ -113,6 +117,11 @@ IOverlayButton* ILeftWindow::createOverlayButton(QWidget *parent, const QString 
     button->setLayoutDirection(Qt::LeftToRight);
     return button;
 }
+
+IHistoryList* ILeftWindow::historyList() const {
+    return m_historyList;
+}
+
 
 QPushButton* ILeftWindow::settingButton() const {
     return m_settingButton;
