@@ -53,6 +53,7 @@ void MainWindow::setupConnections() {
     connect(m_left->expandButton() , &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
     connect(m_welcome->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
     connect(m_market->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
+    connect(m_chats->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
 
     // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
 
@@ -93,7 +94,7 @@ void MainWindow::setupConnections() {
 
     //connect(settingButton, &QPushButton::pressed,  [&](){pages->setCurrentWidget(chats);});
 
-    connect(&SignalHub::instance(), &SignalHub::on_message_sent, [&](const QString&){m_pages->setCurrentWidget(m_chats);});
+    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this, [&](const QString&){m_pages->setCurrentWidget(m_chats);});
 }
 
 void MainWindow::onChatbotFinish() {
@@ -114,6 +115,7 @@ void MainWindow::setLeftWindowVisible()
     m_left->setVisible(!m_left->isVisible());
     m_market->expandButton()->setVisible(!m_left->isVisible());
     m_welcome->expandButton()->setVisible(!m_left->isVisible());
+    m_chats->expandButton()->setVisible(!m_left->isVisible());
 
     m_pages->updateGeometry();
 

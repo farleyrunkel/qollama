@@ -21,6 +21,7 @@ public:
     IChatWidget* addChat();
     IChatWidget* currentChat();
     QStackedWidget* chats() const;
+    QPushButton* expandButton() const;
 
 private slots:
     void sendMessage(const QString &text, bool isNewChat = false);
@@ -28,11 +29,15 @@ private slots:
     void updateMenu(const QList<QString>& list);
 
 private:
+    QPushButton* m_expandButton;
+    QPushButton* m_userButton;
 
     QVBoxLayout* m_mainLayout;
     QStackedWidget* m_chatContainer;
     ILineEdit* m_messageLineEdit;
     QMenu* m_optionMenu;
+    void setupChatComponents();
+    void setupTitleBar();
 };
 
 #endif // ICHATSPAGE_H
