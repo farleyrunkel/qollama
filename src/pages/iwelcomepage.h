@@ -15,6 +15,8 @@ class IWelcomePage : public IWidget
 public:
     explicit IWelcomePage(QWidget *parent = nullptr);
 
+    QPushButton* expandButton() const;
+
 signals:
 
 private:
@@ -39,6 +41,9 @@ private:
     IVPushCard *m_card2;
     IVPushCard *m_card3;
     IVPushCard *m_card4;
+
+    QPushButton* m_expandButton;
+    QPushButton* m_userButton;
 
     QMenu* m_menu;
 };

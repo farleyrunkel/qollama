@@ -11,7 +11,6 @@ int main(int argc, char *argv[])
 
     MainWindow mainWindow;
 
-    // 开始初始化
     initializer.initialize(&mainWindow);
 
     return app.exec();

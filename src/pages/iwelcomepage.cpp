@@ -3,8 +3,8 @@
 #include <QMouseEvent>
 #include "iwelcomepage.h"
 #include "signalhub.h"
-#include "stylemanager.h"
-
+#include <QStackedLayout>
+#include <QLCDNumber>
 
 IWelcomePage::IWelcomePage(QWidget *parent)
     : IWidget(parent)
@@ -24,6 +24,7 @@ void IWelcomePage::setupConnections() {
     auto sendInputText = [this]() {
         if (!m_inputLine->text().isEmpty()) {
             emit SignalHub::instance().on_message_sent(m_inputLine->text(), true);
+            m_inputLine->clear();
         }
     };
 
@@ -46,20 +47,38 @@ void IWelcomePage::updateMenu(const QList<QString>& list)
 
 void IWelcomePage::setupLayout() {
     setObjectName("IWelcomePage");
-    resize(831, 544);
     setContentsMargins(0, 0, 0, 0);
 
+    auto new_mainLayot = new QVBoxLayout(this);
+    auto new_topLayout = new QHBoxLayout(this);
+
+    // 初始化按钮并添加到左侧和右侧
+    m_expandButton = new QPushButton;
+    m_expandButton->setIcon(QIcon("://icon/sidebar-left.svg"));
+    m_expandButton->setFixedSize(QSize(30, 30));
+    m_expandButton->setObjectName("smallButton");
+
+    m_userButton = new QPushButton;
+    m_userButton->setIcon(QIcon("://icon.png"));
+    m_userButton->setFixedSize(QSize(30, 30));
+    m_userButton->setObjectName("smallButton");
+
+    new_topLayout->addWidget(m_expandButton);
+    new_topLayout->addStretch(1);
+    new_topLayout->addWidget(m_userButton);
+    m_expandButton->hide();
     m_mainLayout = new QGridLayout(this);
     m_mainLayout->setObjectName("mainLayout");
     m_mainLayout->setHorizontalSpacing(20);
     m_mainLayout->setVerticalSpacing(40);
-    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setContentsMargins(40, 0, 40, 0);
 
-    auto m_horizontalSpacer1 = new QSpacerItem(40, 20, QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_mainLayout->addItem(m_horizontalSpacer1, 0, 0, 1, 1);
+    new_mainLayot->addLayout(new_topLayout);
+    new_mainLayot->addLayout(m_mainLayout);
+}
 
-    auto m_horizontalSpacer2 = new QSpacerItem(40, 20, QSizePolicy::Preferred, QSizePolicy::Preferred);
-    m_mainLayout->addItem(m_horizontalSpacer2, 0, 3, 1, 1);
+QPushButton* IWelcomePage::expandButton() const {
+    return m_expandButton;
 }
 
 void IWelcomePage::retranslateUi() {

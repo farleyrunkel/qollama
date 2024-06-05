@@ -82,6 +82,30 @@ void StyleManager::enableBorders(bool enable) {
     }
 }
 
+QPixmap StyleManager::roundedPixmap(const QPixmap &src) {
+
+    int size = qMin(src.width(), src.height());
+    int radius = size / 2;
+
+    QPixmap dest(size, size);
+    dest.fill(Qt::transparent);
+
+    QPainter painter(&dest);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    QPainterPath path;
+    path.addEllipse(0, 0, size, size);
+
+    painter.setClipPath(path);
+
+    int x = (size - src.width()) / 2;
+    int y = (size - src.height()) / 2;
+
+    painter.drawPixmap(x, y, src);
+
+    return dest;
+}
+
 QString StyleManager::addBorderStyles() const {
     return R"(
     * {

@@ -5,20 +5,18 @@
 #include <objc/objc-runtime.h>
 #include "initializer.h"
 #include "mainwindow.h"
-
 #import <Cocoa/Cocoa.h>
 
 void setMacWindowStyle(QMainWindow *mainWindow);
 
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     QApplication app(argc, argv);
 
     Initializer initializer;
 
     MainWindow mainWindow;
 
-    // 开始初始化
     initializer.initialize(&mainWindow);
 
     QTimer::singleShot(0, [&mainWindow]() {
@@ -27,7 +25,6 @@ int main(int argc, char *argv[]) {
 
     return app.exec();
 }
-
 
 void setMacWindowStyle(QMainWindow *mainWindow) {
     QWindow *window = mainWindow->windowHandle();

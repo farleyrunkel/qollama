@@ -72,6 +72,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         resources/resources.qrc
         src/objects/initializer.h src/objects/initializer.cpp
+        src/container/iscrollarea.h src/container/iscrollarea.cpp
     )
 else()
     if(ANDROID)

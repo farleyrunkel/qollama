@@ -7,12 +7,12 @@
 #include "ioverlaybutton.h"
 #include "ihistorylist.h"
 
-class ILeftWindow : public IWidget
+class ISideArea : public IWidget
 {
     Q_OBJECT
 
 public:
-    explicit ILeftWindow(QWidget *parent = nullptr);
+    explicit ISideArea(QWidget *parent = nullptr);
 
     QPushButton* expandButton() const;
     IOverlayButton* newChatButton() const;

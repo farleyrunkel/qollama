@@ -9,7 +9,7 @@ class TestAsio: public QObject
 private slots:
     void toUpper();
     void toRegularExpression();
-        void toRegularExpression2();
+    void toRegularExpression2();
 };
 
 

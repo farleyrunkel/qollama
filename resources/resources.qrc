@@ -3,7 +3,6 @@
         <file>icon/share.svg</file>
         <file>icon/download.svg</file>
         <file>icon/edit.svg</file>
-        <file>icon/logo.png</file>
         <file>icon/earth.svg</file>
         <file>icon/jupiter.svg</file>
         <file>icon/mars.svg</file>
@@ -21,7 +20,6 @@
         <file>icon/send.svg</file>
         <file>icon/down.svg</file>
         <file>icon/share-box.svg</file>
-        <file>icon/sparkles.png</file>
         <file>icon/ollama.png</file>
         <file>icon/full-screen.svg</file>
         <file>icon/full-screen-zoom.svg</file>
@@ -30,7 +28,6 @@
         <file>icon/art-palette.svg</file>
         <file>icon/terminal.svg</file>
         <file>icon/electric-light-bulb.svg</file>
-        <file>icon/qollama.png</file>
         <file>images/qollama-text.png</file>
         <file>icon/delete.svg</file>
         <file>icon/stop.svg</file>

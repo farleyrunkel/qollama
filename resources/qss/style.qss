@@ -50,7 +50,7 @@ IChatWidget {
     border: none;
 }
 
-ILeftWindow,
+ISideArea,
 IHistoryList {
     background-color: #78D999; /*@LightBackground*/
     border: none;
@@ -154,12 +154,12 @@ QPushButton#expandButton:pressed{
 
 
 QScrollBar:vertical {
-    background-color: #f7f7f5; /*@White*/
-    width: 8px;  
+    background-color: transparent;
+    width: 8px;
 }
 QScrollBar:horizontal {
     height: 8px;
-    background: #DDD;
+    background: transparent;
 }
 QScrollBar::handle:vertical,
 QScrollBar::handle:horizontal {

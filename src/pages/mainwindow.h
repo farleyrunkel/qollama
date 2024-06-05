@@ -15,11 +15,9 @@
 #include "client.h"
 #include "itestwidget.h"
 #include "imarketpage.h"
-#include "ihistorylist.h"
 #include "iwelcomepage.h"
 #include "ichatspage.h"
-#include "ileftwindow.h"
-#include "irightwindow.h"
+#include "isidearea.h"
 #include "isettingpage.h"
 
 class MainWindow : public QMainWindow
@@ -31,7 +29,6 @@ public:
     ~MainWindow();
 
     void setLeftWindowVisible();
-    void addMessage(QString text);
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -40,39 +37,35 @@ public slots:
     void appendWordToActiveChat(QString reply);
 
 private slots:
-    void on_inputLine_returnPressed();
-    void on_comboBox_activated(int index);
-    void on_inputLine_textChanged(const QString &arg1);
+    void onInputLineReturnPressed();
+    void onComboBoxActivated(int index);
+    void onInputLineTextChanged(const QString &arg1);
+    void onChatbotFinish();
 
 private:
-    void setupUi();
+    void setupPages();
+    void setupStatusBar();
+    void setupSplitter();
+    void setupConnections();
     void retranslateUi();
-    void on_chatbot_finish();
-    void promoteToMacButtons();
-    void setShadeBackground();
 
-    // Only key member variables
-    ollama::Client* chatbot;
-
-    IHistoryList* historyList;
+    ollama::Client* m_ollama;
 
     ITestWidget* test;
 
-    QStackedWidget *pages;
+    QStackedWidget *m_pages;
 
-    IMarketPage* market;
-    IWelcomePage* welcome;
-    IChatsPage* chats;
-    ISettingPage* settings;
+    IMarketPage* m_market;
+    IWelcomePage* m_welcome;
+    IChatsPage* m_chats;
+    ISettingPage* m_settings;
 
-    ILeftWindow *left;
-    IRightWindow* right;
+    ISideArea *m_left;
 
-    QWidget *centralwidget;
-    QSplitter *splitter;
+    QWidget *m_centralwidget;
+    QSplitter *m_splitter;
 
-    QStatusBar *statusBar;
-    void setupConnections();
+    QStatusBar *m_statusBar;
 };
 
 #endif // MAINWINDOW_H

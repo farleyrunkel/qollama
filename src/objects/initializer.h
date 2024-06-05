@@ -7,42 +7,20 @@
 #include <signalhub.h>
 #include "stylemanager.h"
 #include <QMainWindow>
-#include "signalhub.h"
 
 class Initializer : public QObject {
     Q_OBJECT
 
 public:
-    Initializer(QObject* parent = nullptr) : QObject(parent), mainWindow(nullptr) {
-        // connect(&dataLoader, &DataLoader::dataLoaded, this, &Initializer::onDataLoaded);
-    }
+    Initializer(QObject* parent = nullptr);
 
-    void initialize(QMainWindow* window) {
-
-        mainWindow = window;
-
-        ConfigManager::instance().initializeDefaults();
-
-        onDataLoaded();
-
-        emit SignalHub::instance().listRequest();
-        //dataLoader.loadData();
-    }
+    void initialize(QMainWindow* window);
 
 signals:
     void initializationComplete();
 
 private slots:
-    void onDataLoaded() {
-
-
-        styleManager.loadStyleSheet(":/qss/style.qss");
-        styleManager.applyStyleSheet(mainWindow);
-
-        mainWindow->show();
-
-        emit initializationComplete();
-    }
+    void onDataLoaded();
 
 private:
     //DataLoader dataLoader;

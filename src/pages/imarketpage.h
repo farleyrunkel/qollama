@@ -12,22 +12,25 @@
 #include <QMap>
 #include <QDebug>
 #include "inavigetrorbar.h"
+#include "iscrollarea.h"
+#include <QStackedWidget>
 
 class ILineEdit;
 class IHPushCard;
 
-class IMarketPage : public QScrollArea
+class IMarketPage : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit IMarketPage(QWidget *parent = nullptr);
+    QPushButton* expandButton() const;
 
 private:
-    void setupTitle();
+    void setupTitleLabel();
     void setupSearchLine();
     void setupNavigator();
-    void setupTopSearchArea();
+
     void setupCategories();
 
     ILineEdit* createSearchLineEdit();
@@ -35,9 +38,10 @@ private:
     void addCategory(const QString &text);
     void navigateToCategory(const QString &categoryName);
 
-    QWidget *containerWidget;
-    QVBoxLayout *contentLayout;
-    QVBoxLayout *mainLayout;
+    QWidget *m_scrollWidget;
+    QVBoxLayout *m_scrollWidgetLayout;
+
+    QVBoxLayout *m_scrollLayout;
     QWidget *topSearchArea;
     QHBoxLayout *topAreaButtonsLayout;
     QWidget *navigatorWidget;
@@ -48,9 +52,21 @@ private:
 
     QMap<QString, QWidget*> categoryMap;
 
+    QPushButton* m_expandButton;
+    QPushButton* m_userButton;
+    QVBoxLayout* m_mainLayout;
+    ILineEdit* m_topSearchLine;
+    QWidget*     m_topSpace;
+
+    QStackedWidget* m_topStack;
+    IScrollArea* m_scrollArea;
+    void setupScrollArea();
+    void setupTopArea();
+    void setupTopNavigator();
 protected:
-    void scrollContentsBy(int dx, int dy) override;
-    void resizeEvent(QResizeEvent *event) override;
+
+
+
 };
 
 #endif // IMARKETPAGE_H

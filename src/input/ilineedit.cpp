@@ -3,7 +3,7 @@
 
 ILineEdit::ILineEdit(QWidget *parent) : QLineEdit(parent) {
 
-    setFixedHeight(40);
+    setMaximumHeight(40);
 
     m_leftButton = new QPushButton("", this);
     m_leftButton->setFixedSize(30, 30); // 设置按钮大小

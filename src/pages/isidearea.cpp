@@ -1,11 +1,12 @@
-#include "ileftwindow.h"
+#include "isidearea.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QFile>
 #include "signalhub.h"
+#include "stylemanager.h"
 
-ILeftWindow::ILeftWindow(QWidget *parent) : IWidget(parent) {
+ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
 
     setMaximumSize(QSize(200, 16777215));
     setObjectName("leftWindow");
@@ -21,11 +22,11 @@ ILeftWindow::ILeftWindow(QWidget *parent) : IWidget(parent) {
     setupConnections();
 }
 
-void ILeftWindow::setupConnections() {
+void ISideArea::setupConnections() {
 
 }
 
-void ILeftWindow::setupTitleBar(QVBoxLayout *layout) {
+void ISideArea::setupTitleBar(QVBoxLayout *layout) {
     QWidget *titleBar = createButtonContainer(this, "leftTitleBar", ":/icon/sidebar-left.svg", QSize(30, 30), layout);
     QHBoxLayout *titleBarLayout = qobject_cast<QHBoxLayout*>(titleBar->layout());
 
@@ -39,7 +40,7 @@ void ILeftWindow::setupTitleBar(QVBoxLayout *layout) {
     titleBarLayout->addWidget(m_newChatButton);
 }
 
-void ILeftWindow::setupButtons(QVBoxLayout *layout) {
+void ISideArea::setupButtons(QVBoxLayout *layout) {
     QFont buttonFont;
     buttonFont.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
     buttonFont.setPointSize(10);
@@ -55,7 +56,7 @@ void ILeftWindow::setupButtons(QVBoxLayout *layout) {
     m_exploreButton->setText(tr("Explore GPTs"));
 }
 
-void ILeftWindow::setupHistoryList(QVBoxLayout *layout) {
+void ISideArea::setupHistoryList(QVBoxLayout *layout) {
     m_historyList = new IHistoryList(this);
     m_historyList->setObjectName("historyList");
     m_historyList->setFocusPolicy(Qt::NoFocus);
@@ -66,7 +67,7 @@ void ILeftWindow::setupHistoryList(QVBoxLayout *layout) {
     layout->addWidget(m_historyList);
 }
 
-void ILeftWindow::setupSettingButton(QVBoxLayout *layout) {
+void ISideArea::setupSettingButton(QVBoxLayout *layout) {
     QFont buttonFont;
     buttonFont.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
     buttonFont.setPointSize(10);
@@ -79,17 +80,18 @@ void ILeftWindow::setupSettingButton(QVBoxLayout *layout) {
     m_settingButton->setText(tr("User Settings"));
 }
 
-QWidget* ILeftWindow::createButtonContainer(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, QVBoxLayout *layout) {
+QWidget* ISideArea::createButtonContainer(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, QVBoxLayout *layout) {
     QWidget *container = new QWidget(parent);
     container->setObjectName(objectName);
     QHBoxLayout *containerLayout = new QHBoxLayout(container);
     containerLayout->setSpacing(0);
     containerLayout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(container);
+    container->setFixedHeight(35);
     return container;
 }
 
-QPushButton* ILeftWindow::createButton(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, bool isFixedSize) {
+QPushButton* ISideArea::createButton(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, bool isFixedSize) {
     QPushButton *button = new QPushButton(parent);
     button->setObjectName(objectName);
     button->setIcon(QIcon(iconPath));
@@ -105,9 +107,11 @@ QPushButton* ILeftWindow::createButton(QWidget *parent, const QString &objectNam
     return button;
 }
 
-IOverlayButton* ILeftWindow::createOverlayButton(QWidget *parent, const QString &objectName, const QFont &font, const QSize &size) {
+IOverlayButton* ISideArea::createOverlayButton(QWidget *parent, const QString &objectName, const QFont &font, const QSize &size) {
     IOverlayButton *button = new IOverlayButton(parent);
-    button->setIcon(QIcon("://icon/ollama.png"));
+    QPixmap pix = QPixmap("://icon/ollama.png");
+    pix = StyleManager::roundedPixmap(pix);
+    button->setIcon(QIcon(pix));
     button->setObjectName(objectName);
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     button->setMinimumSize(size);
@@ -118,23 +122,23 @@ IOverlayButton* ILeftWindow::createOverlayButton(QWidget *parent, const QString 
     return button;
 }
 
-IHistoryList* ILeftWindow::historyList() const {
+IHistoryList* ISideArea::historyList() const {
     return m_historyList;
 }
 
 
-QPushButton* ILeftWindow::settingButton() const {
+QPushButton* ISideArea::settingButton() const {
     return m_settingButton;
 }
 
-QPushButton* ILeftWindow::expandButton() const {
+QPushButton* ISideArea::expandButton() const {
     return m_expandButton;
 }
 
-IOverlayButton* ILeftWindow::newChatButton() const {
+IOverlayButton* ISideArea::newChatButton() const {
     return m_modelButton;
 }
 
-QPushButton* ILeftWindow::exploreButton() const {
+QPushButton* ISideArea::exploreButton() const {
     return m_exploreButton;
 }

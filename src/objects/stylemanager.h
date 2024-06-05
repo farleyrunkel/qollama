@@ -3,10 +3,11 @@
 
 #include <QObject>
 #include <QMap>
+#include <QPainter>
+#include <QPainterPath>
 
-class QWidget;
-
-class StyleManager : public QObject {
+class StyleManager : public QObject
+{
     Q_OBJECT
 
 public:
@@ -15,6 +16,7 @@ public:
     void loadStyleSheet(const QString &filePath);
     void applyStyleSheet(QWidget *widget);
     void enableBorders(bool enable);
+    static QPixmap roundedPixmap(const QPixmap &src);
 
 private:
     QString replaceColors(const QString &styleSheet);
@@ -23,6 +25,7 @@ private:
 
     QString currentStyleSheet;
     QMap<QString, QString> colorPalette;
+
     bool showBorders;
 };
 
