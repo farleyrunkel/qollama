@@ -10,6 +10,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+
+if (Python3_FOUND)
+    message(STATUS "Python3 found")
+    message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
+    message(STATUS "Python3_LIBRARIES: ${Python3_LIBRARIES}")
+    message(STATUS "Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
+    include_directories(${Python3_INCLUDE_DIRS})
+else()
+    message(FATAL_ERROR "Python3 not found")
+endif()
 
 # Include the src directory and all its subdirectories
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
@@ -85,9 +96,9 @@ endif()
 
 # Link ws2_32 library only on Windows
 if(WIN32)
-    target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network ws2_32)
+    target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network ${Python3_LIBRARIES} ws2_32)
 else()
-    target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+    target_link_libraries(qollama PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network ${Python3_LIBRARIES})
 endif()
 
 # Set some properties on macOS
