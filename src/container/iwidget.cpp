@@ -6,10 +6,10 @@ IWidget::IWidget(QWidget *parent) {
 
 void IWidget::showEvent(QShowEvent *event) {
     QWidget::showEvent(event);
-    emit shown(true);
+    emit hidden(false);
 }
 
 void IWidget::hideEvent(QHideEvent *event) {
     QWidget::hideEvent(event);
-    emit shown(false);
+    emit hidden(true);
 }

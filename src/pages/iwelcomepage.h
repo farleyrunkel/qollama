@@ -1,13 +1,20 @@
 #ifndef IWELCOMEPAGE_H
 #define IWELCOMEPAGE_H
 
-#include <QLabel>
-#include <QGridLayout>
-
 #include "ilineedit.h"
 #include "ivpushcard.h"
 #include "iwidget.h"
+#include <QGridLayout>
+#include <QLabel>
+#include <QMenu>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
+/**
+ * @class IWelcomePage
+ * @brief The IWelcomePage class represents the welcome page of the application.
+ */
 class IWelcomePage : public IWidget
 {
     Q_OBJECT
@@ -15,37 +22,35 @@ class IWelcomePage : public IWidget
 public:
     explicit IWelcomePage(QWidget *parent = nullptr);
 
-    QPushButton* expandButton() const;
-
-signals:
-
 private:
-    void setupLayout();
-
-    void retranslateUi();
-
-    void setupPushCards();
-    void setupLineEdit();
-    void setupModelLabel();
-
+    void setupMainLayout();
+    void setupTopArea();
+    void setupContentArea();
+    void setupContentLabel();
+    void setupContentCards();
+    void setupContentLineEdit();
     void setupConnections();
+    void retranslateUi();
     void updateMenu(const QList<QString> &list);
 
+    QPushButton *createButton(const QString &iconPath);
+    IVPushCard *createPushCard(const QString &text, const QString &iconPath);
+
 private:
+    QVBoxLayout *m_mainLayout;    ///< Main layout for the welcome page.
+    QGridLayout *m_contentLayout; ///< Layout for the content area.
+    QWidget *m_topArea;           ///< Widget for the top area.
+    QPushButton *m_expandButton;  ///< Button to expand the sidebar.
+    QPushButton *m_newChatButton; ///< Button to create a new chat.
+    QPushButton *m_userButton;    ///< Button for user settings.
+    QLabel *m_welcomeLogo;        ///< Label for the welcome logo.
+    ILineEdit *m_inputLine;       ///< Line edit for input messages.
+    QMenu *m_menu;                ///< Menu for additional options.
 
-    QGridLayout *m_mainLayout;
-    QLabel* m_welcomeLogo;
-    ILineEdit *m_inputLine;
-
-    IVPushCard *m_card1;
-    IVPushCard *m_card2;
-    IVPushCard *m_card3;
-    IVPushCard *m_card4;
-
-    QPushButton* m_expandButton;
-    QPushButton* m_userButton;
-
-    QMenu* m_menu;
+    IVPushCard *m_card1; ///< First push card.
+    IVPushCard *m_card2; ///< Second push card.
+    IVPushCard *m_card3; ///< Third push card.
+    IVPushCard *m_card4; ///< Fourth push card.
 };
 
 #endif // IWELCOMEPAGE_H

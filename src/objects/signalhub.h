@@ -22,7 +22,8 @@ signals:
     void listReceived(const QList<QString>);
     void on_message_sent(const QString&, bool isNewChat);
     void newChatAdded(IChatWidget *);
-
+    void onExpandButtonClicked();
+    void onSideAreaHidden(bool);
 private:
     SignalHub() {}
     SignalHub(const SignalHub&) = delete;

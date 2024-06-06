@@ -28,8 +28,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void setLeftWindowVisible();
-
 protected:
     void showEvent(QShowEvent *event) override;
 
@@ -58,7 +56,7 @@ private:
     IMarketPage* m_market;
     IWelcomePage* m_welcome;
     IChatsPage* m_chats;
-    ISettingPage* m_settings;
+    ISettingPage* m_setting;
 
     ISideArea *m_left;
 

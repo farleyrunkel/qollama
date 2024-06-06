@@ -3,60 +3,71 @@
 #include "ilineedit.h"
 #include <QStackedLayout>
 #include <QStackedWidget>
+#include "signalhub.h"
 
-IMarketPage::IMarketPage(QWidget *parent) : QWidget(parent)
-{
-    qDebug() << "IMarketPage constructor called";
-
-    m_mainLayout = new QVBoxLayout(this);
-
+/**
+ * @brief IMarketPage constructor
+ *
+ * @param parent Parent widget
+ */
+IMarketPage::IMarketPage(QWidget *parent) : QWidget(parent) {
+    setupMainLayout();
     setupTopArea();
     setupScrollArea();
+    setupConnections();
 }
 
-QPushButton* IMarketPage::expandButton() const {
-    return m_expandButton;
+/**
+ * @brief Set up the main layout of the market page
+ */
+void IMarketPage::setupMainLayout() {
+    setObjectName("IMarketPage");
+    setContentsMargins(0, 0, 0, 0);
+
+    m_mainLayout = new QVBoxLayout(this);
+    setLayout(m_mainLayout);
+
+    m_topArea = new QWidget(this);
+    m_topArea->setFixedHeight(35);
+
+    m_scrollArea = new IScrollArea(this);
+
+    m_mainLayout->addWidget(m_topArea);
+    m_mainLayout->addWidget(m_scrollArea);
 }
 
-void IMarketPage::setupTopArea()
-{
-    auto topArea = new QWidget;
-    auto topAreaLayout = new QHBoxLayout(topArea);
-    topArea->setLayout(topAreaLayout);
-
-    topAreaLayout->setSpacing(30);
+/**
+ * @brief Set up the top area of the market page
+ */
+void IMarketPage::setupTopArea() {
+    auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = new QPushButton;
-    m_expandButton->setIcon(QIcon("://icon/sidebar-left.svg"));
-    m_expandButton->setFixedSize(QSize(30, 30));
-    m_expandButton->setObjectName("smallButton");
+    m_expandButton = createButton("://icon/sidebar-left.svg");
+    m_newChatButton = createButton(":/icon/create-new.svg");
+    m_userButton = createButton("://icon.png");
+
     m_expandButton->hide();
-    topAreaLayout->addWidget(m_expandButton);
-    topAreaLayout->addSpacing(20);
+    m_newChatButton->hide();
+    m_userButton->hide();
+
     m_topStack = new QStackedWidget;
     m_topSearchLine = createSearchLineEdit();
     m_topSpace = new QWidget;
     m_topStack->addWidget(m_topSearchLine);
     m_topStack->addWidget(m_topSpace);
     m_topStack->setCurrentWidget(m_topSpace);
+
+    topAreaLayout->addWidget(m_expandButton);
+    topAreaLayout->addWidget(m_newChatButton);
     topAreaLayout->addWidget(m_topStack);
-
-    m_userButton = new QPushButton;
-    m_userButton->setIcon(QIcon("://icon.png"));
-    m_userButton->setFixedSize(QSize(30, 30));
-    m_userButton->setObjectName("smallButton");
     topAreaLayout->addWidget(m_userButton);
-
-    topArea->setFixedHeight(35);
-    m_mainLayout->addWidget(topArea);
 }
 
-void IMarketPage::setupScrollArea()
-{
-    m_scrollArea = new IScrollArea(this);
-    m_mainLayout->addWidget(m_scrollArea);
-
+/**
+ * @brief Set up the scroll area of the market page
+ */
+void IMarketPage::setupScrollArea() {
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setAlignment(Qt::AlignTop);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
@@ -64,6 +75,7 @@ void IMarketPage::setupScrollArea()
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scrollArea->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_scrollArea->setStyleSheet("background-color: white;");
+
     m_scrollLayout = new QVBoxLayout;
     m_scrollArea->setLayout(m_scrollLayout);
 
@@ -84,13 +96,10 @@ void IMarketPage::setupScrollArea()
     setupCategories();
 }
 
-void IMarketPage::setupTopNavigator()
-{
-    m_topNavigator = new INavigetrorBar(this);
-    m_scrollLayout->addWidget(m_topNavigator);
-    m_scrollLayout->setAlignment(Qt::AlignTop);
-    m_topNavigator->hide();
-
+/**
+ * @brief Set up connections for signals and slots
+ */
+void IMarketPage::setupConnections() {
     connect(m_topNavigator, &INavigetrorBar::buttonClicked, this, [this](QPushButton *button) {
         qDebug() << "INavigetrorBar button clicked:" << button->text();
         m_navigator->showUnderline(m_navigator->getUnderlineLabel(button->text()));
@@ -111,10 +120,27 @@ void IMarketPage::setupTopNavigator()
             qDebug() << "Layout does not exist.";
         }
     });
+
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(), &SignalHub::onExpandButtonClicked);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton, &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton, &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton, &QPushButton::setVisible);
 }
 
-void IMarketPage::setupTitleLabel()
-{
+/**
+ * @brief Set up the top navigator bar
+ */
+void IMarketPage::setupTopNavigator() {
+    m_topNavigator = new INavigetrorBar(this);
+    m_scrollLayout->addWidget(m_topNavigator);
+    m_scrollLayout->setAlignment(Qt::AlignTop);
+    m_topNavigator->hide();
+}
+
+/**
+ * @brief Set up the title label
+ */
+void IMarketPage::setupTitleLabel() {
     qDebug() << "Setting up title";
 
     auto titleWidget = new QLabel;
@@ -126,8 +152,10 @@ void IMarketPage::setupTitleLabel()
     m_scrollWidgetLayout->addWidget(titleWidget);
 }
 
-void IMarketPage::setupSearchLine()
-{
+/**
+ * @brief Set up the search line edit
+ */
+void IMarketPage::setupSearchLine() {
     qDebug() << "Setting up search line";
 
     searchLineEdit = createSearchLineEdit();
@@ -135,8 +163,12 @@ void IMarketPage::setupSearchLine()
     m_scrollWidgetLayout->addWidget(searchLineEdit);
 }
 
-ILineEdit* IMarketPage::createSearchLineEdit()
-{
+/**
+ * @brief Create a search line edit widget
+ *
+ * @return ILineEdit* Pointer to the created search line edit
+ */
+ILineEdit* IMarketPage::createSearchLineEdit() {
     auto lineEdit = new ILineEdit;
     lineEdit->setObjectName("marketPageSearchLine");
     lineEdit->setPlaceholderText("Search GPT");
@@ -150,8 +182,10 @@ ILineEdit* IMarketPage::createSearchLineEdit()
     return lineEdit;
 }
 
-void IMarketPage::setupNavigator()
-{
+/**
+ * @brief Set up the navigator bar
+ */
+void IMarketPage::setupNavigator() {
     qDebug() << "Setting up navigator";
 
     m_navigator = new INavigetrorBar;
@@ -164,8 +198,13 @@ void IMarketPage::setupNavigator()
     });
 }
 
-QWidget* IMarketPage::createCategoryCard(const QString &categoryName)
-{
+/**
+ * @brief Create a category card widget
+ *
+ * @param categoryName Name of the category
+ * @return QWidget* Pointer to the created category card widget
+ */
+QWidget* IMarketPage::createCategoryCard(const QString &categoryName) {
     qDebug() << "Creating new category card for:" << categoryName;
 
     auto categoryWidget = new QWidget(m_scrollWidget);
@@ -180,8 +219,12 @@ QWidget* IMarketPage::createCategoryCard(const QString &categoryName)
     return categoryWidget;
 }
 
-void IMarketPage::addCategory(const QString &categoryName)
-{
+/**
+ * @brief Add a new category
+ *
+ * @param categoryName Name of the category
+ */
+void IMarketPage::addCategory(const QString &categoryName) {
     qDebug() << "Adding category:" << categoryName;
 
     auto categoryLabel = new QLabel;
@@ -200,19 +243,26 @@ void IMarketPage::addCategory(const QString &categoryName)
     m_topNavigator->addButton(categoryName);
 }
 
-void IMarketPage::navigateToCategory(const QString &categoryName)
-{
+/**
+ * @brief Navigate to a specific category
+ *
+ * @param categoryName Name of the category to navigate to
+ */
+void IMarketPage::navigateToCategory(const QString &categoryName) {
     qDebug() << "Navigating to category:" << categoryName;
 
     auto categoryWidget = categoryMap.value(categoryName);
     if (categoryWidget) {
         qDebug() << "Scrolling to category:" << categoryName;
-        m_scrollArea->verticalScrollBar()->setValue(categoryWidget->geometry().top() - m_topNavigator->height() - 96);
+        int labelHeight = 38;
+        m_scrollArea->verticalScrollBar()->setValue(categoryWidget->geometry().top() - labelHeight - m_topNavigator->height());
     }
 }
 
-void IMarketPage::setupCategories()
-{
+/**
+ * @brief Set up all categories
+ */
+void IMarketPage::setupCategories() {
     qDebug() << "Setting up categories";
 
     addCategory("Recommend");
@@ -224,4 +274,27 @@ void IMarketPage::setupCategories()
 
     m_navigator->showUnderline(m_navigator->getUnderlineLabel("Recommend"));
     m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("Recommend"));
+}
+
+/**
+ * @brief Create a button with an icon
+ *
+ * @param iconPath Path to the icon image
+ * @return QPushButton* Pointer to the created button
+ */
+QPushButton* IMarketPage::createButton(const QString& iconPath) {
+    auto button = new QPushButton;
+    button->setIcon(QIcon(iconPath));
+    button->setFixedSize(QSize(30, 30));
+    button->setObjectName("smallButton");
+    return button;
+}
+
+/**
+ * @brief Get the expand button
+ *
+ * @return QPushButton* Pointer to the expand button
+ */
+QPushButton* IMarketPage::expandButton() const {
+    return m_expandButton;
 }

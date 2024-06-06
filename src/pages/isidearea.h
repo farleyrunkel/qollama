@@ -31,13 +31,12 @@ private:
     QPushButton* createButton(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, bool isFixedSize = true);
     IOverlayButton* createOverlayButton(QWidget *parent, const QString &objectName, const QFont &font, const QSize &size);
 
+private:
     QPushButton *m_expandButton;
     IOverlayButton *m_modelButton;
     QPushButton *m_exploreButton;
     QPushButton *m_settingButton;
     IHistoryList *m_historyList;
-
-
 };
 
 #endif // ILEFTWINDOW_H

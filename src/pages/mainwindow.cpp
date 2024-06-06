@@ -7,7 +7,6 @@
 #include <QJsonObject>
 #include <QGraphicsDropShadowEffect>
 
-#include "ioverlaybutton.h"
 #include "ichatwidget.h"
 #include "itestwidget.h"
 #include "imarketpage.h"
@@ -33,27 +32,19 @@ MainWindow::MainWindow(QWidget *parent)
     setupPages();
 
     setupConnections();
-
     retranslateUi();
 }
-
 
 MainWindow::~MainWindow()
 {
 }
 
-
 void MainWindow::setupConnections() {
     //connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
-    //connect(marketStackWidget, &IWidget::shown, exploreLabel, &QComboBox::setVisible);
 
-    connect(m_left->settingButton(), &QPushButton::pressed, this, [this](){m_pages->setCurrentWidget(m_settings);});
+    connect(m_left->settingButton(), &QPushButton::pressed, this, [this](){m_pages->setCurrentWidget(m_setting);});
     connect(m_left->newChatButton(), &QPushButton::pressed, this, [this](){m_pages->setCurrentWidget(m_welcome);});
     connect(m_left->exploreButton(), &QPushButton::pressed, this, [this](){m_pages->setCurrentWidget(m_market);});
-    connect(m_left->expandButton() , &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
-    connect(m_welcome->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
-    connect(m_market->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
-    connect(m_chats->expandButton(), &QPushButton::pressed, this, &MainWindow::setLeftWindowVisible);
 
     // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
 
@@ -91,6 +82,10 @@ void MainWindow::setupConnections() {
     connect(&SignalHub::instance(), &SignalHub::newChatAdded, this,[this](IChatWidget* chat) {
         m_left->historyList()->addItem("test");}
     );
+    connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,[this]() {
+       m_left->setVisible(!m_left->isVisible())
+       ;}
+    );
 
     //connect(settingButton, &QPushButton::pressed,  [&](){pages->setCurrentWidget(chats);});
 
@@ -108,18 +103,6 @@ void MainWindow::onChatbotFinish() {
 
     IMessageWidget* curr = chatListView->getLatestMessageWidget();
     curr->finish();
-}
-
-void MainWindow::setLeftWindowVisible()
-{
-    m_left->setVisible(!m_left->isVisible());
-    m_market->expandButton()->setVisible(!m_left->isVisible());
-    m_welcome->expandButton()->setVisible(!m_left->isVisible());
-    m_chats->expandButton()->setVisible(!m_left->isVisible());
-
-    m_pages->updateGeometry();
-
-    QApplication::processEvents();
 }
 
 void MainWindow::appendWordToActiveChat(QString text)
@@ -148,7 +131,7 @@ void MainWindow::showEvent(QShowEvent *event)
 void MainWindow::onComboBoxActivated(int index)
 {
     // auto text = "";//comboBox->currentText();
-   // inputLine->setPlaceholderText(QString("Message ") + text + "...");
+    // inputLine->setPlaceholderText(QString("Message ") + text + "...");
 }
 
 void MainWindow::onInputLineTextChanged(const QString &arg1)
@@ -227,8 +210,8 @@ void MainWindow::setupPages()
     m_market = new IMarketPage(this);
     m_pages->addWidget(m_market);
 
-    m_settings = new ISettingPage(this);
-    m_pages->addWidget(m_settings);
+    m_setting = new ISettingPage(this);
+    m_pages->addWidget(m_setting);
 }
 
 void MainWindow::retranslateUi()

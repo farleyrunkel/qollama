@@ -27,7 +27,7 @@ public:
     IWidget(QWidget *parent = nullptr);
 
 signals:
-    void shown(bool);
+    void hidden(bool);
 
 protected:
     void showEvent(QShowEvent *event) override;

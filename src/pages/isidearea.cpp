@@ -23,7 +23,8 @@ ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
 }
 
 void ISideArea::setupConnections() {
-
+    connect(this, &ISideArea::hidden, &SignalHub::instance(), &SignalHub::onSideAreaHidden);
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(), &SignalHub::onExpandButtonClicked);
 }
 
 void ISideArea::setupTitleBar(QVBoxLayout *layout) {
