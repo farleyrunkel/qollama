@@ -42,6 +42,9 @@ private:
     IOverlayButton *m_modelButton;
     QPushButton *m_exploreButton;
     QPushButton *m_settingButton;
+
+    QPushButton* m_newChatSubButton;
+
     IHistoryList *m_historyList;
 };
 

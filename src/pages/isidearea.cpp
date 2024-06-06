@@ -31,6 +31,8 @@ void ISideArea::setupConnections() {
             &SignalHub::onNewChatButtonClicked);
     connect(m_modelButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onNewChatButtonClicked);
+    connect(m_newChatSubButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
 }
 
 void ISideArea::setupTitleBar(QVBoxLayout *layout) {
@@ -142,6 +144,10 @@ IOverlayButton *ISideArea::createOverlayButton(QWidget *parent,
     button->setFont(font);
     button->setFocusPolicy(Qt::NoFocus);
     button->setLayoutDirection(Qt::LeftToRight);
+
+    button->addSubButton(QIcon(":/icon/create-new.svg"));
+
+    m_newChatSubButton = button->getSubButtons().first();
     return button;
 }
 

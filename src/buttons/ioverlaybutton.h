@@ -7,6 +7,25 @@
 #include <QEvent>
 #include <QList>
 
+class ISubButton : public QPushButton {
+    Q_OBJECT
+public:
+    ISubButton(QWidget *parent = nullptr) : QPushButton(parent) {
+        setStyleSheet("border: none;"); // Remove border
+    }
+
+protected:
+    void enterEvent(QEnterEvent *event) override {
+        QPushButton::enterEvent(event);
+        setEnabled(true); // Enable the button on hover enter
+    }
+
+    void leaveEvent(QEvent *event) override {
+        QPushButton::leaveEvent(event);
+        setEnabled(false); // Disable the button on hover leave
+    }
+};
+
 class IOverlayButton : public QPushButton {
     Q_OBJECT
 

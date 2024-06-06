@@ -9,7 +9,7 @@ IOverlayButton::IOverlayButton(QWidget *parent) : QPushButton(parent) {
 }
 
 void IOverlayButton::addSubButton(QIcon icon) {
-    auto button = new QPushButton;
+    QPushButton* button = new ISubButton;
     button->setIcon(icon);
     m_mainLayout->addWidget(button);
     button->hide(); // Initially hide the button
@@ -39,6 +39,7 @@ bool IOverlayButton::event(QEvent *e) {
 void IOverlayButton::showSubButtons() {
     for (auto button : m_subButtons) {
         button->show();
+        button->setDisabled(true);
     }
 }
 
