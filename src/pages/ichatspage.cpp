@@ -104,7 +104,7 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
     if (text.isEmpty())
         return;
 
-    IChatsScrollArea *chat = currentChat();
+    IChatScrollArea *chat = currentChat();
 
     if (isNewChat || !chat) {
         chat = addChat();
@@ -129,9 +129,9 @@ void IChatsPage::handleSendMessage() {
 
 QPushButton *IChatsPage::expandButton() const { return m_expandButton; }
 
-IChatsScrollArea *IChatsPage::addChat() {
+IChatScrollArea *IChatsPage::addChat() {
     // Add a new chat widget
-    IChatsScrollArea *chat = new IChatsScrollArea;
+    IChatScrollArea *chat = new IChatScrollArea;
     m_chatsStack->addWidget(chat);
     m_chatsStack->setCurrentWidget(chat);
     qDebug() << "add new chat: " << m_chatsStack->indexOf(chat);
@@ -139,9 +139,9 @@ IChatsScrollArea *IChatsPage::addChat() {
     return chat;
 }
 
-IChatsScrollArea *IChatsPage::currentChat() {
+IChatScrollArea *IChatsPage::currentChat() {
     // Get the current active chat widget
-    return qobject_cast<IChatsScrollArea *>(m_chatsStack->currentWidget());
+    return qobject_cast<IChatScrollArea *>(m_chatsStack->currentWidget());
 }
 
 QStackedWidget *IChatsPage::chats() const {

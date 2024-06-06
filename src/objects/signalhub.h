@@ -3,7 +3,7 @@
 
 #include <QJsonObject>
 #include <QObject>
-#include <IChatsScrollArea.h>
+#include "ichatscrollarea.h"
 
 class SignalHub : public QObject {
     Q_OBJECT
@@ -19,7 +19,7 @@ signals:
     void listRequest();
     void listReceived(const QList<QString>);
     void on_message_sent(const QString &, bool isNewChat);
-    void newChatAdded(IChatsScrollArea *);
+    void newChatAdded(IChatScrollArea *);
     void onExpandButtonClicked();
     void onNewChatButtonClicked();
     void onSideAreaHidden(bool);

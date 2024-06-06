@@ -1,7 +1,7 @@
 #ifndef ICHATSPAGE_H
 #define ICHATSPAGE_H
 
-#include "IChatsScrollArea.h"
+#include "ichatscrollarea.h"
 #include "ilineedit.h"
 #include "iwidget.h"
 #include <QHBoxLayout>
@@ -23,7 +23,7 @@ public:
     explicit IChatsPage(QWidget *parent = nullptr);
     QPushButton *expandButton() const;
     QStackedWidget *chats() const;
-    IChatsScrollArea *currentChat();
+    IChatScrollArea *currentChat();
 
 private slots:
     void sendMessage(const QString &text, bool isNewChat = false);
@@ -37,7 +37,7 @@ private:
     void setupBottomArea();
     void setupConnections();
 
-    IChatsScrollArea *addChat();
+    IChatScrollArea *addChat();
     QPushButton *createButton(const QString &iconPath);
 
 private:

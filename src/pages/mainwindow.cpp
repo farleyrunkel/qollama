@@ -8,7 +8,7 @@
 #include <QVBoxLayout>
 
 #include "configmanager.h"
-#include "IChatsScrollArea.h"
+#include "ichatscrollarea.h"
 #include "imarketpage.h"
 #include "isettingpage.h"
 #include "isidearea.h"
@@ -86,7 +86,7 @@ void MainWindow::setupConnections() {
 
     connect(
         &SignalHub::instance(), &SignalHub::newChatAdded, this,
-        [this](IChatsScrollArea *chat) { m_left->historyList()->addItem("test"); });
+        [this](IChatScrollArea *chat) { m_left->historyList()->addItem("test"); });
     connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
             [this]() { m_left->setVisible(!m_left->isVisible()); });
 
