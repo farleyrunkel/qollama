@@ -1,13 +1,12 @@
 #ifndef STYLEMANAGER_H
 #define STYLEMANAGER_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QPainter>
 #include <QPainterPath>
 
-class StyleManager : public QObject
-{
+class StyleManager : public QObject {
     Q_OBJECT
 
 public:

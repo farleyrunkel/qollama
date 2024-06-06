@@ -73,6 +73,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resources/resources.qrc
         src/objects/initializer.h src/objects/initializer.cpp
         src/container/iscrollarea.h src/container/iscrollarea.cpp
+        src/buttons/ioverlaybutton.cpp
+        src/display/imessagebox.h src/display/imessagebox.cpp
     )
 else()
     if(ANDROID)

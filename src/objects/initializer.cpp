@@ -23,7 +23,8 @@ void Initializer::initialize(QMainWindow *window)
 void Initializer::onDataLoaded()
 {
     styleManager.loadStyleSheet(":/qss/style.qss");
-    // styleManager.enableBorders(true);
+
+    //styleManager.enableBorders(true);
 
     styleManager.applyStyleSheet(mainWindow);
 

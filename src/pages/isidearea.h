@@ -1,24 +1,23 @@
 #ifndef ILEFTWINDOW_H
 #define ILEFTWINDOW_H
 
-#include "iwidget.h"
-#include <QWidget>
-#include <QPushButton>
-#include "ioverlaybutton.h"
 #include "ihistorylist.h"
+#include "ioverlaybutton.h"
+#include "iwidget.h"
+#include <QPushButton>
+#include <QWidget>
 
-class ISideArea : public IWidget
-{
+class ISideArea : public IWidget {
     Q_OBJECT
 
 public:
     explicit ISideArea(QWidget *parent = nullptr);
 
-    QPushButton* expandButton() const;
-    IOverlayButton* newChatButton() const;
-    QPushButton* exploreButton() const;
+    QPushButton *expandButton() const;
+    IOverlayButton *newChatButton() const;
+    QPushButton *exploreButton() const;
     QPushButton *settingButton() const;
-    IHistoryList* historyList() const;
+    IHistoryList *historyList() const;
 
 private:
     void setupConnections();
@@ -27,12 +26,19 @@ private:
     void setupHistoryList(QVBoxLayout *layout);
     void setupSettingButton(QVBoxLayout *layout);
 
-    QWidget* createButtonContainer(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, QVBoxLayout *layout);
-    QPushButton* createButton(QWidget *parent, const QString &objectName, const QString &iconPath, const QSize &size, bool isFixedSize = true);
-    IOverlayButton* createOverlayButton(QWidget *parent, const QString &objectName, const QFont &font, const QSize &size);
+    QWidget *createButtonContainer(QWidget *parent, const QString &objectName,
+                                   const QString &iconPath, const QSize &size,
+                                   QVBoxLayout *layout);
+    QPushButton *createButton(QWidget *parent, const QString &objectName,
+                              const QString &iconPath, const QSize &size,
+                              bool isFixedSize = true);
+    IOverlayButton *createOverlayButton(QWidget *parent,
+                                        const QString &objectName,
+                                        const QFont &font, const QSize &size);
 
 private:
     QPushButton *m_expandButton;
+    QPushButton *m_newChatButton;
     IOverlayButton *m_modelButton;
     QPushButton *m_exploreButton;
     QPushButton *m_settingButton;

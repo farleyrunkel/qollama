@@ -1,31 +1,30 @@
 #include "client.h"
-#include <QUrl>
-#include <QDebug>
-#include <QJsonObject>
-#include <QJsonDocument>
 #include "signalhub.h"
+#include <QDebug>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QUrl>
 
 namespace ollama {
 
 Client::Client(QObject *parent)
-    : QObject(parent)
-    , m_manager(new QNetworkAccessManager(this))
-    , m_status(Waiting) {
+    : QObject(parent), m_manager(new QNetworkAccessManager(this)),
+    m_status(Waiting) {
 
-    connect(&SignalHub::instance(), &SignalHub::generateRequest, this, &Client::generate);
+    connect(&SignalHub::instance(), &SignalHub::generateRequest, this,
+            &Client::generate);
     connect(&SignalHub::instance(), &SignalHub::listRequest, this, &Client::list);
 }
 
-Client::~Client() {
-    qDebug() << "Client destroyed.";
-}
+Client::~Client() { qDebug() << "Client destroyed."; }
 
-void Client::chat(const QJsonObject& json) {
-    qDebug() << "Chat request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
+void Client::chat(const QJsonObject &json) {
+    qDebug() << "Chat request with JSON:"
+             << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/chat", json);
 }
 
-void Client::generate(const QJsonObject& json) {
+void Client::generate(const QJsonObject &json) {
     auto reply = sendRequest("http://localhost:11434/api/generate", json);
 
     QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
@@ -64,24 +63,28 @@ void Client::generate(const QJsonObject& json) {
         emit finished();
     });
 
-    QObject::connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError error){
-        qDebug() << "Network error occurred:" << error;
+    QObject::connect(reply, &QNetworkReply::errorOccurred, this,
+                     [this](QNetworkReply::NetworkError error) {
+                         qDebug() << "Network error occurred:" << error;
         emit replyReceived("Network error occurred");
     });
 }
 
-void Client::embeddings(const QJsonObject& json) {
-    qDebug() << "Embeddings request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
+void Client::embeddings(const QJsonObject &json) {
+    qDebug() << "Embeddings request with JSON:"
+             << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/embeddings", json);
 }
 
-void Client::pull(const QJsonObject& json) {
-    qDebug() << "Pull request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
+void Client::pull(const QJsonObject &json) {
+    qDebug() << "Pull request with JSON:"
+             << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/pull", json);
 }
 
-void Client::push(const QJsonObject& json) {
-    qDebug() << "Push request with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
+void Client::push(const QJsonObject &json) {
+    qDebug() << "Push request with JSON:"
+             << QJsonDocument(json).toJson(QJsonDocument::Compact);
     sendRequest("http://localhost:11434/api/push", json);
 }
 
@@ -102,8 +105,9 @@ void Client::list() {
         emit finished();
     });
 
-    QObject::connect(reply, &QNetworkReply::errorOccurred, this, [this](QNetworkReply::NetworkError error){
-        qDebug() << "Network error occurred:" << error;
+    QObject::connect(reply, &QNetworkReply::errorOccurred, this,
+                     [this](QNetworkReply::NetworkError error) {
+                         qDebug() << "Network error occurred:" << error;
         emit replyReceived("Network error occurred");
     });
 }
@@ -113,8 +117,10 @@ Client::Status Client::status() const {
     return m_status;
 }
 
-QNetworkReply* Client::sendRequest(const QString &url, const QJsonObject& json) {
-    qDebug() << "Sending request to URL:" << url << "with JSON:" << QJsonDocument(json).toJson(QJsonDocument::Compact);
+QNetworkReply *Client::sendRequest(const QString &url,
+                                   const QJsonObject &json) {
+    qDebug() << "Sending request to URL:" << url << "with JSON:"
+             << QJsonDocument(json).toJson(QJsonDocument::Compact);
 
     QNetworkRequest request;
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

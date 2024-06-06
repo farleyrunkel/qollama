@@ -1,20 +1,18 @@
 #ifndef OLLAMACLIENT_H
 #define OLLAMACLIENT_H
 
-#include <QObject>
+#include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QJsonObject>
+#include <QObject>
 
 namespace ollama {
 
-class Client: public QObject
-{
+class Client : public QObject {
     Q_OBJECT
 
 public:
-
-    enum Status {Waiting, Requesting, Receiving, Finished };
+    enum Status { Waiting, Requesting, Receiving, Finished };
 
     explicit Client(QObject *parent = nullptr);
     ~Client();
@@ -26,17 +24,18 @@ public:
     void push(const QJsonObject &json);
     void list();
 
-    void abort() {m_manager->disconnect();}
+    void abort() { m_manager->disconnect(); }
     Status status() const;
 
 signals:
-    void replyReceived(const QString&);
+    void replyReceived(const QString &);
     void finished();
 
-    void listReceived(const QList<QString>&);
+    void listReceived(const QList<QString> &);
 
 private:
-    QNetworkReply * sendRequest(const QString &url, const QJsonObject &json = QJsonObject());
+    QNetworkReply *sendRequest(const QString &url,
+                               const QJsonObject &json = QJsonObject());
 
 private:
     QNetworkAccessManager *m_manager;
@@ -44,5 +43,5 @@ private:
 
     QJsonObject m_modelList;
 };
-}
+} // namespace ollama
 #endif // OLLAMACLIENT_H

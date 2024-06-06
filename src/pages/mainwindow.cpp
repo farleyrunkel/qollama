@@ -1,25 +1,23 @@
 #include "mainwindow.h"
 
-#include <QVBoxLayout>
 #include <QDialog>
+#include <QGraphicsDropShadowEffect>
+#include <QJsonObject>
 #include <QLabel>
 #include <QStandardItemModel>
-#include <QJsonObject>
-#include <QGraphicsDropShadowEffect>
+#include <QVBoxLayout>
 
-#include "ichatwidget.h"
-#include "itestwidget.h"
-#include "imarketpage.h"
-#include "iwelcomepage.h"
-#include "isidearea.h"
-#include "isettingpage.h"
 #include "configmanager.h"
+#include "IChatsScrollArea.h"
+#include "imarketpage.h"
+#include "isettingpage.h"
+#include "isidearea.h"
+#include "itestwidget.h"
+#include "iwelcomepage.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , m_ollama (new ollama::Client(this))
-    , test(new ITestWidget(this))
-{
+    : QMainWindow(parent), m_ollama(new ollama::Client(this)),
+    test(new ITestWidget(this)) {
     setObjectName("MainWindow");
     setWindowModality(Qt::WindowModal);
     setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
@@ -35,21 +33,25 @@ MainWindow::MainWindow(QWidget *parent)
     retranslateUi();
 }
 
-MainWindow::~MainWindow()
-{
-}
+MainWindow::~MainWindow() {}
 
 void MainWindow::setupConnections() {
-    //connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
+    // connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
 
-    connect(m_left->settingButton(), &QPushButton::pressed, this, [this](){m_pages->setCurrentWidget(m_setting);});
-    connect(m_left->newChatButton(), &QPushButton::pressed, this, [this](){m_pages->setCurrentWidget(m_welcome);});
-    connect(m_left->exploreButton(), &QPushButton::pressed, this, [this](){m_pages->setCurrentWidget(m_market);});
+    connect(m_left->settingButton(), &QPushButton::pressed, this,
+            [this]() { m_pages->setCurrentWidget(m_setting); });
+    connect(&SignalHub::instance(), &SignalHub::onNewChatButtonClicked, this,
+            [this]() { m_pages->setCurrentWidget(m_welcome); });
+    connect(m_left->exploreButton(), &QPushButton::pressed, this,
+            [this]() { m_pages->setCurrentWidget(m_market); });
 
-    // connect(newChatBtn, &QPushButton::pressed, [&](){pages->setCurrentWidget(welcome);});
+    // connect(newChatBtn, &QPushButton::pressed,
+    // [&](){pages->setCurrentWidget(welcome);});
 
-    connect(m_ollama, &ollama::Client::replyReceived, this, &MainWindow::appendWordToActiveChat);
-    connect(m_ollama, &ollama::Client::finished, this,  &MainWindow::onChatbotFinish);
+    connect(m_ollama, &ollama::Client::replyReceived, this,
+            &MainWindow::appendWordToActiveChat);
+    connect(m_ollama, &ollama::Client::finished, this,
+            &MainWindow::onChatbotFinish);
 
     // connect(sendButton, &QPushButton::clicked,[&](){
     //     if (sendButton->statusTip() == "Pending") {
@@ -62,80 +64,78 @@ void MainWindow::setupConnections() {
     //     }
     // });
 
-    // connect(inputLine, &QLineEdit::returnPressed, sendButton, &QPushButton::pressed);
+    // connect(inputLine, &QLineEdit::returnPressed, sendButton,
+    // &QPushButton::pressed);
 
-    connect(m_left->historyList(), &IHistoryList::itemClicked, this,[this](QListWidgetItem *item)
-            {
+    connect(m_left->historyList(), &IHistoryList::itemClicked, this,
+            [this](QListWidgetItem *item) {
                 if (item) {
-                    m_pages->setCurrentWidget(m_chats);
-                    m_chats->chats()->setCurrentIndex(m_left->historyList()->row(item));
+            m_pages->setCurrentWidget(m_chats);
+                    m_chats->chats()->setCurrentIndex(
+                m_left->historyList()->row(item));
                 } else {
                     qDebug() << "Clicked history list item is null.";
                 }
-            }
-            );
-    connect(m_left->historyList(), &IHistoryList::itemDeleted, this, [&](int row){
-        m_chats->chats()->removeWidget(m_chats->chats()->widget(row));
+    });
+    connect(m_left->historyList(), &IHistoryList::itemDeleted, this,
+            [&](int row) {
+                m_chats->chats()->removeWidget(m_chats->chats()->widget(row));
         m_pages->setCurrentWidget(m_welcome);
     });
 
-    connect(&SignalHub::instance(), &SignalHub::newChatAdded, this,[this](IChatWidget* chat) {
-        m_left->historyList()->addItem("test");}
-    );
-    connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,[this]() {
-       m_left->setVisible(!m_left->isVisible())
-       ;}
-    );
+    connect(
+        &SignalHub::instance(), &SignalHub::newChatAdded, this,
+        [this](IChatsScrollArea *chat) { m_left->historyList()->addItem("test"); });
+    connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
+            [this]() { m_left->setVisible(!m_left->isVisible()); });
 
-    //connect(settingButton, &QPushButton::pressed,  [&](){pages->setCurrentWidget(chats);});
+    // connect(settingButton, &QPushButton::pressed,
+    // [&](){pages->setCurrentWidget(chats);});
 
-    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this, [&](const QString&){m_pages->setCurrentWidget(m_chats);});
+    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
+            [&](const QString &) { m_pages->setCurrentWidget(m_chats); });
 }
 
 void MainWindow::onChatbotFinish() {
-   // sendButton->setStatusTip("Nothing");
-   // on_inputLine_textChanged(inputLine->text());
+    // sendButton->setStatusTip("Nothing");
+    // on_inputLine_textChanged(inputLine->text());
     auto *chatListView = m_chats->currentChat();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
     }
 
-    IMessageWidget* curr = chatListView->getLatestMessageWidget();
+    IMessageBox *curr = chatListView->getLatestMessageWidget();
     curr->finish();
 }
 
-void MainWindow::appendWordToActiveChat(QString text)
-{
+void MainWindow::appendWordToActiveChat(QString text) {
     auto chatListView = m_chats->currentChat();
     if (!chatListView) {
         qDebug() << "Current chat list is null.";
         return;
     }
 
-    IMessageWidget* curr = chatListView->getLatestMessageWidget();
+    IMessageBox *curr = chatListView->getLatestMessageWidget();
     curr->appendMessage(text);
 
     chatListView->scrollToBottom();
 }
 
-void MainWindow::showEvent(QShowEvent *event)
-{
+void MainWindow::showEvent(QShowEvent *event) {
     QMainWindow::showEvent(event);
 
-    //expandButton->hide();
-   // comboBox->hide();
+    // expandButton->hide();
+    // comboBox->hide();
     test->hide();
 }
 
-void MainWindow::onComboBoxActivated(int index)
-{
+void MainWindow::onComboBoxActivated(int index) {
     // auto text = "";//comboBox->currentText();
     // inputLine->setPlaceholderText(QString("Message ") + text + "...");
 }
 
-void MainWindow::onInputLineTextChanged(const QString &arg1)
-{
+void MainWindow::onInputLineTextChanged(const QString &arg1) {
     // if ( sendButton->statusTip() == "Pending") {
     //     return;
     // }
@@ -150,8 +150,7 @@ void MainWindow::onInputLineTextChanged(const QString &arg1)
     // }
 }
 
-void MainWindow::onInputLineReturnPressed()
-{
+void MainWindow::onInputLineReturnPressed() {
     // if (chatbot->status() == ollama::Client::Receiving
     //     || chatbot->status() == ollama::Client::Requesting
     //     ) {return;}
@@ -167,8 +166,7 @@ void MainWindow::onInputLineReturnPressed()
     // inputLine->clear();
 }
 
-void MainWindow::setupSplitter()
-{
+void MainWindow::setupSplitter() {
     m_splitter = new QSplitter(this);
     m_splitter->setObjectName("splitter");
     m_splitter->setOrientation(Qt::Horizontal);
@@ -185,21 +183,20 @@ void MainWindow::setupSplitter()
     setCentralWidget(m_splitter);
 }
 
-void MainWindow::setupStatusBar()
-{
+void MainWindow::setupStatusBar() {
     m_statusBar = new QStatusBar(this);
     m_statusBar->setObjectName("statusBar");
     setStatusBar(m_statusBar);
 
-    auto statusLabel = new QLabel("AI can make mistakes. Check important info.", this);
+    auto statusLabel =
+        new QLabel("AI can make mistakes. Check important info.", this);
     statusLabel->setAlignment(Qt::AlignCenter);
     statusLabel->setObjectName("statusLabel");
 
     m_statusBar->addPermanentWidget(statusLabel, 1);
 }
 
-void MainWindow::setupPages()
-{
+void MainWindow::setupPages() {
     m_chats = new IChatsPage;
     m_pages->addWidget(m_chats);
 
@@ -214,7 +211,6 @@ void MainWindow::setupPages()
     m_pages->addWidget(m_setting);
 }
 
-void MainWindow::retranslateUi()
-{
+void MainWindow::retranslateUi() {
     setWindowTitle(QCoreApplication::translate("MainWindow", "QOllama", nullptr));
 }

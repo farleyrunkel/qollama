@@ -22,12 +22,12 @@ void IChatsPage::setupMainLayout() {
     m_topArea = new QWidget(this);
     m_topArea->setFixedHeight(35);
 
-    m_chatsLayout = new QStackedWidget;
+    m_chatsStack = new QStackedWidget;
 
     m_bottomLayout = new QHBoxLayout;
 
     m_mainLayout->addWidget(m_topArea);
-    m_mainLayout->addWidget(m_chatsLayout);
+    m_mainLayout->addWidget(m_chatsStack);
     m_mainLayout->addLayout(m_bottomLayout);
 }
 
@@ -41,6 +41,9 @@ void IChatsPage::setupConnections() {
             &IChatsPage::handleSendMessage);
     connect(&SignalHub::instance(), &SignalHub::listReceived, this,
             &IChatsPage::updateMenu);
+
+    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
 
     connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onExpandButtonClicked);
@@ -74,6 +77,9 @@ void IChatsPage::setupTopArea() {
 void IChatsPage::setupChatArea() {
     // Set up the chat area of the chats page
     // Not implemented in this snippet
+
+    // m_chatsStack->setFrameShape(QFrame::NoFrame);
+    m_chatsStack->setStyleSheet("border: red;");
 }
 
 void IChatsPage::setupBottomArea() {
@@ -98,7 +104,7 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
     if (text.isEmpty())
         return;
 
-    IChatWidget *chat = currentChat();
+    IChatsScrollArea *chat = currentChat();
 
     if (isNewChat || !chat) {
         chat = addChat();
@@ -123,24 +129,24 @@ void IChatsPage::handleSendMessage() {
 
 QPushButton *IChatsPage::expandButton() const { return m_expandButton; }
 
-IChatWidget *IChatsPage::addChat() {
+IChatsScrollArea *IChatsPage::addChat() {
     // Add a new chat widget
-    IChatWidget *chat = new IChatWidget;
-    m_chatsLayout->addWidget(chat);
-    m_chatsLayout->setCurrentWidget(chat);
-    qDebug() << "add new chat: " << m_chatsLayout->indexOf(chat);
+    IChatsScrollArea *chat = new IChatsScrollArea;
+    m_chatsStack->addWidget(chat);
+    m_chatsStack->setCurrentWidget(chat);
+    qDebug() << "add new chat: " << m_chatsStack->indexOf(chat);
     emit SignalHub::instance().newChatAdded(chat);
     return chat;
 }
 
-IChatWidget *IChatsPage::currentChat() {
+IChatsScrollArea *IChatsPage::currentChat() {
     // Get the current active chat widget
-    return qobject_cast<IChatWidget *>(m_chatsLayout->currentWidget());
+    return qobject_cast<IChatsScrollArea *>(m_chatsStack->currentWidget());
 }
 
 QStackedWidget *IChatsPage::chats() const {
     // Get the chat area layout
-    return m_chatsLayout;
+    return m_chatsStack;
 }
 
 void IChatsPage::updateMenu(const QList<QString> &list) {

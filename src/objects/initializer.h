@@ -1,20 +1,20 @@
 #ifndef INITIALIZER_H
 #define INITIALIZER_H
 
-#include <QObject>
+#include "stylemanager.h"
 #include <QApplication>
+#include <QMainWindow>
+#include <QObject>
 #include <configmanager.h>
 #include <signalhub.h>
-#include "stylemanager.h"
-#include <QMainWindow>
 
 class Initializer : public QObject {
     Q_OBJECT
 
 public:
-    Initializer(QObject* parent = nullptr);
+    Initializer(QObject *parent = nullptr);
 
-    void initialize(QMainWindow* window);
+    void initialize(QMainWindow *window);
 
 signals:
     void initializationComplete();
@@ -23,9 +23,9 @@ private slots:
     void onDataLoaded();
 
 private:
-    //DataLoader dataLoader;
+    // DataLoader dataLoader;
     StyleManager styleManager;
-    QMainWindow* mainWindow;
+    QMainWindow *mainWindow;
 };
 
 #endif // INITIALIZER_H

@@ -6,10 +6,10 @@ class IAutoResizeTextBrowser : public QTextBrowser {
     Q_OBJECT
 
 public:
-    IAutoResizeTextBrowser(QWidget* parent = nullptr);
+    IAutoResizeTextBrowser(QWidget *parent = nullptr);
 
 protected:
-    void resizeEvent(QResizeEvent* event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 public:
     void updateGeometry();

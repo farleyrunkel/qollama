@@ -1,15 +1,13 @@
-#include <QMenu>
-#include <QSpacerItem>
-#include <QMouseEvent>
 #include "iwelcomepage.h"
 #include "signalhub.h"
-#include <QStackedLayout>
 #include <QLCDNumber>
+#include <QMenu>
+#include <QMouseEvent>
 #include <QScopedPointer>
+#include <QSpacerItem>
+#include <QStackedLayout>
 
-IWelcomePage::IWelcomePage(QWidget *parent)
-    : IWidget(parent)
-{
+IWelcomePage::IWelcomePage(QWidget *parent) : IWidget(parent) {
     setupMainLayout();
     setupTopArea();
     setupContentArea();
@@ -17,8 +15,7 @@ IWelcomePage::IWelcomePage(QWidget *parent)
     retranslateUi();
 }
 
-void IWelcomePage::setupMainLayout()
-{
+void IWelcomePage::setupMainLayout() {
     setObjectName("IWelcomePage");
     setContentsMargins(0, 0, 0, 0);
 
@@ -36,8 +33,7 @@ void IWelcomePage::setupMainLayout()
     m_mainLayout->addLayout(m_contentLayout);
 }
 
-void IWelcomePage::setupTopArea()
-{
+void IWelcomePage::setupTopArea() {
     auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -55,19 +51,23 @@ void IWelcomePage::setupTopArea()
     topAreaLayout->addWidget(m_userButton);
 }
 
-void IWelcomePage::setupContentArea()
-{
+void IWelcomePage::setupContentArea() {
     setupContentCards();
     setupContentLabel();
     setupContentLineEdit();
 }
 
-void IWelcomePage::setupContentCards()
-{
+void IWelcomePage::setupContentCards() {
     m_card1 = createPushCard("Why the sky is blue?", "://icon/heart-balloon.svg");
-    m_card2 = createPushCard("Create a personal webpage for me, all in a single file. Ask me 3 questions first on whatever you need to know.", "://icon/art-palette.svg");
-    m_card3 = createPushCard("Write a short-and-sweet text message inviting my neighbor to a barbecue.", "://icon/electric-light-bulb.svg");
-    m_card4 = createPushCard("Tell me a random fun fact about the Roman Empire", "://icon/terminal.svg");
+    m_card2 =
+        createPushCard("Create a personal webpage for me, all in a single file. "
+                       "Ask me 3 questions first on whatever you need to know.",
+                             "://icon/art-palette.svg");
+    m_card3 = createPushCard("Write a short-and-sweet text message inviting my "
+                             "neighbor to a barbecue.",
+                             "://icon/electric-light-bulb.svg");
+    m_card4 = createPushCard("Tell me a random fun fact about the Roman Empire",
+                             "://icon/terminal.svg");
 
     m_contentLayout->addWidget(m_card1, 1, 1, 1, 1);
     m_contentLayout->addWidget(m_card2, 1, 2, 1, 1);
@@ -75,16 +75,15 @@ void IWelcomePage::setupContentCards()
     m_contentLayout->addWidget(m_card4, 2, 2, 1, 1);
 }
 
-IVPushCard* IWelcomePage::createPushCard(const QString& text, const QString& iconPath)
-{
+IVPushCard *IWelcomePage::createPushCard(const QString &text,
+                                         const QString &iconPath) {
     auto card = new IVPushCard;
     card->setText(text);
     card->setPixmap(QPixmap(iconPath));
     return card;
 }
 
-void IWelcomePage::setupContentLabel()
-{
+void IWelcomePage::setupContentLabel() {
     m_welcomeLogo = new QLabel;
     m_welcomeLogo->setObjectName("welcomeLogo");
     m_welcomeLogo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -96,8 +95,7 @@ void IWelcomePage::setupContentLabel()
     m_contentLayout->addWidget(m_welcomeLogo, 0, 1, 1, 2);
 }
 
-void IWelcomePage::setupContentLineEdit()
-{
+void IWelcomePage::setupContentLineEdit() {
     m_inputLine = new ILineEdit;
     m_inputLine->setPlaceholderText("Message llama3 ...");
     m_inputLine->setFixedHeight(40);
@@ -114,8 +112,7 @@ void IWelcomePage::setupContentLineEdit()
     m_contentLayout->addWidget(m_inputLine, 3, 0, 1, 4);
 }
 
-void IWelcomePage::setupConnections()
-{
+void IWelcomePage::setupConnections() {
     auto sendInputText = [this]() {
         if (!m_inputLine->text().isEmpty()) {
             emit SignalHub::instance().on_message_sent(m_inputLine->text(), true);
@@ -123,21 +120,26 @@ void IWelcomePage::setupConnections()
         }
     };
 
-    connect(m_inputLine->rightButton(), &QPushButton::clicked, this, sendInputText);
+    connect(m_inputLine->rightButton(), &QPushButton::clicked, this,
+            sendInputText);
     connect(m_inputLine, &ILineEdit::returnPressed, this, sendInputText);
-    connect(&SignalHub::instance(), &SignalHub::listReceived, this, &IWelcomePage::updateMenu);
+    connect(&SignalHub::instance(), &SignalHub::listReceived, this,
+            &IWelcomePage::updateMenu);
 
-    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(), &SignalHub::onExpandButtonClicked);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton, &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton, &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton, &QPushButton::setVisible);
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onExpandButtonClicked);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
+            &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
+            &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
+            &QPushButton::setVisible);
 }
 
-void IWelcomePage::updateMenu(const QList<QString>& list)
-{
+void IWelcomePage::updateMenu(const QList<QString> &list) {
     m_menu->clear();
-    for (const QString& item : list) {
-        QAction* action = new QAction(item, this);
+    for (const QString &item : list) {
+        QAction *action = new QAction(item, this);
         m_menu->addAction(action);
         connect(action, &QAction::triggered, this, [this, action]() {
             m_inputLine->setPlaceholderText("Message " + action->text() + " ...");
@@ -145,8 +147,7 @@ void IWelcomePage::updateMenu(const QList<QString>& list)
     }
 }
 
-QPushButton* IWelcomePage::createButton(const QString& iconPath)
-{
+QPushButton *IWelcomePage::createButton(const QString &iconPath) {
     auto button = new QPushButton;
     button->setIcon(QIcon(iconPath));
     button->setFixedSize(QSize(30, 30));
@@ -154,8 +155,8 @@ QPushButton* IWelcomePage::createButton(const QString& iconPath)
     return button;
 }
 
-void IWelcomePage::retranslateUi()
-{
-    this->setWindowTitle(QCoreApplication::translate("IWelcomePage", "Welcome", nullptr));
+void IWelcomePage::retranslateUi() {
+    this->setWindowTitle(
+        QCoreApplication::translate("IWelcomePage", "Welcome", nullptr));
     m_welcomeLogo->setText(QString());
 }

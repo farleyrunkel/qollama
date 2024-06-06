@@ -2,35 +2,29 @@
 #define IMAGELOADER_H
 
 #include <QApplication>
+#include <QFile>
 #include <QLabel>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QPixmap>
-#include <QFile>
-#include <QTextStream>
-#include <QWidget>
 #include <QPainter>
 #include <QPainterPath>
+#include <QPixmap>
+#include <QTextStream>
+#include <QWidget>
 
-class ImageLoader : public QObject
-{
+class ImageLoader : public QObject {
     Q_OBJECT
 
 public:
-    ImageLoader(QObject *parent = nullptr)
-        : QObject(parent), pixmap(nullptr)
-    {
+    ImageLoader(QObject *parent = nullptr) : QObject(parent), pixmap(nullptr) {
         loadImage(QUrl("https://picsum.photos/200"));
-        connect(&manager, &QNetworkAccessManager::finished, this, &ImageLoader::onFinished);
+        connect(&manager, &QNetworkAccessManager::finished, this,
+                &ImageLoader::onFinished);
     }
 
-    void loadImage(const QUrl &url)
-    {
-        manager.get(QNetworkRequest(url));
-    }
+    void loadImage(const QUrl &url) { manager.get(QNetworkRequest(url)); }
 
-    static QPixmap circularPixmap(const QPixmap &source)
-    {
+    static QPixmap circularPixmap(const QPixmap &source) {
         QPixmap circularPixmap(source.size());
         circularPixmap.fill(Qt::transparent);
 
@@ -50,18 +44,14 @@ signals:
     void imageLoaded(QPixmap *pixmap);
 
 private slots:
-    void onFinished(QNetworkReply *reply)
-    {
-        if (reply->error() == QNetworkReply::NoError)
-        {
+    void onFinished(QNetworkReply *reply) {
+        if (reply->error() == QNetworkReply::NoError) {
             QByteArray imageData = reply->readAll();
             pixmap = new QPixmap();
             pixmap->loadFromData(imageData);
 
             emit imageLoaded(pixmap);
-        }
-        else
-        {
+        } else {
             qDebug() << "Failed to load image:" << reply->errorString();
         }
         reply->deleteLater();

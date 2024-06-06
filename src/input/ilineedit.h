@@ -2,20 +2,20 @@
 #define ILINEEDIT_H
 
 #include <QApplication>
-#include <QWidget>
+#include <QHBoxLayout>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QHBoxLayout>
 #include <QSpacerItem>
+#include <QWidget>
 
 class ILineEdit : public QLineEdit {
     Q_OBJECT
 public:
     ILineEdit(QWidget *parent = nullptr);
 
-    QPushButton* leftButton() const;
+    QPushButton *leftButton() const;
 
-    QPushButton* rightButton() const;
+    QPushButton *rightButton() const;
 
 private:
     QPushButton *m_leftButton;

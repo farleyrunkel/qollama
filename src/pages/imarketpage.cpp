@@ -1,9 +1,9 @@
 #include "imarketpage.h"
 #include "ihpushcard.h"
 #include "ilineedit.h"
+#include "signalhub.h"
 #include <QStackedLayout>
 #include <QStackedWidget>
-#include "signalhub.h"
 
 /**
  * @brief IMarketPage constructor
@@ -100,10 +100,12 @@ void IMarketPage::setupScrollArea() {
  * @brief Set up connections for signals and slots
  */
 void IMarketPage::setupConnections() {
-    connect(m_topNavigator, &INavigetrorBar::buttonClicked, this, [this](QPushButton *button) {
-        qDebug() << "INavigetrorBar button clicked:" << button->text();
-        m_navigator->showUnderline(m_navigator->getUnderlineLabel(button->text()));
-        navigateToCategory(button->text());
+    connect(m_topNavigator, &INavigetrorBar::buttonClicked, this,
+            [this](QPushButton *button) {
+                qDebug() << "INavigetrorBar button clicked:" << button->text();
+        m_navigator->showUnderline(
+                    m_navigator->getUnderlineLabel(button->text()));
+                navigateToCategory(button->text());
     });
 
     connect(m_scrollArea, &IScrollArea::scrolledToValue, this, [this](int y) {
@@ -121,10 +123,16 @@ void IMarketPage::setupConnections() {
         }
     });
 
-    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(), &SignalHub::onExpandButtonClicked);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton, &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton, &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton, &QPushButton::setVisible);
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onExpandButtonClicked);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
+            &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
+            &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
+            &QPushButton::setVisible);
+    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
 }
 
 /**
@@ -146,8 +154,11 @@ void IMarketPage::setupTitleLabel() {
     auto titleWidget = new QLabel;
     titleWidget->setWordWrap(true);
     titleWidget->setText(
-        "<p style='text-align: center; font-size: 48px; font-weight: bold; color: black;'>GPTs</p>"
-        "<p style='text-align: center; font-size: 12px; color: gray;'>Explore and create a customized version of ChatGPT that integrates commands, additional knowledge, and any combination of skills.</p>");
+        "<p style='text-align: center; font-size: 48px; font-weight: bold; "
+        "color: black;'>GPTs</p>"
+        "<p style='text-align: center; font-size: 12px; color: gray;'>Explore "
+        "and create a customized version of ChatGPT that integrates commands, "
+        "additional knowledge, and any combination of skills.</p>");
 
     m_scrollWidgetLayout->addWidget(titleWidget);
 }
@@ -168,14 +179,15 @@ void IMarketPage::setupSearchLine() {
  *
  * @return ILineEdit* Pointer to the created search line edit
  */
-ILineEdit* IMarketPage::createSearchLineEdit() {
+ILineEdit *IMarketPage::createSearchLineEdit() {
     auto lineEdit = new ILineEdit;
     lineEdit->setObjectName("marketPageSearchLine");
     lineEdit->setPlaceholderText("Search GPT");
     lineEdit->rightButton()->hide();
     lineEdit->leftButton()->setFlat(true);
     QIcon searchIcon;
-    searchIcon.addPixmap(QPixmap("://icon/search.svg"), QIcon::Disabled, QIcon::On);
+    searchIcon.addPixmap(QPixmap("://icon/search.svg"), QIcon::Disabled,
+                         QIcon::On);
     lineEdit->leftButton()->setIcon(searchIcon);
     lineEdit->leftButton()->setDisabled(true);
 
@@ -191,10 +203,12 @@ void IMarketPage::setupNavigator() {
     m_navigator = new INavigetrorBar;
     m_scrollWidgetLayout->addWidget(m_navigator);
 
-    connect(m_navigator, &INavigetrorBar::buttonClicked, this, [this](QPushButton *button) {
-        qDebug() << "INavigetrorBar button clicked:" << button->text();
-        m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel(button->text()));
-        navigateToCategory(button->text());
+    connect(m_navigator, &INavigetrorBar::buttonClicked, this,
+            [this](QPushButton *button) {
+                qDebug() << "INavigetrorBar button clicked:" << button->text();
+        m_topNavigator->showUnderline(
+                    m_topNavigator->getUnderlineLabel(button->text()));
+                navigateToCategory(button->text());
     });
 }
 
@@ -204,7 +218,7 @@ void IMarketPage::setupNavigator() {
  * @param categoryName Name of the category
  * @return QWidget* Pointer to the created category card widget
  */
-QWidget* IMarketPage::createCategoryCard(const QString &categoryName) {
+QWidget *IMarketPage::createCategoryCard(const QString &categoryName) {
     qDebug() << "Creating new category card for:" << categoryName;
 
     auto categoryWidget = new QWidget(m_scrollWidget);
@@ -228,15 +242,19 @@ void IMarketPage::addCategory(const QString &categoryName) {
     qDebug() << "Adding category:" << categoryName;
 
     auto categoryLabel = new QLabel;
-    categoryLabel->setText(QString("<p style='text-align: left; font-size: 20px; font-weight: bold; color: black;'>%1</p>").arg(categoryName));
+    categoryLabel->setText(QString("<p style='text-align: left; font-size: 20px; "
+                                   "font-weight: bold; color: black;'>%1</p>")
+                               .arg(categoryName));
     m_scrollWidgetLayout->addWidget(categoryLabel);
 
     auto categoryWidget = createCategoryCard(categoryName);
     m_scrollWidgetLayout->addWidget(categoryWidget);
 
     for (int i = 0; i < 5; ++i) {
-        qDebug() << "Adding IHPushCard to category:" << categoryName << "index:" << i;
-        categoryWidget->layout()->addWidget(new IHPushCard(categoryWidget->layout()->count()));
+        qDebug() << "Adding IHPushCard to category:" << categoryName
+                 << "index:" << i;
+        categoryWidget->layout()->addWidget(
+            new IHPushCard(categoryWidget->layout()->count()));
     }
 
     m_navigator->addButton(categoryName);
@@ -255,7 +273,9 @@ void IMarketPage::navigateToCategory(const QString &categoryName) {
     if (categoryWidget) {
         qDebug() << "Scrolling to category:" << categoryName;
         int labelHeight = 38;
-        m_scrollArea->verticalScrollBar()->setValue(categoryWidget->geometry().top() - labelHeight - m_topNavigator->height());
+        m_scrollArea->verticalScrollBar()->setValue(
+            categoryWidget->geometry().top() - labelHeight -
+            m_topNavigator->height());
     }
 }
 
@@ -282,7 +302,7 @@ void IMarketPage::setupCategories() {
  * @param iconPath Path to the icon image
  * @return QPushButton* Pointer to the created button
  */
-QPushButton* IMarketPage::createButton(const QString& iconPath) {
+QPushButton *IMarketPage::createButton(const QString &iconPath) {
     auto button = new QPushButton;
     button->setIcon(QIcon(iconPath));
     button->setFixedSize(QSize(30, 30));
@@ -295,6 +315,4 @@ QPushButton* IMarketPage::createButton(const QString& iconPath) {
  *
  * @return QPushButton* Pointer to the expand button
  */
-QPushButton* IMarketPage::expandButton() const {
-    return m_expandButton;
-}
+QPushButton *IMarketPage::expandButton() const { return m_expandButton; }

@@ -1,10 +1,9 @@
 #include "inavigetrorbar.h"
-#include <QGridLayout>
 #include <QDebug>
+#include <QGridLayout>
 
 INavigetrorBar::INavigetrorBar(QWidget *parent)
-    : IWidget(parent), m_currentUnderlineLabel(nullptr)
-{
+    : IWidget(parent), m_currentUnderlineLabel(nullptr) {
 
     m_buttonLayout = new QGridLayout(this);
     m_buttonLayout->setContentsMargins(0, 10, 0, 0);
@@ -12,7 +11,7 @@ INavigetrorBar::INavigetrorBar(QWidget *parent)
     qDebug() << "INavigetrorBar created and UI setup completed";
 }
 
-void INavigetrorBar::addButton(const QString& text) {
+void INavigetrorBar::addButton(const QString &text) {
     qDebug() << "Adding button with text:" << text;
 
     auto button = new QPushButton(text, this);
@@ -32,18 +31,20 @@ void INavigetrorBar::addButton(const QString& text) {
 
     m_underlineLabelMap.insert(text, underlineLabel);
 
-    connect(button, &QPushButton::clicked, this, [this, button, underlineLabel]() {
+    connect(button, &QPushButton::clicked, this,
+            [this, button, underlineLabel]() {
         qDebug() << "Button clicked with text:" << button->text();
         showUnderline(underlineLabel);
         emit buttonClicked(button);
     });
 }
 
-void INavigetrorBar::showUnderline(QLabel* underlineLabel) {
+void INavigetrorBar::showUnderline(QLabel *underlineLabel) {
     qDebug() << "Showing underline";
 
     if (m_currentUnderlineLabel == underlineLabel) {
-        qDebug() << "The underline is already shown for this label. No action taken.";
+        qDebug()
+            << "The underline is already shown for this label. No action taken.";
         return;
     }
 
@@ -52,11 +53,13 @@ void INavigetrorBar::showUnderline(QLabel* underlineLabel) {
     }
 
     m_currentUnderlineLabel = underlineLabel;
-    m_currentUnderlineLabel->show(); // Show the underline label for the clicked button
+    m_currentUnderlineLabel
+        ->show(); // Show the underline label for the clicked button
 
-    qDebug() << "Underline shown for label " << m_currentUnderlineLabel->objectName();
+    qDebug() << "Underline shown for label "
+             << m_currentUnderlineLabel->objectName();
 }
 
-QLabel* INavigetrorBar::getUnderlineLabel(const QString& text) const {
+QLabel *INavigetrorBar::getUnderlineLabel(const QString &text) const {
     return m_underlineLabelMap.value(text, nullptr);
 }

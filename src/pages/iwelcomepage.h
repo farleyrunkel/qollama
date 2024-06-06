@@ -15,8 +15,7 @@
  * @class IWelcomePage
  * @brief The IWelcomePage class represents the welcome page of the application.
  */
-class IWelcomePage : public IWidget
-{
+class IWelcomePage : public IWidget {
     Q_OBJECT
 
 public:

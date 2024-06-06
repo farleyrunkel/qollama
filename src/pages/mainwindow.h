@@ -1,27 +1,26 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QListWidgetItem>
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QIcon>
+#include <QListWidgetItem>
+#include <QMainWindow>
 #include <QPushButton>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QStatusBar>
-#include <QIcon>
+#include <QVBoxLayout>
 
 #include "client.h"
-#include "itestwidget.h"
-#include "imarketpage.h"
-#include "iwelcomepage.h"
 #include "ichatspage.h"
-#include "isidearea.h"
+#include "imarketpage.h"
 #include "isettingpage.h"
+#include "isidearea.h"
+#include "itestwidget.h"
+#include "iwelcomepage.h"
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -47,16 +46,16 @@ private:
     void setupConnections();
     void retranslateUi();
 
-    ollama::Client* m_ollama;
+    ollama::Client *m_ollama;
 
-    ITestWidget* test;
+    ITestWidget *test;
 
     QStackedWidget *m_pages;
 
-    IMarketPage* m_market;
-    IWelcomePage* m_welcome;
-    IChatsPage* m_chats;
-    ISettingPage* m_setting;
+    IMarketPage *m_market;
+    IWelcomePage *m_welcome;
+    IChatsPage *m_chats;
+    ISettingPage *m_setting;
 
     ISideArea *m_left;
 
