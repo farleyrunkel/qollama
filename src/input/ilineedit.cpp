@@ -1,26 +1,35 @@
 #include "ilineedit.h"
 
 ILineEdit::ILineEdit(QWidget *parent) : QLineEdit(parent) {
-
+    // Set maximum height of the line edit
     setMaximumHeight(40);
 
+    // Create left button and set properties
     m_leftButton = new QPushButton("", this);
-    m_leftButton->setFixedSize(30, 30); // 设置按钮大小
+    m_leftButton->setFixedSize(30, 30); // Set button size
     m_leftButton->setObjectName("circleButton");
-    m_rightButton = new QPushButton("", this);
-    m_rightButton->setFixedSize(30, 30); // 设置按钮大小
-    m_rightButton->setObjectName("circleButton");
-    QHBoxLayout *hLayout = new QHBoxLayout(this);
-    hLayout->setContentsMargins(5, 0, 5, 0); // 设置布局边距为0
-    hLayout->setSpacing(5);                  // 设置控件之间的间距
 
+    // Create right button and set properties
+    m_rightButton = new QPushButton("", this);
+    m_rightButton->setFixedSize(30, 30); // Set button size
+    m_rightButton->setObjectName("circleButton");
+
+    // Create horizontal layout
+    QHBoxLayout *hLayout = new QHBoxLayout(this);
+    hLayout->setContentsMargins(5, 0, 5, 0); // Set layout margins
+    hLayout->setSpacing(5);                  // Set spacing between widgets
+
+    // Add widgets to layout
     hLayout->addWidget(m_leftButton);
     hLayout->addStretch(1);
     hLayout->addWidget(m_rightButton);
 
-    setLayout(hLayout); // 设置主布局
+    // Set the layout for the line edit
+    setLayout(hLayout);
 }
 
+// Get left button
 QPushButton *ILineEdit::leftButton() const { return m_leftButton; }
 
+// Get right button
 QPushButton *ILineEdit::rightButton() const { return m_rightButton; }

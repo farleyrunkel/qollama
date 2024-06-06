@@ -3,8 +3,7 @@
 #include <asio.hpp>
 #include <ollama.hpp>
 
-class TestAsio: public QObject
-{
+class TestAsio : public QObject {
     Q_OBJECT
 private slots:
     void toUpper();
@@ -12,9 +11,7 @@ private slots:
     void toRegularExpression2();
 };
 
-
-void TestAsio::toRegularExpression()
-{
+void TestAsio::toRegularExpression() {
     QString str = "background-color: transparent; /*@PrimaryColor*/";
 
     QRegularExpression regex(R"(\s([^\s;]+)\s*;\s*/\*\s*@(\w+)\s*\*/)");
@@ -25,8 +22,7 @@ void TestAsio::toRegularExpression()
     QCOMPARE(match.captured(1), "transparent");
     QCOMPARE(match.captured(2), "PrimaryColor");
 }
-void TestAsio::toRegularExpression2()
-{
+void TestAsio::toRegularExpression2() {
     QString str = "border: 1px solid transparent; /*@DarkBorder*/";
 
     QRegularExpression regex(R"(\s([^\s;]+)\s*;\s*/\*\s*@(\w+)\s*\*/)");
@@ -38,8 +34,7 @@ void TestAsio::toRegularExpression2()
     QCOMPARE(match.captured(2), "DarkBorder");
 }
 
-void TestAsio::toUpper()
-{
+void TestAsio::toUpper() {
     QString str = "Hello";
     QCOMPARE(str.toUpper(), QString("HELLO"));
 }

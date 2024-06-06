@@ -14,6 +14,7 @@
 #include "isidearea.h"
 #include "itestwidget.h"
 #include "iwelcomepage.h"
+#include "signalhub.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), m_ollama(new ollama::Client(this)),

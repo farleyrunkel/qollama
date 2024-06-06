@@ -1,5 +1,6 @@
 #ifndef IAUTORESIZETEXTBROWSER_H
 #define IAUTORESIZETEXTBROWSER_H
+
 #include <QTextBrowser>
 
 class IAutoResizeTextBrowser : public QTextBrowser {

@@ -10,47 +10,57 @@ class ConfigManager : public QObject {
     Q_OBJECT
 
 public:
-    static ConfigManager &instance() {
-        static ConfigManager instance;
-        return instance;
-    }
+    // Get the singleton instance of ConfigManager
+    static ConfigManager &instance();
 
-    QPixmap appIcon() const { return m_appIcon; }
-    QPixmap avatar() const { return m_userAvatar; }
-    void setAvatar(const QPixmap &newAvatar) {
-        m_userAvatar = newAvatar;
-        emit avatarChanged(m_userAvatar);
-    }
+    // Get application icon
+    QPixmap appIcon() const;
 
+    // Get user avatar
+    QPixmap avatar() const;
+
+    // Set user avatar and emit signal
+    void setAvatar(const QPixmap &newAvatar);
+
+    // Get username
     QString username() const { return m_username; }
-    void setUsername(const QString &newUsername) {
-        m_username = newUsername;
-        emit usernameChanged(m_username);
-    }
 
-    QVariant value(const QString &key) const { return configs.value(key); }
+    // Set username and emit signal
+    void setUsername(const QString &newUsername);
 
-    void setConfig(const QString &key, const QVariant &value) {
-        configs[key] = value;
-        emit configChanged(key, value);
-    }
+    // Get configuration value by key
+    QVariant value(const QString &key) const;
+
+    // Set configuration value by key and emit signal
+    void setConfig(const QString &key, const QVariant &value);
+
+    // Initialize default configuration values
     void initializeDefaults();
 
 signals:
+    // Signal emitted when avatar changes
     void avatarChanged(const QPixmap &newAvatar);
+
+    // Signal emitted when username changes
     void usernameChanged(const QString &newUsername);
+
+    // Signal emitted when any configuration value changes
     void configChanged(const QString &key, const QVariant &value);
 
 private:
+    // Private constructor for singleton pattern
     ConfigManager() { initializeDefaults(); }
+
+    // Disable copy constructor and assignment operator
     ConfigManager(const ConfigManager &) = delete;
     ConfigManager &operator=(const ConfigManager &) = delete;
 
 private:
-    QPixmap m_appIcon;
-    QPixmap m_userAvatar;
-    QString m_username;
-    QMap<QString, QVariant> configs;
+    // Member variables
+    QPixmap m_appIcon;                 // Application icon
+    QPixmap m_userAvatar;              // User avatar
+    QString m_username;                // Username
+    QMap<QString, QVariant> m_configs; // Configuration key-value pairs
 };
 
 #endif // ICONFIGMANAGER_H

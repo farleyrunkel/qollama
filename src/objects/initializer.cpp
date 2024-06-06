@@ -1,14 +1,13 @@
 #include "initializer.h"
 #include "signalhub.h"
 
-
-Initializer::Initializer(QObject *parent) : QObject(parent), mainWindow(nullptr)
-{
-    // connect(&dataLoader, &DataLoader::dataLoaded, this, &Initializer::onDataLoaded);
+Initializer::Initializer(QObject *parent)
+    : QObject(parent), mainWindow(nullptr) {
+    // connect(&dataLoader, &DataLoader::dataLoaded, this,
+    // &Initializer::onDataLoaded);
 }
 
-void Initializer::initialize(QMainWindow *window)
-{
+void Initializer::initialize(QMainWindow *window) {
     mainWindow = window;
 
     ConfigManager::instance().initializeDefaults();
@@ -17,14 +16,13 @@ void Initializer::initialize(QMainWindow *window)
 
     emit SignalHub::instance().listRequest();
 
-    //dataLoader.loadData();
+    // dataLoader.loadData();
 }
 
-void Initializer::onDataLoaded()
-{
+void Initializer::onDataLoaded() {
     styleManager.loadStyleSheet(":/qss/style.qss");
 
-    //styleManager.enableBorders(true);
+    // styleManager.enableBorders(true);
 
     styleManager.applyStyleSheet(mainWindow);
 

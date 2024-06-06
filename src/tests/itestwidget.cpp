@@ -1,27 +1,26 @@
 #include "itestwidget.h"
 #include "ollama.hpp"
 
-ITestWidget::ITestWidget(QWidget *parent)
-    : QDialog(parent)
-{
+ITestWidget::ITestWidget(QWidget *parent) : QDialog(parent) {
 
     setAutoFillBackground(true);
     setFixedSize(QSize(500, 500));
 
     ollama::SyncClient client("localhost");
-//     try {
-//         auto res = client.chat("llama3",  nlohmann::json({
-// {
-//                                                          {"role",  "user"},
-//                                                          {"content", "why is the sky blue?"}
-//                                          }}
-// ));
-//     qDebug() << "res.dump()";
-//     qDebug() << res.dump();
+    //     try {
+    //         auto res = client.chat("llama3",  nlohmann::json({
+    // {
+    //                                                          {"role",  "user"},
+    //                                                          {"content", "why
+    //                                                          is the sky blue?"}
+    //                                          }}
+    // ));
+    //     qDebug() << "res.dump()";
+    //     qDebug() << res.dump();
 
-//     }
-//     catch (std::exception& e)
-//     {
-//         std::cerr << e.what() << std::endl;
-//     }
+    //     }
+    //     catch (std::exception& e)
+    //     {
+    //         std::cerr << e.what() << std::endl;
+    //     }
 }

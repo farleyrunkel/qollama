@@ -1,36 +1,32 @@
 #ifndef IVPUSHCARD_H
 #define IVPUSHCARD_H
 
-#include <QPushButton>
+#include <QIcon>
 #include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
 #include <QVBoxLayout>
-#include <QMouseEvent>
-#include <QEvent>
-#include "signalhub.h"
 
 class IVPushCard : public QPushButton {
     Q_OBJECT
+
 public:
+    // Constructors
     explicit IVPushCard(QWidget *parent = nullptr);
+    IVPushCard(const QString &text, QWidget *parent = nullptr);
+    IVPushCard(const QIcon &icon, const QString &text, QWidget *parent = nullptr);
 
-    explicit IVPushCard(const QString &text, QWidget *parent = nullptr);
-
-    IVPushCard(const QIcon& icon, const QString &text, QWidget *parent = nullptr);
-
-    void setupUI();
-
-    void setText(const QString& text);
-
-    void setPixmap(const QPixmap &pixmap);
-
-signals:
-
-protected:
-
+    // Setters
+    void setText(const QString &text);     // Set card text
+    void setPixmap(const QPixmap &pixmap); // Set card icon
 
 private:
-    QLabel *m_iconLabel;
-    QLabel *m_textLabel;
+    // Private method for UI setup
+    void setupUI();
+
+    // Member variables
+    QLabel *m_iconLabel; // Label for card icon
+    QLabel *m_textLabel; // Label for card text
 };
 
 #endif // IVPUSHCARD_H

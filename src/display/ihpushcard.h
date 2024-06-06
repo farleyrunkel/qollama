@@ -1,50 +1,39 @@
 #ifndef IPUSHCARD_H
 #define IPUSHCARD_H
 
-#include <QScrollArea>
-#include <QVBoxLayout>
-#include <QCalendarWidget>
-#include <QSizePolicy>
-#include <QLabel>
-#include <QLineEdit>
-#include <QTextEdit>
-#include <QPushButton>
-#include <QSpacerItem>
 #include <QFrame>
-#include <QScrollBar>
-#include <QDebug>
-#include <QEvent>
+#include <QLabel>
+#include <QIcon>
 
-class IHPushCard : public QFrame
-{
+class IHPushCard : public QFrame {
     Q_OBJECT
 
 public:
-    IHPushCard(QWidget* parent = nullptr);
-    IHPushCard(int num, QWidget* parent = nullptr) : IHPushCard(parent) {
+    // Constructors
+    IHPushCard(QWidget *parent = nullptr);
+    IHPushCard(int num, QWidget *parent = nullptr) : IHPushCard(parent) {
         setNumber(num);
     };
 
-    void setNumber(int num);
-
-
-    void setText(const QString& text);
-
-    void setNumberUnused();
-
-    void setIcon(const QIcon &icon);
+    // Setters
+    void setNumber(int num); // Set card number
+    void setText(const QString &text); // Set card text
+    void setNumberUnused(); // Set card as unused
+    void setIcon(const QIcon &icon); // Set card icon
 
 protected:
-    // 事件过滤器
-    bool eventFilter(QObject* watched, QEvent* event) override;
+    // Event filter override
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
+    // Private method for UI setup
     void setupUI();
 
 private:
-    QLabel* itemNumberLabel;
-    QLabel* itemIconLabel;
-    QLabel* itemTextLabel;
+    // Member variables
+    QLabel *itemNumberLabel; // Label for card number
+    QLabel *itemIconLabel; // Label for card icon
+    QLabel *itemTextLabel; // Label for card text
 };
 
 #endif // IPUSHCARD_H
