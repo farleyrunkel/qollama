@@ -132,7 +132,7 @@ class WebScraper(QObject):
         
         with open(os.path.join('models', f'{extract_before_colon(latest_version.strip())}.json'), 'w', encoding='utf-8') as f:
             json.dump({
-                'url': 'url',
+                'url': url,
                 'name': name.text.strip(),
                 'intro': intro.text.strip(),
                 'tag': latest_version,

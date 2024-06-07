@@ -36,6 +36,16 @@ bool IHPushCard::eventFilter(QObject *watched, QEvent *event) {
     return QFrame::eventFilter(watched, event);
 }
 
+void IHPushCard::setName(const QString& name) {
+    m_name = name;
+
+}
+
+void IHPushCard::setIntro(const QString& intro) {
+    m_intro = intro;
+
+}
+
 void IHPushCard::setupUI() {
     setMinimumWidth(100);
     setMinimumHeight(90);
@@ -60,10 +70,10 @@ void IHPushCard::setupUI() {
                          }
                          delete pixmap;
     });
-
+    m_name = "Model";
+    m_intro = "Introducing to model";
     itemTextLabel = new QLabel(this);
-    itemTextLabel->setText(
-        QString("<b>Heading</b><p>%1</p>").arg("This is a text"));
+    itemTextLabel->setText(QString("<b>%1</b><p>%2</p>").arg(m_name).arg(m_intro));
     itemTextLabel->setStyleSheet("border:none;");
 
     auto itemLayout = new QHBoxLayout;

@@ -1,6 +1,7 @@
 #ifndef IMARKETPAGE_H
 #define IMARKETPAGE_H
 
+#include "ihpushcard.h"
 #include "ilineedit.h"
 #include "inavigetrorbar.h"
 #include "iscrollarea.h"
@@ -40,6 +41,7 @@ private:
     void navigateToCategory(const QString &categoryName);
     void setupCategories();
     QPushButton *createButton(const QString &iconPath);
+    void addCategoryItem(const QString &categoryName, IHPushCard *item);
 
 private:
     QVBoxLayout *m_mainLayout;
@@ -58,6 +60,8 @@ private:
     QPushButton *m_newChatButton;
     QPushButton *m_userButton;
     ILineEdit *searchLineEdit;
+
+    QMap<QString, QWidget *> m_categories;
 };
 
 #endif // IMARKETPAGE_H

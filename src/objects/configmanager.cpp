@@ -47,6 +47,7 @@ void ConfigManager::initializeDefaults() {
     setConfig("username", m_username);
     setConfig("appIcon", m_appIcon);
     setConfig("userAvatar", m_userAvatar);
+    setConfig("modelsDir", "   ");
 
     // Emit signals to notify about changes
     emit avatarChanged(m_userAvatar);

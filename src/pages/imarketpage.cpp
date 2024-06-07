@@ -4,6 +4,11 @@
 #include "signalhub.h"
 #include <QStackedLayout>
 #include <QStackedWidget>
+#include <QFile>
+#include <QDir>
+#include <QJsonParseError>
+#include <QJsonArray>
+#include <QDialog>
 
 /**
  * @brief IMarketPage constructor
@@ -248,17 +253,27 @@ void IMarketPage::addCategory(const QString &categoryName) {
     m_scrollWidgetLayout->addWidget(categoryLabel);
 
     auto categoryWidget = createCategoryCard(categoryName);
-    m_scrollWidgetLayout->addWidget(categoryWidget);
 
-    for (int i = 0; i < 5; ++i) {
-        qDebug() << "Adding IHPushCard to category:" << categoryName
-                 << "index:" << i;
-        categoryWidget->layout()->addWidget(
-            new IHPushCard(categoryWidget->layout()->count()));
-    }
+    m_categories[categoryName] = categoryWidget;
+
+    m_scrollWidgetLayout->addWidget(categoryWidget);
 
     m_navigator->addButton(categoryName);
     m_topNavigator->addButton(categoryName);
+}
+
+void IMarketPage::addCategoryItem(const QString &categoryName, IHPushCard* item) {
+    qDebug() << "Adding category item:" << categoryName;
+
+    // Check if the category already exists in m_categories
+    if (!m_categories.contains(categoryName)) {
+        createCategoryCard(categoryName);
+    }
+
+    auto categoryWidget = m_categories[categoryName];
+    item->setNumber(categoryWidget->layout()->count());
+
+    categoryWidget->layout()->addWidget(item);
 }
 
 /**
@@ -285,12 +300,88 @@ void IMarketPage::navigateToCategory(const QString &categoryName) {
 void IMarketPage::setupCategories() {
     qDebug() << "Setting up categories";
 
-    addCategory("Recommend");
-    addCategory("Write");
-    addCategory("Research");
-    addCategory("Education");
-    addCategory("Life");
-    addCategory("Program");
+    addCategory("programming");
+    addCategory("assistant");
+    addCategory("productivity");
+    addCategory("character");
+    addCategory("writing");
+    addCategory("life");
+
+
+    QDir modelsDir("C:/Users/95439/Documents/Github/qollama/models");
+
+    qDebug() << "modelsDir:" << modelsDir.dirName();
+    // List all JSON files in the directory
+    QStringList jsonFiles = modelsDir.entryList(QStringList() << "*.json", QDir::Files);
+
+    // Iterate through each JSON file
+    foreach (const QString &jsonFile, jsonFiles) {
+        qDebug() << "jsonFile:" << jsonFile;
+
+        QFile file(modelsDir.absoluteFilePath(jsonFile));
+
+        if (!file.open(QIODevice::ReadOnly)) {
+            qWarning() << "Could not open file" << jsonFile;
+            continue;
+        }
+
+        QByteArray fileData = file.readAll();
+        file.close();
+
+        QJsonParseError parseError;
+        QJsonDocument doc = QJsonDocument::fromJson(fileData, &parseError);
+
+        if (parseError.error != QJsonParseError::NoError) {
+            qWarning() << "Failed to parse JSON file" << jsonFile << ":" << parseError.errorString();
+            continue;
+        }
+
+        if (!doc.isObject()) {
+            qWarning() << "Invalid JSON structure in file" << jsonFile;
+            continue;
+        }
+
+        QJsonObject jsonObj = doc.object();
+
+        QString name = jsonObj.value("name").toString();
+        QString intro = jsonObj.value("intro").toString();
+
+        QString base64Image = jsonObj.value("image").toString();
+        qWarning() << "base64Image" << base64Image;
+
+        // // 解码Base64字符串
+        // QByteArray imageData = QByteArray::fromBase64(base64Image.toUtf8());
+
+        // // 将图像数据加载到QPixmap中
+        // QPixmap pixmap;
+        // if (!pixmap.loadFromData(imageData)) {
+        //     qWarning("Failed to load image from data.");
+        // }
+
+        QString content = jsonObj.value("content").toString();
+        QJsonArray categoriesArray = jsonObj.value("categories").toArray();
+
+        if (categoriesArray.isEmpty()) {
+            qWarning() << "No categories found in file" << jsonFile;
+            continue;
+        }
+
+        QString category = categoriesArray.at(0).toString();
+
+        auto item = new IHPushCard;
+        // item->setIcon(QIcon(pixmap));
+        item->setName(name);
+        item->setIntro(intro);
+        // item->setImage(image);
+        // item->setContent(content);
+
+        if (!m_categories.contains(category)) {
+            addCategory(category);
+        }
+
+        m_categories[category]->layout()->addWidget(item);
+    }
+
 
     m_navigator->showUnderline(m_navigator->getUnderlineLabel("Recommend"));
     m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("Recommend"));
