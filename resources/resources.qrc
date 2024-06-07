@@ -45,5 +45,6 @@
         <file>icon.png</file>
         <file>icon/grid.svg</file>
         <file>icon/account.svg</file>
+        <file>icon/farley.jpg</file>
     </qresource>
 </RCC>

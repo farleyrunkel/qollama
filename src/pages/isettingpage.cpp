@@ -19,8 +19,7 @@ ISettingPage::ISettingPage(QWidget *parent) : QDialog(parent) {
     setupMainLayout();      // Setup the main layout
     setupSideArea();        // Setup the top area
     setupSettingsAccount(); // Setup the setting area
-        // setupConnections(); // Setup signal-slot
-        // connections
+    setupConnections();     // Setup signal-slot
 }
 
 void ISettingPage::showEvent(QShowEvent *event) {
@@ -189,25 +188,16 @@ void ISettingPage::setupSettingsAccount() {
 void ISettingPage::setupConnections() {
     connect(m_changeAvatarButton, &QPushButton::clicked, this,
             &ISettingPage::changeAvatar); // Change avatar button clicked
-    connect(m_saveButton, &QPushButton::clicked, this,
-            &ISettingPage::changeUsername); // Save button clicked
+    // connect(m_saveButton, &QPushButton::clicked, this,
+    //         &ISettingPage::changeUsername); // Save button clicked
 
-    connect(&ConfigManager::instance(), &ConfigManager::avatarChanged, this,
-            &ISettingPage::updateAvatarDisplay); // Avatar changed signal
-    connect(&ConfigManager::instance(), &ConfigManager::usernameChanged, this,
-            &ISettingPage::updateUsernameDisplay); // Username changed signal
+    // connect(&ConfigManager::instance(), &ConfigManager::avatarChanged, this,
+    //         &ISettingPage::updateAvatarDisplay); // Avatar changed signal
+    // connect(&ConfigManager::instance(), &ConfigManager::usernameChanged, this,
+    //         &ISettingPage::updateUsernameDisplay); // Username changed signal
 
-    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onNewChatButtonClicked);
-
-    connect(m_accountButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onExpandButtonClicked);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_accountButton,
-            &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
-            &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
-            &QPushButton::setVisible);
+    // connect(m_accountButton, &QPushButton::clicked, &SignalHub::instance(),
+    //         &SignalHub::onExpandButtonClicked);
 }
 
 // Slot to change avatar
@@ -216,8 +206,8 @@ void ISettingPage::changeAvatar() {
         this, "Select Avatar", "", "Image Files (*.png *.jpg *.bmp)");
     if (!fileName.isEmpty()) {
         QPixmap newAvatar(fileName);
-
-        ConfigManager::instance().setConfig("avatar", newAvatar);
+        m_changeAvatarButton->setIcon(QIcon(newAvatar));
+        ConfigManager::instance().setConfig("avatar", fileName);
     }
 }
 

@@ -37,7 +37,7 @@ void ConfigManager::initializeDefaults() {
     // Store default configurations
     setConfig("username", m_username);
     setConfig("appIcon", m_appIcon);
-    setConfig("avatar", ":/icon.png");
+    setConfig("avatar", "://icon/farley.jpg");
     setConfig("modeldir", "C:/Users/95439/Documents/Github/qollama/models");
 
     // Emit signals to notify about changes
