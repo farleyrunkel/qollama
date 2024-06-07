@@ -148,7 +148,8 @@ void ISettingPage::setupSettingArea() {
 
     m_changeAvatarButton = new QPushButton(this);
     m_changeAvatarButton->setFixedSize(100, 100);
-    m_changeAvatarButton->setStyleSheet("border: 2px solid black; border-radius: 50px;");
+    m_changeAvatarButton->setStyleSheet(
+        "border: 2px solid black; border-radius: 50px;");
 
     QPixmap avatar(ConfigManager::instance().avatar().scaled(200, 200));
     avatar = StyleManager::roundedPixmap(avatar);
@@ -157,7 +158,6 @@ void ISettingPage::setupSettingArea() {
     m_changeAvatarButton->setIconSize(QSize(100, 100));
 
     page1_layout->setSpacing(20);
-    page1_layout->addWidget(m_changeAvatarButton);
 
     auto group1 = new QGroupBox("User name");
     group1->setLayout(new QHBoxLayout);
@@ -166,7 +166,7 @@ void ISettingPage::setupSettingArea() {
     editButton1->setFixedSize(QSize(30, 30));
     // editButton1->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     group1->layout()->addWidget(editButton1);
-    page1_layout->addWidget(group1);
+
     editButton1->setObjectName("smallButton");
 
     auto group = new QGroupBox("Models file directory");
@@ -182,7 +182,14 @@ void ISettingPage::setupSettingArea() {
     editButton->setObjectName("smallButton");
 
     group->layout()->addWidget(editButton);
+
+    QHBoxLayout *lay = new QHBoxLayout;
+    lay->addWidget(m_changeAvatarButton);
+    lay->addWidget(group1);
+
+    page1_layout->addLayout(lay);
     page1_layout->addWidget(group);
+    page1_layout->setAlignment(Qt::AlignTop);
 
     m_settingLayout->addWidget(page1);
 }
@@ -233,7 +240,8 @@ void ISettingPage::changeUsername() {
 
 // Slot to update avatar display
 void ISettingPage::updateAvatarDisplay(const QPixmap &newAvatar) {
-    // m_avatarLabel->setPixmap(newAvatar.scaled(100, 100, Qt::KeepAspectRatio,Qt::SmoothTransformation));
+    // m_avatarLabel->setPixmap(newAvatar.scaled(100, 100,
+    // Qt::KeepAspectRatio,Qt::SmoothTransformation));
 }
 
 // Slot to update username display
