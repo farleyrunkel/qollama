@@ -46,7 +46,7 @@ private:
     QPushButton *m_newChatButton;
     QPushButton *m_userButton;
 
-    QLabel *m_avatarLabel;
+    QPushButton *m_avatarLabel;
     QPushButton *m_changeAvatarButton;
     QLineEdit *m_usernameLineEdit;
     QPushButton *m_saveButton;

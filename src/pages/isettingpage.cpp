@@ -146,25 +146,17 @@ void ISettingPage::setupSettingArea() {
     auto page1_layout = new QVBoxLayout;
     page1->setLayout(page1_layout);
 
-    m_avatarLabel = new QLabel(this);
-    m_avatarLabel->setFixedSize(100, 100);
-    m_avatarLabel->setAlignment(Qt::AlignCenter);
-    m_avatarLabel->setPixmap(ConfigManager::instance().avatar().scaled(
-        100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_changeAvatarButton = new QPushButton(this);
+    m_changeAvatarButton->setFixedSize(100, 100);
+    m_changeAvatarButton->setStyleSheet("border: 2px solid black; border-radius: 50px;");
 
-    m_changeAvatarButton = new QPushButton("Change Avatar", this);
-    m_changeAvatarButton->setStyleSheet("QPushButton {"
-                                        "    background-color: #5cb85c;"
-                                        "    color: white;"
-                                        "    border-radius: 5px;"
-                                        "    padding: 10px;"
-                                        "}"
-                                        "QPushButton:hover {"
-                                        "    background-color: #4cae4c;"
-                                        "}");
+    QPixmap avatar(ConfigManager::instance().avatar().scaled(200, 200));
+    avatar = StyleManager::roundedPixmap(avatar);
+    QIcon icon(avatar);
+    m_changeAvatarButton->setIcon(icon);
+    m_changeAvatarButton->setIconSize(QSize(100, 100));
 
     page1_layout->setSpacing(20);
-    page1_layout->addWidget(m_avatarLabel);
     page1_layout->addWidget(m_changeAvatarButton);
 
     auto group1 = new QGroupBox("User name");
@@ -241,8 +233,7 @@ void ISettingPage::changeUsername() {
 
 // Slot to update avatar display
 void ISettingPage::updateAvatarDisplay(const QPixmap &newAvatar) {
-    m_avatarLabel->setPixmap(newAvatar.scaled(100, 100, Qt::KeepAspectRatio,
-                                              Qt::SmoothTransformation));
+    // m_avatarLabel->setPixmap(newAvatar.scaled(100, 100, Qt::KeepAspectRatio,Qt::SmoothTransformation));
 }
 
 // Slot to update username display
