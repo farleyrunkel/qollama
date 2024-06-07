@@ -25,8 +25,8 @@ void ConfigManager::setUsername(const QString &newUsername) {
     emit usernameChanged(m_username);
 }
 
-// Get configuration value by key
-QVariant ConfigManager::value(const QString &key) const {
+// Get configuration config by key
+QVariant ConfigManager::config(const QString &key) const {
     return m_configs.value(key);
 }
 
@@ -47,7 +47,7 @@ void ConfigManager::initializeDefaults() {
     setConfig("username", m_username);
     setConfig("appIcon", m_appIcon);
     setConfig("userAvatar", m_userAvatar);
-    setConfig("modelsDir", "   ");
+    setConfig("modeldir", "C:/Users/95439/Documents/Github/qollama/models");
 
     // Emit signals to notify about changes
     emit avatarChanged(m_userAvatar);

@@ -28,8 +28,8 @@ public:
     // Set username and emit signal
     void setUsername(const QString &newUsername);
 
-    // Get configuration value by key
-    QVariant value(const QString &key) const;
+    // Get configuration config by key
+    QVariant config(const QString &key) const;
 
     // Set configuration value by key and emit signal
     void setConfig(const QString &key, const QVariant &value);

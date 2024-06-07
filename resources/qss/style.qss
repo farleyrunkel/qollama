@@ -80,7 +80,8 @@ QPushButton#smallButton:pressed {
 
 QPushButton#exploreButton,
 QPushButton#settingButton,
-QPushButton#newChatButton {
+QPushButton#newChatButton,
+QPushButton#bigButton{
     border: 1px hidden;
     border-radius: 10px;
     padding-left: 10px;
@@ -88,12 +89,14 @@ QPushButton#newChatButton {
 }
 QPushButton#settingButton:hover,
 QPushButton#exploreButton:hover,
-QPushButton#newChatButton:hover  {
+QPushButton#newChatButton:hover,
+QPushButton#bigButton:hover  {
     background-color: #ececec; /*@LightGreen*/
 }
 QPushButton#settingButton:pressed,
 QPushButton#exploreButton:pressed,
-QPushButton#newChatButton:pressed  {
+QPushButton#newChatButton:pressed,
+QPushButton#bigButton:pressed  {
     border: 1px hidden;
     border-radius: 10px;
     background-color: #ececec;

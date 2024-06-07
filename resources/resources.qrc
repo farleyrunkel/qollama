@@ -44,5 +44,6 @@
         <file>icon.icns</file>
         <file>icon.png</file>
         <file>icon/grid.svg</file>
+        <file>icon/account.svg</file>
     </qresource>
 </RCC>

@@ -8,21 +8,25 @@
 #include <QLineEdit>
 #include <QPixmap>
 #include <QPushButton>
+#include <QStackedLayout>
 #include <QVBoxLayout>
 #include <QWidget>
 
-class ISettingPage : public QWidget {
+class ISettingPage : public QDialog {
     Q_OBJECT
 
 public:
     explicit ISettingPage(QWidget *parent = nullptr);
 
+protected:
+    void showEvent(QShowEvent *) override;
+    void paintEvent(QPaintEvent *event) override;
+
 private:
     void setupMainLayout();
-    void setupTopArea();
+    void setupSideArea();
     void setupSettingArea();
     void setupConnections();
-    QPushButton *createButton(const QString &iconPath);
 
 private slots:
     void changeAvatar();
@@ -34,11 +38,11 @@ private slots:
     void userSettings();
 
 private:
-    QVBoxLayout *m_mainLayout;
-    QWidget *m_topArea;
-    QVBoxLayout *m_settingLayout;
+    QHBoxLayout *m_mainLayout;
+    QWidget *m_sideArea;
+    QStackedLayout *m_settingLayout;
 
-    QPushButton *m_expandButton;
+    QPushButton *m_accountButton;
     QPushButton *m_newChatButton;
     QPushButton *m_userButton;
 

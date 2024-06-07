@@ -9,6 +9,7 @@
 #include <QJsonParseError>
 #include <QJsonArray>
 #include <QDialog>
+#include "configmanager.h"
 
 /**
  * @brief IMarketPage constructor
@@ -308,7 +309,8 @@ void IMarketPage::setupCategories() {
     addCategory("life");
 
 
-    QDir modelsDir("C:/Users/95439/Documents/Github/qollama/models");
+    auto modeldir = ConfigManager::instance().config("modeldir").toString();
+    QDir modelsDir(modeldir);
 
     qDebug() << "modelsDir:" << modelsDir.dirName();
     // List all JSON files in the directory
@@ -317,6 +319,7 @@ void IMarketPage::setupCategories() {
     // Iterate through each JSON file
     foreach (const QString &jsonFile, jsonFiles) {
         qDebug() << "jsonFile:" << jsonFile;
+        auto item = new IHPushCard;
 
         QFile file(modelsDir.absoluteFilePath(jsonFile));
 
@@ -349,14 +352,14 @@ void IMarketPage::setupCategories() {
         QString base64Image = jsonObj.value("image").toString();
         qWarning() << "base64Image" << base64Image;
 
-        // // 解码Base64字符串
-        // QByteArray imageData = QByteArray::fromBase64(base64Image.toUtf8());
+        // 解码Base64字符串
+        QByteArray imageData = QByteArray::fromBase64(base64Image.toUtf8());
 
-        // // 将图像数据加载到QPixmap中
-        // QPixmap pixmap;
-        // if (!pixmap.loadFromData(imageData)) {
-        //     qWarning("Failed to load image from data.");
-        // }
+        // 将图像数据加载到QPixmap中
+        QPixmap pixmap;
+        if (!pixmap.loadFromData(imageData)) {
+            qWarning("Failed to load image from data.");
+        }
 
         QString content = jsonObj.value("content").toString();
         QJsonArray categoriesArray = jsonObj.value("categories").toArray();
@@ -368,7 +371,7 @@ void IMarketPage::setupCategories() {
 
         QString category = categoriesArray.at(0).toString();
 
-        auto item = new IHPushCard;
+
         // item->setIcon(QIcon(pixmap));
         item->setName(name);
         item->setIntro(intro);

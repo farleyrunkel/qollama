@@ -24,7 +24,12 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    resize(800, 500);
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Window, Qt::white);
+    this->setAutoFillBackground(true);
+    this->setPalette(palette);
+
+    resize(800, 480);
 
     setupSplitter();
     setupStatusBar();
@@ -39,8 +44,7 @@ MainWindow::~MainWindow() {}
 void MainWindow::setupConnections() {
     // connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
 
-    connect(m_left->settingButton(), &QPushButton::pressed, this,
-            [this]() { m_pages->setCurrentWidget(m_setting); });
+    connect(m_left->settingButton(), &QPushButton::pressed, m_setting, &ISettingPage::show);
     connect(&SignalHub::instance(), &SignalHub::onNewChatButtonClicked, this,
             [this]() { m_pages->setCurrentWidget(m_welcome); });
     connect(m_left->exploreButton(), &QPushButton::pressed, this,
@@ -209,7 +213,7 @@ void MainWindow::setupPages() {
     m_pages->addWidget(m_market);
 
     m_setting = new ISettingPage(this);
-    m_pages->addWidget(m_setting);
+    m_setting->hide();
 }
 
 void MainWindow::retranslateUi() {
