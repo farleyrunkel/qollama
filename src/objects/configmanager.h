@@ -16,12 +16,6 @@ public:
     // Get application icon
     QPixmap appIcon() const;
 
-    // Get user avatar
-    QPixmap avatar() const;
-
-    // Set user avatar and emit signal
-    void setAvatar(const QPixmap &newAvatar);
-
     // Get username
     QString username() const { return m_username; }
 
@@ -39,7 +33,7 @@ public:
 
 signals:
     // Signal emitted when avatar changes
-    void avatarChanged(const QPixmap &newAvatar);
+    void avatarChanged(const QString &newAvatar);
 
     // Signal emitted when username changes
     void usernameChanged(const QString &newUsername);
@@ -58,7 +52,6 @@ private:
 private:
     // Member variables
     QPixmap m_appIcon;                 // Application icon
-    QPixmap m_userAvatar;              // User avatar
     QString m_username;                // Username
     QMap<QString, QVariant> m_configs; // Configuration key-value pairs
 };

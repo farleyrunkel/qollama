@@ -10,15 +10,6 @@ ConfigManager &ConfigManager::instance() {
 // Get application icon
 QPixmap ConfigManager::appIcon() const { return m_appIcon; }
 
-// Get user avatar
-QPixmap ConfigManager::avatar() const { return m_userAvatar; }
-
-// Set user avatar and emit signal
-void ConfigManager::setAvatar(const QPixmap &newAvatar) {
-    m_userAvatar = newAvatar;
-    emit avatarChanged(m_userAvatar);
-}
-
 // Set username and emit signal
 void ConfigManager::setUsername(const QString &newUsername) {
     m_username = newUsername;
@@ -39,17 +30,17 @@ void ConfigManager::setConfig(const QString &key, const QVariant &value) {
 // Initialize default configuration values
 void ConfigManager::initializeDefaults() {
     // Set default values
-    m_userAvatar = QPixmap(":/icon.png");
+
     m_appIcon = QPixmap(":/icon.png");
     m_username = "QOllama"; // Default username
 
     // Store default configurations
     setConfig("username", m_username);
     setConfig("appIcon", m_appIcon);
-    setConfig("userAvatar", m_userAvatar);
+    setConfig("avatar", ":/icon.png");
     setConfig("modeldir", "C:/Users/95439/Documents/Github/qollama/models");
 
     // Emit signals to notify about changes
-    emit avatarChanged(m_userAvatar);
+    emit avatarChanged(":/icon.png");
     emit usernameChanged(m_username);
 }

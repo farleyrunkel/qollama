@@ -41,13 +41,10 @@ Example#Usage {
    border: 1px solid transparent; /*@LightBorder*/
 }
 
-QStatusBar,
-QSplitter,
-IWelcomePage
-IMarketPage,
-IChatWidget {
-    background-color: #78D999; /*@White*/
-    border: none;
+
+QWidget#settingCenterWidget {
+background-color: white;
+    border-radius: 20px;
 }
 
 ISideArea,
@@ -70,6 +67,8 @@ QPushButton#smallButton {
     border: 1px hidden gray;
     border-radius: 5px;
     text-align: center;
+    width: 30px;
+    height: 30px;
 }
 QPushButton#smallButton:hover {
     background-color: #ececec;  /*@NeutralBackground*/

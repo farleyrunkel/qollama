@@ -25,6 +25,7 @@ void Initializer::onDataLoaded() {
     // styleManager.enableBorders(true);
 
     styleManager.applyStyleSheet(mainWindow);
+    styleManager.applyPalette(mainWindow);
 
     mainWindow->show();
 

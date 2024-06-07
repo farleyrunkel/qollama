@@ -17,6 +17,7 @@ public:
     void enableBorders(bool enable);
     static QPixmap roundedPixmap(const QPixmap &src);
 
+    static void applyPalette(QWidget *widget);
 private:
     QString replaceColors(const QString &styleSheet);
     QMap<QString, QString> parseColorPalette(const QString &styleSheet);

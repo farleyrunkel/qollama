@@ -3,7 +3,6 @@
 #include "signalhub.h"
 #include <QApplication>
 #include <QCalendarWidget>
-#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QMainWindow>
 #include <QPainter>
@@ -17,10 +16,11 @@
 
 // Constructor
 ISettingPage::ISettingPage(QWidget *parent) : QDialog(parent) {
-    setupMainLayout();  // Setup the main layout
-    setupSideArea();    // Setup the top area
-    setupSettingArea(); // Setup the setting area
-        // setupConnections(); // Setup signal-slot connections
+    setupMainLayout();      // Setup the main layout
+    setupSideArea();        // Setup the top area
+    setupSettingsAccount(); // Setup the setting area
+        // setupConnections(); // Setup signal-slot
+        // connections
 }
 
 void ISettingPage::showEvent(QShowEvent *event) {
@@ -70,22 +70,16 @@ void ISettingPage::paintEvent(QPaintEvent *event) {
 void ISettingPage::setupMainLayout() {
     setObjectName("ISettingPage");
     setContentsMargins(80, 80, 80, 80);
-    setWindowFlags(this->windowFlags() | Qt::FramelessWindowHint);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
-
-    // StyleManager styleManager;
-    // styleManager.loadStyleSheet(":/qss/style.qss");
-    // // styleManager.enableBorders(true);
-    // styleManager.applyStyleSheet(this);
 
     m_mainLayout = new QHBoxLayout(this);
     setLayout(m_mainLayout);
     auto m_centerWidget = new QWidget;
-
-    QPalette palette = this->palette();
-    palette.setColor(QPalette::Window, Qt::white);
+    m_centerWidget->setObjectName("settingCenterWidget");
     m_centerWidget->setAutoFillBackground(true);
-    m_centerWidget->setPalette(palette);
+
+    StyleManager::applyPalette(m_centerWidget);
 
     m_mainLayout->addWidget(m_centerWidget);
 
@@ -93,9 +87,8 @@ void ISettingPage::setupMainLayout() {
     m_centerWidget->setLayout(m_centerLayout);
 
     m_sideArea = new QWidget(m_centerWidget);
-    m_sideArea->setFixedWidth(150);
+    m_sideArea->setFixedWidth(130);
 
-    // 添加分隔线
     QFrame *line = new QFrame();
     line->setFrameShape(QFrame::VLine);
     line->setFrameShadow(QFrame::Sunken);
@@ -128,7 +121,7 @@ void ISettingPage::setupMainLayout() {
 // Setup the top area of the setting page
 void ISettingPage::setupSideArea() {
     auto sideAreaLayout = new QVBoxLayout(m_sideArea);
-    sideAreaLayout->setContentsMargins(5, 10, 5, 10);
+    sideAreaLayout->setContentsMargins(5, 8, 5, 10);
     sideAreaLayout->setAlignment(Qt::AlignTop);
 
     sideAreaLayout->addWidget(new QLabel("Settings"));
@@ -139,59 +132,57 @@ void ISettingPage::setupSideArea() {
     sideAreaLayout->addWidget(m_accountButton);
 }
 
-// Setup the setting area of the setting page
-void ISettingPage::setupSettingArea() {
+QGroupBox* ISettingPage::addSettingGroupBox(const QString& key, const QString& value, const QString& config) {
+    auto groupBox = new QGroupBox(key);
+    auto lineEdit  = new QLineEdit(value);
+    auto pushButton = new QPushButton("Edit");
 
-    auto page1 = new QWidget;
-    auto page1_layout = new QVBoxLayout;
-    page1->setLayout(page1_layout);
+    lineEdit->setDisabled(true);
+    lineEdit->setFrame(false);
+    pushButton->setObjectName("smallButton");
+
+    groupBox->setLayout(new QHBoxLayout);
+    groupBox->layout()->addWidget(lineEdit);
+    groupBox->layout()->addWidget(pushButton);
+
+    connect(pushButton, &QPushButton::clicked, this, [lineEdit, pushButton, config]() {
+        lineEdit->setEnabled(!lineEdit->isEnabled());
+        pushButton->setText(lineEdit->isEnabled() ? "Done" : "Edit");
+        if (!config.isEmpty() && pushButton->text() == "Done") {
+            emit ConfigManager::instance().configChanged(config, lineEdit->text());
+        }
+    });
+
+    return groupBox;
+}
+
+// Setup the setting area of the setting page
+void ISettingPage::setupSettingsAccount() {
+    auto account = new QWidget;
+    m_settings["account"] = account;
+    m_settingLayout->addWidget(m_settings["account"]);
+
+    auto accountLayout = new QVBoxLayout(m_settings["account"]);
+    accountLayout->setSpacing(10);
+
+    QPixmap avatar(ConfigManager::instance().config("avatar").toString());
+    avatar = StyleManager::roundedPixmap(avatar);
 
     m_changeAvatarButton = new QPushButton(this);
     m_changeAvatarButton->setFixedSize(100, 100);
-    m_changeAvatarButton->setStyleSheet(
-        "border: 2px solid black; border-radius: 50px;");
-
-    QPixmap avatar(ConfigManager::instance().avatar().scaled(200, 200));
-    avatar = StyleManager::roundedPixmap(avatar);
-    QIcon icon(avatar);
-    m_changeAvatarButton->setIcon(icon);
+    m_changeAvatarButton->setStyleSheet("border: 2px solid black; border-radius: 50px;");
+    m_changeAvatarButton->setIcon(QIcon(avatar));
     m_changeAvatarButton->setIconSize(QSize(100, 100));
 
-    page1_layout->setSpacing(20);
-
-    auto group1 = new QGroupBox("User name");
-    group1->setLayout(new QHBoxLayout);
-    group1->layout()->addWidget(new QLabel("QOllama"));
-    auto editButton1 = new QPushButton("Edit");
-    editButton1->setFixedSize(QSize(30, 30));
-    // editButton1->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    group1->layout()->addWidget(editButton1);
-
-    editButton1->setObjectName("smallButton");
-
-    auto group = new QGroupBox("Models file directory");
-    group->setLayout(new QHBoxLayout);
-
-    auto modeldir = ConfigManager::instance().config("modeldir").toString();
-
-    auto llla = new QLabel(modeldir);
-    group->layout()->addWidget(llla);
-    auto editButton = new QPushButton("Edit");
-    editButton->setFixedSize(QSize(30, 30));
-    // editButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    editButton->setObjectName("smallButton");
-
-    group->layout()->addWidget(editButton);
 
     QHBoxLayout *lay = new QHBoxLayout;
     lay->addWidget(m_changeAvatarButton);
-    lay->addWidget(group1);
+    lay->addWidget(addSettingGroupBox("User name", "QOllama", "username"));
 
-    page1_layout->addLayout(lay);
-    page1_layout->addWidget(group);
-    page1_layout->setAlignment(Qt::AlignTop);
+    accountLayout->addLayout(lay);
+    accountLayout->addWidget(addSettingGroupBox("Model files directory", ConfigManager::instance().config("modeldir").toString(), "modeldir"));
+    accountLayout->setAlignment(Qt::AlignTop);
 
-    m_settingLayout->addWidget(page1);
 }
 
 // Setup signal-slot connections
@@ -225,7 +216,8 @@ void ISettingPage::changeAvatar() {
         this, "Select Avatar", "", "Image Files (*.png *.jpg *.bmp)");
     if (!fileName.isEmpty()) {
         QPixmap newAvatar(fileName);
-        ConfigManager::instance().setAvatar(newAvatar); // Update avatar in config
+
+        ConfigManager::instance().setConfig("avatar", newAvatar);
     }
 }
 

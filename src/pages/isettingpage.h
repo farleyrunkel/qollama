@@ -11,6 +11,7 @@
 #include <QStackedLayout>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QGroupBox>
 
 class ISettingPage : public QDialog {
     Q_OBJECT
@@ -25,7 +26,7 @@ protected:
 private:
     void setupMainLayout();
     void setupSideArea();
-    void setupSettingArea();
+    void setupSettingsAccount();
     void setupConnections();
 
 private slots:
@@ -50,6 +51,9 @@ private:
     QPushButton *m_changeAvatarButton;
     QLineEdit *m_usernameLineEdit;
     QPushButton *m_saveButton;
+
+    QMap<QString, QWidget*> m_settings;
+    QGroupBox *addSettingGroupBox(const QString &key, const QString &value, const QString &config = "");
 };
 
 #endif // ISETTINGPAGE_H

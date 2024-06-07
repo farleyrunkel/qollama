@@ -111,7 +111,7 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
     }
 
     chat->addMessage(text, ConfigManager::instance().username(),
-                     ConfigManager::instance().avatar());
+                     QPixmap(ConfigManager::instance().config("avatar").toString()));
     chat->addMessage("", "llama3");
 
     QJsonObject json;

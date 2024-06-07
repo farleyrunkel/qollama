@@ -23,13 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowModality(Qt::WindowModal);
     setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
     setContextMenuPolicy(Qt::ActionsContextMenu);
-
-    QPalette palette = this->palette();
-    palette.setColor(QPalette::Window, Qt::white);
-    this->setAutoFillBackground(true);
-    this->setPalette(palette);
-
-    resize(800, 480);
+    setAutoFillBackground(true);
+    resize(800, 500);
 
     setupSplitter();
     setupStatusBar();
