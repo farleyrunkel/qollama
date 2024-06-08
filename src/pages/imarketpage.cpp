@@ -391,9 +391,8 @@ void IMarketPage::setupCategories() {
         m_categories[category]->layout()->addWidget(item);
     }
 
-
-    m_navigator->showUnderline(m_navigator->getUnderlineLabel("Recommend"));
-    m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("Recommend"));
+    m_navigator->showUnderline(m_navigator->getUnderlineLabel("programming"));
+    m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("programming"));
 }
 
 /**
