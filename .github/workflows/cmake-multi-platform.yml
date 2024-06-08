@@ -58,12 +58,13 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y qt6-base-dev libgl1-mesa-dev
-
+        sudo apt-get install -y qt6-base-dev qt6-tools-dev qt6-tools-dev-tools 
+        sudo apt-get install -y libgl1-mesa-dev
+        
     - name: Install dependencies on Windows
       if: matrix.os == 'windows-latest'
       run: |
-        choco install qt --version=6.2.0
+        choco install qt --version=6.7.0
         choco install opengl
       
     - name: Configure CMake
