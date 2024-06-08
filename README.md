@@ -22,15 +22,6 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
 | :---: | :---: | :---: |
 | ![image](./resources/images/chatspage.png) | ![image](./resources/images/marketpage.png) | ![image](./resources/images/settingspage.png) | 
 
-## Installation
-
-### Prerequisites
-
-- Qt 5 or higher
-- C++11 or higher
-- CMake
-- Git
-
 ## Directory Structure
 
 - **design**: Directory for design-related files.
@@ -54,6 +45,17 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
   - **scripts**: Scripts for getting information from the server and processing
 - **tests**: Test cases and testing-related code.
 
+## Installation
+
+### Prerequisites
+
+- Qt 5 or higher
+- C++11 or higher
+- CMake
+- Git
+- Python 3 or higher
+- ollama-server
+  
 ### Steps
 
 1. **Clone the Repository**:
@@ -89,22 +91,6 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
     ```sh
     ./qollama
     ```
-
-## Usage
-
-1. **Start a New Chat**:
-   - Click the "New Chat" button to create a new chat session.
-   - Enter your message in the input line and press Enter or click the input button.
-
-2. **Send a Message**:
-   - Type your message in the input line.
-   - Press Enter or click the input button to send the message.
-
-3. **View Chat History**:
-   - Click on a chat session in the history list to view the messages.
-
-4. **Expand/Collapse Side Widget**:
-   - Click the expand button to toggle the visibility of the side widget.
 
 ## Contribution
 
