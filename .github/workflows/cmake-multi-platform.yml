@@ -54,15 +54,17 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
         
-    - name: Install Qt on Ubuntu
+    - name: Install dependencies on Ubuntu
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y qt6-base-dev
+        sudo apt-get install -y qt6-base-dev libgl1-mesa-dev
 
-    - name: Install Qt on Windows
+    - name: Install dependencies on Windows
       if: matrix.os == 'windows-latest'
-      run: choco install qt --version=6.2.0
+      run: |
+        choco install qt --version=6.2.0
+        choco install opengl
       
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
