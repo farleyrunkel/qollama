@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.5)
 
 project(qollama VERSION 0.1 LANGUAGES CXX)
 
-qt_standard_project_setup()
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
