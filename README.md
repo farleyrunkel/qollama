@@ -31,6 +31,29 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
 - CMake
 - Git
 
+## Directory Structure
+
+- **design**: Directory for design-related files.
+- **external**: Contains external libraries and dependencies.
+- **models**: Directory for custom models.
+- **resources**: Contains application resources such as icons, images, and stylesheets.
+  - **icon**: Icon files for the application.
+  - **images**: Image files used in the application.
+  - **psd**: PSD files for design purposes.
+  - **qss**: Qt Style Sheets for customizing the application's appearance.
+- **src**: Source code directory.
+  - **3rdParty**: Third-party libraries and components.
+  - **buttons**: Directory for button components.
+  - **container**: Components related to containers and layouts.
+  - **display**: Components for displaying data and information.
+  - **include**: Header files and external includes.
+  - **input**: Input-related components such as text fields and buttons.
+  - **network**: Networking-related components and functionalities.
+  - **objects**: QOject-related components
+  - **pages**: Application pages and UI components.
+  - **scripts**: Scripts for getting information from the server and processing
+- **tests**: Test cases and testing-related code.
+
 ### Steps
 
 1. **Clone the Repository**:
