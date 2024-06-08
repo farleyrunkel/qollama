@@ -11,7 +11,6 @@ include_directories(${CMAKE_SOURCE_DIR}/external/ollama/include)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Test Widgets)
 
-qt_standard_project_setup()
 
 qt_add_executable(test1
     testasio.cpp
