@@ -23,9 +23,9 @@ void IChatScrollArea::setupUI() {
 
 void IChatScrollArea::addMessage(const QString &message,
                                  const QString &userName,
-                                 const QPixmap &avatar) {
+                                 const QString &avatar) {
     IMessageBox *messageWidget =
-        new IMessageBox(userName, avatar.scaledToWidth(30), message, this);
+        new IMessageBox(userName, avatar, message, this);
     m_chatContainer->layout()->addWidget(messageWidget);
     m_latestMessageWidget = messageWidget;
 

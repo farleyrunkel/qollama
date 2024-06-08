@@ -54,6 +54,8 @@ void IChatsPage::setupConnections() {
             &SignalHub::onNewChatButtonClicked);
     connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onUserButtonClicked);
+    connect(m_langButton, &QPushButton::clicked, this,
+            [this](){m_langButton->setText(m_langButton->text() == "cn" ? "en" : "cn");});
 }
 
 void IChatsPage::setupTopArea() {
@@ -61,17 +63,32 @@ void IChatsPage::setupTopArea() {
     auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = createButton("://icon/sidebar-left.svg");
-    m_newChatButton = createButton(":/icon/create-new.svg");
-    m_userButton = createButton("://icon.png");
+    m_expandButton = new QPushButton(QIcon("://icon/sidebar-left.svg"), "");
+    m_expandButton->setObjectName("smallButton");
 
+    m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
+    m_newChatButton->setObjectName("smallButton");
+
+    m_userButton = new QPushButton(QIcon("://icon.png"), "");
+    m_userButton->setObjectName("smallButton");
+
+    m_langButton = new QPushButton("cn");
+    m_langButton->setObjectName("smallButton");
+
+    m_expandButton->hide();
     m_expandButton->hide();
     m_newChatButton->hide();
     m_userButton->hide();
 
+    m_topStack = new QStackedWidget;
+    m_topLabel = new QLabel("llama3");
+    m_topStack->addWidget(m_topLabel);
+    m_topStack->setCurrentWidget(m_topLabel);
+
     topAreaLayout->addWidget(m_expandButton);
     topAreaLayout->addWidget(m_newChatButton);
-    topAreaLayout->addStretch(1);
+    topAreaLayout->addWidget(m_topStack);
+    topAreaLayout->addWidget(m_langButton);
     topAreaLayout->addWidget(m_userButton);
 }
 
@@ -112,11 +129,11 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
     }
 
     chat->addMessage(text, ConfigManager::instance().username(),
-                     QPixmap(ConfigManager::instance().config("avatar").toString()));
+                     ConfigManager::instance().config("avatar").toString());
     chat->addMessage("", "llama3");
 
     QJsonObject json;
-    json["prompt"] = text;
+    json["prompt"] = QString(m_langButton->text() == "cn" ? "请用中文回答\n" : "Please answer in english.\n") + text;
     json["model"] = "llama3";
     emit SignalHub::instance().generateRequest(json);
 }
@@ -161,13 +178,4 @@ void IChatsPage::updateMenu(const QList<QString> &list) {
                                                   " ...");
         });
     }
-}
-
-QPushButton *IChatsPage::createButton(const QString &iconPath) {
-    // Create a button with an icon
-    auto button = new QPushButton;
-    button->setIcon(QIcon(iconPath));
-    button->setFixedSize(QSize(30, 30));
-    button->setObjectName("smallButton");
-    return button;
 }

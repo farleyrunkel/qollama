@@ -11,7 +11,7 @@ class IMessageBox : public QWidget {
     Q_OBJECT
 
 public:
-    explicit IMessageBox(const QString& userName, const QPixmap& avatar, const QString& message, QWidget* parent = nullptr);
+    explicit IMessageBox(const QString& userName, const QString& avatar, const QString& message, QWidget* parent = nullptr);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -20,7 +20,7 @@ public slots:
     void setMarkdown(const QString& markdown);
     void appendMessage(const QString& message);
     void finish();
-    void setPixmap(const QPixmap &avatar);
+    void setAvatar(const QString &avatar);
 
 private:
     void setAnimation();

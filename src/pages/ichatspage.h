@@ -38,7 +38,6 @@ private:
     void setupConnections();
 
     IChatScrollArea *addChat();
-    QPushButton *createButton(const QString &iconPath);
 
 private:
     QVBoxLayout *m_mainLayout;
@@ -49,7 +48,11 @@ private:
     QPushButton *m_expandButton;
     QPushButton *m_newChatButton;
     QPushButton *m_userButton;
+    QPushButton *m_langButton;
     QMenu *m_optionMenu;
+
+    QLabel* m_topLabel;
+    QStackedWidget* m_topStack;
 };
 
 #endif // ICHATSPAGE_H

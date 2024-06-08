@@ -1,29 +1,30 @@
 #include "imessagebox.h"
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include "stylemanager.h"
+#include <QColor>
 #include <QFont>
 #include <QFrame>
+#include <QHBoxLayout>
 #include <QResizeEvent>
-#include <QColor>
+#include <QVBoxLayout>
 
-IMessageBox::IMessageBox(const QString &userName, const QPixmap &avatar,
+IMessageBox::IMessageBox(const QString &userName, const QString &avatar,
                          const QString &message, QWidget *parent)
-    : QWidget(parent),
-    avatarLabel(new QLabel(this)),
+    : QWidget(parent), avatarLabel(new QLabel(this)),
     userLabel(new QLabel(userName, this)),
-    messageBrowser(new IAutoResizeTextBrowser(this)),
-    spinner(nullptr),
+    messageBrowser(new IAutoResizeTextBrowser(this)), spinner(nullptr),
     messageCache() {
     setupUI();
-    setPixmap(avatar);
+    setAvatar(avatar);
     setAnimation();
     appendMessage(message);
     finish();
 }
 
-void IMessageBox::setPixmap(const QPixmap &avatar) {
-    avatarLabel->setPixmap(avatar);
+void IMessageBox::setAvatar(const QString &avatar) {
+    auto m_avatar = StyleManager::roundedPixmap(QPixmap(avatar));
+
+    avatarLabel->setPixmap(QPixmap(avatar).scaled(avatarLabel->size()));
 }
 
 void IMessageBox::setupUI() {
@@ -34,6 +35,14 @@ void IMessageBox::setupUI() {
     // Setting up the avatar layout
     QVBoxLayout *avatarLayout = new QVBoxLayout();
     avatarLayout->setAlignment(Qt::AlignTop);
+
+    int borderWidth = 1;
+    avatarLabel->setFixedSize(QSize(31, 31));
+    // avatarLabel->setStyleSheet(
+    //     QString("border: %1px solid black; border-radius: %2px; padding: %3px; text-align: center;")
+    //         .arg(1)
+    //         .arg((avatarLabel->width() - borderWidth) / 2)
+    //         .arg(borderWidth));
     avatarLayout->addWidget(avatarLabel);
 
     // Setting up the text layout
@@ -103,14 +112,17 @@ void IMessageBox::appendMessage(const QString &message) {
     QString html = messageBrowser->toHtml();
 
     // Adding a custom image to the HTML content
-    QString circleSpan = "<img src=':/icon/qtcircle.svg' height='11' width='11'/>";
+    QString circleSpan =
+        "<img src=':/icon/qtcircle.svg' height='11' width='11'/>";
 
     if (html.contains("</p></body></html>")) {
         html.replace("</p></body></html>", circleSpan + "</p></body></html>");
     } else if (html.contains("</li></ol></body></html>")) {
-        html.replace("</li></ol></body></html>", circleSpan + "</li></ol></body></html>");
+        html.replace("</li></ol></body></html>",
+                     circleSpan + "</li></ol></body></html>");
     } else if (html.contains("</li></ul></body></html>")) {
-        html.replace("</li></ul></body></html>", circleSpan + "</li></ul></body></html>");
+        html.replace("</li></ul></body></html>",
+                     circleSpan + "</li></ul></body></html>");
     }
 
     // Setting the updated HTML content
