@@ -16,7 +16,7 @@ public:
 
 signals:
     void generateRequest(const QJsonObject &);
-    void messageSent(const QString &);
+    void onMessageAdded(const QString &);
 
     void listRequest();
     void listReceived(const QList<QString>);

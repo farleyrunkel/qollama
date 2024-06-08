@@ -73,7 +73,7 @@ void IChatsPage::setupTopArea() {
     m_userButton = new QPushButton(QIcon("://icon.png"), "");
     m_userButton->setObjectName("smallButton");
 
-    m_langButton = new QPushButton("cn");
+    m_langButton = new QPushButton("en");
     m_langButton->setObjectName("smallButton");
 
     m_expandButton->hide();
@@ -139,7 +139,8 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
                                                           : "Please answer in english.\n") +
                      text;
     json["model"] = "llama3";
-    emit SignalHub::instance().messageSent(text);
+
+    emit SignalHub::instance().onMessageAdded(text);
     emit SignalHub::instance().generateRequest(json);
 }
 

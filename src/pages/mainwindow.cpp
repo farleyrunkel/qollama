@@ -84,9 +84,13 @@ void MainWindow::setupConnections() {
         m_pages->setCurrentWidget(m_welcome);
     });
 
-    connect(&SignalHub::instance(), &SignalHub::messageSent, this,
+    connect(&SignalHub::instance(), &SignalHub::newChatAdded, this,
+            [this](IChatScrollArea *chat) {m_left->historyList()->addItem(""); });
+
+    connect(&SignalHub::instance(), &SignalHub::onMessageAdded, this,
             [this](const QString & chat) {
-                m_left->historyList()->addItem(chat);});
+                int idx = m_chats->chats()->indexOf(m_chats->chats()->currentWidget());
+                m_left->historyList()->item(idx)->setText(chat);});
     connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
             [this]() { m_left->setVisible(!m_left->isVisible()); });
     connect(&SignalHub::instance(), &SignalHub::onUserButtonClicked, this,
