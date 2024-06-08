@@ -54,8 +54,9 @@ void IChatsPage::setupConnections() {
             &SignalHub::onNewChatButtonClicked);
     connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onUserButtonClicked);
-    connect(m_langButton, &QPushButton::clicked, this,
-            [this](){m_langButton->setText(m_langButton->text() == "cn" ? "en" : "cn");});
+    connect(m_langButton, &QPushButton::clicked, this, [this]() {
+        m_langButton->setText(m_langButton->text() == "cn" ? "en" : "cn");
+    });
 }
 
 void IChatsPage::setupTopArea() {
@@ -133,8 +134,12 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
     chat->addMessage("", "llama3");
 
     QJsonObject json;
-    json["prompt"] = QString(m_langButton->text() == "cn" ? "请用中文回答\n" : "Please answer in english.\n") + text;
+    json["prompt"] =
+        QString(m_langButton->text() == "cn" ? "请用中文回答\n"
+                                                          : "Please answer in english.\n") +
+                     text;
     json["model"] = "llama3";
+    emit SignalHub::instance().messageSent(text);
     emit SignalHub::instance().generateRequest(json);
 }
 

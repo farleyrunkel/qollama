@@ -13,6 +13,8 @@ class IMessageBox : public QWidget {
 public:
     explicit IMessageBox(const QString& userName, const QString& avatar, const QString& message, QWidget* parent = nullptr);
 
+    QString message() {return m_message;}
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
@@ -32,7 +34,7 @@ private:
     IAutoResizeTextBrowser* messageBrowser;
     WaitingSpinnerWidget* spinner;
 
-    QString messageCache;
+    QString m_message;
 };
 
 #endif // IMESSAGEBOX_H

@@ -13,7 +13,7 @@ IMessageBox::IMessageBox(const QString &userName, const QString &avatar,
     : QWidget(parent), avatarLabel(new QLabel(this)),
     userLabel(new QLabel(userName, this)),
     messageBrowser(new IAutoResizeTextBrowser(this)), spinner(nullptr),
-    messageCache() {
+    m_message() {
     setupUI();
     setAvatar(avatar);
     setAnimation();
@@ -94,7 +94,7 @@ void IMessageBox::setMarkdown(const QString &markdown) {
 
 void IMessageBox::finish() {
     // Finalizing the message display
-    messageBrowser->setMarkdown(messageCache);
+    messageBrowser->setMarkdown(m_message);
 }
 
 void IMessageBox::appendMessage(const QString &message) {
@@ -107,8 +107,8 @@ void IMessageBox::appendMessage(const QString &message) {
     spinner->parentWidget()->close();
 
     // Caching and displaying the message
-    messageCache += message;
-    messageBrowser->setMarkdown(messageCache);
+    m_message += message;
+    messageBrowser->setMarkdown(m_message);
     QString html = messageBrowser->toHtml();
 
     // Adding a custom image to the HTML content

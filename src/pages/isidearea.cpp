@@ -8,7 +8,7 @@
 
 ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
 
-    setMaximumSize(QSize(200, 16777215));
+    setMaximumSize(QSize(170, 16777215));
     setObjectName("leftWindow");
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -62,13 +62,13 @@ void ISideArea::setupButtons(QVBoxLayout *layout) {
     m_modelButton =
         createOverlayButton(this, "newChatButton", buttonFont, QSize(0, 34));
     layout->addWidget(m_modelButton);
-    m_modelButton->setText(tr("Message llama3"));
+    m_modelButton->setText(tr("Llama3"));
 
     m_exploreButton = createButton(this, "exploreButton", "://icon/grid.svg",
                                    QSize(0, 34), false);
     m_exploreButton->setFont(buttonFont);
     layout->addWidget(m_exploreButton);
-    m_exploreButton->setText(tr("Explore GPTs"));
+    m_exploreButton->setText(tr("Explore"));
 }
 
 void ISideArea::setupHistoryList(QVBoxLayout *layout) {
@@ -93,7 +93,7 @@ void ISideArea::setupSettingButton(QVBoxLayout *layout) {
     m_settingButton->setFont(buttonFont);
     m_settingButton->setIconSize(QSize(20, 20));
     layout->addWidget(m_settingButton);
-    m_settingButton->setText(tr("User Settings"));
+    m_settingButton->setText(tr("Settings"));
 }
 
 QWidget *ISideArea::createButtonContainer(QWidget *parent,
