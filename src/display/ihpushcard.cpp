@@ -5,11 +5,17 @@
 #include <QLabel>
 #include <QPainter>
 #include <QPainterPath>
+#include "signalhub.h"
 
 IHPushCard::IHPushCard(QWidget *parent) : QPushButton(parent) {
     setupMainUI();
 
     installEventFilter(this);
+
+    // Connect the clicked signal to the SignalHub's on_message_sent signal
+    connect(this, &IHPushCard::clicked, [&]() {
+        emit SignalHub::instance().on_message_sent(QString("You are：") + m_intro, true);
+    });
 }
 
 void IHPushCard::setupMainUI() {
