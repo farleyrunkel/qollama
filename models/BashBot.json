@@ -1,7 +1,7 @@
 {
     "url": "url",
     "name": "BashBot",
-    "intro": "ð ð§  ð¤ Bash Command Generation Chatbot with fine tuned parameters. It is designed to write short answers until you ask for explanation. It utilises new  Llama 3 8B model.",
+    "intro": "Bash Command Generation Chatbot with fine tuned parameters. It is designed to write short answers until you ask for explanation. It utilises new  Llama 3 8B model.",
     "tag": "BashBot:latest",
     "author": "@godof1337",
     "download": "2K+",

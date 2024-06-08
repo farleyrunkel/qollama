@@ -42,17 +42,18 @@ void IChatsPage::setupConnections() {
     connect(&SignalHub::instance(), &SignalHub::listReceived, this,
             &IChatsPage::updateMenu);
 
-    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onNewChatButtonClicked);
-
-    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onExpandButtonClicked);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
             &QPushButton::setVisible);
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onExpandButtonClicked);
+    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
+    connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onUserButtonClicked);
 }
 
 void IChatsPage::setupTopArea() {

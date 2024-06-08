@@ -22,6 +22,7 @@ signals:
     void newChatAdded(IChatScrollArea *);
     void onExpandButtonClicked();
     void onNewChatButtonClicked();
+    void onUserButtonClicked();
     void onSideAreaHidden(bool);
 
 private:

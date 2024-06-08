@@ -22,15 +22,11 @@ IVPushCard::IVPushCard(const QIcon &icon, const QString &text, QWidget *parent)
 }
 
 void IVPushCard::setupUI() {
-    setObjectName("ivPushCard");
     setMinimumSize(QSize(120, 120));
     setMaximumSize(QSize(200, 150));
-
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setSizePolicy(sizePolicy);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    setLayout(mainLayout);
 
     // Setup icon label
     m_iconLabel = new QLabel(this);
@@ -39,19 +35,16 @@ void IVPushCard::setupUI() {
     m_iconLabel->setAlignment(Qt::AlignCenter); // Center align the icon label
     QPixmap pixmap(":/icon/electric-light-bulb.svg");
     m_iconLabel->setPixmap(pixmap.scaled(m_iconLabel->size()));
-    mainLayout->addWidget(
-        m_iconLabel, 0,
-        Qt::AlignCenter); // Add icon label to layout and center align
 
     // Setup text label
     m_textLabel = new QLabel(this);
-    m_textLabel->setSizePolicy(sizePolicy);
+    m_textLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_textLabel->setAlignment(Qt::AlignCenter); // Center align the text label
     m_textLabel->setWordWrap(true);
     m_textLabel->setIndent(10);
-    mainLayout->addWidget(
-        m_textLabel, 0,
-        Qt::AlignCenter); // Add text label to layout and center align
+
+    mainLayout->addWidget(m_iconLabel, 0, Qt::AlignCenter); // Add icon label to layout and center align
+    mainLayout->addWidget(m_textLabel, 0, Qt::AlignCenter); // Add text label to layout and center align
 }
 
 void IVPushCard::setText(const QString &text) { m_textLabel->setText(text); }

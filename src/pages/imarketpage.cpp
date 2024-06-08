@@ -49,9 +49,14 @@ void IMarketPage::setupTopArea() {
     auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = createButton("://icon/sidebar-left.svg");
-    m_newChatButton = createButton(":/icon/create-new.svg");
-    m_userButton = createButton("://icon.png");
+    m_expandButton = new QPushButton(QIcon("://icon/sidebar-left.svg"), "");
+    m_expandButton->setObjectName("smallButton");
+
+    m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
+    m_newChatButton->setObjectName("smallButton");
+
+    m_userButton = new QPushButton(QIcon("://icon.png"), "");
+    m_userButton->setObjectName("smallButton");
 
     m_expandButton->hide();
     m_newChatButton->hide();
@@ -107,10 +112,10 @@ void IMarketPage::setupScrollArea() {
  */
 void IMarketPage::setupConnections() {
     connect(m_topNavigator, &INavigetrorBar::buttonClicked, this,
-            [this](QPushButton *button) {
+            [this](QPushButton * button ) {
                 qDebug() << "INavigetrorBar button clicked:" << button->text();
-        m_navigator->showUnderline(
-                    m_navigator->getUnderlineLabel(button->text()));
+                m_navigator->showUnderline(
+                m_navigator->getUnderlineLabel(button->text()));
                 navigateToCategory(button->text());
     });
 
@@ -129,16 +134,18 @@ void IMarketPage::setupConnections() {
         }
     });
 
-    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onExpandButtonClicked);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
             &QPushButton::setVisible);
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onExpandButtonClicked);
     connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onNewChatButtonClicked);
+    connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onUserButtonClicked);
 }
 
 /**
@@ -160,11 +167,10 @@ void IMarketPage::setupTitleLabel() {
     auto titleWidget = new QLabel;
     titleWidget->setWordWrap(true);
     titleWidget->setText(
-        "<p style='text-align: center; font-size: 48px; font-weight: bold; "
-        "color: black;'>GPTs</p>"
-        "<p style='text-align: center; font-size: 12px; color: gray;'>Explore "
-        "and create a customized version of ChatGPT that integrates commands, "
-        "additional knowledge, and any combination of skills.</p>");
+        "<p style='text-align: center; font-size: 32px; font-weight: bold; "
+        "color: black; margin-bottom: 1px; '>GPT</p>"
+        "<p style='text-align: center; font-size: 10px; color: gray;margin-top: 1px;  '>Explore "
+        "and create a customized version of GPT.</p>");
 
     m_scrollWidgetLayout->addWidget(titleWidget);
 }
@@ -371,7 +377,7 @@ void IMarketPage::setupCategories() {
 
         QString category = categoriesArray.at(0).toString();
 
-
+        item->setNumber(m_categories[category]->layout()->count());
         // item->setIcon(QIcon(pixmap));
         item->setName(name);
         item->setIntro(intro);
@@ -388,20 +394,6 @@ void IMarketPage::setupCategories() {
 
     m_navigator->showUnderline(m_navigator->getUnderlineLabel("Recommend"));
     m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("Recommend"));
-}
-
-/**
- * @brief Create a button with an icon
- *
- * @param iconPath Path to the icon image
- * @return QPushButton* Pointer to the created button
- */
-QPushButton *IMarketPage::createButton(const QString &iconPath) {
-    auto button = new QPushButton;
-    button->setIcon(QIcon(iconPath));
-    button->setFixedSize(QSize(30, 30));
-    button->setObjectName("smallButton");
-    return button;
 }
 
 /**

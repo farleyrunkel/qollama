@@ -39,7 +39,8 @@ MainWindow::~MainWindow() {}
 void MainWindow::setupConnections() {
     // connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
 
-    connect(m_left->settingButton(), &QPushButton::pressed, m_setting, &ISettingPage::show);
+    connect(m_left->settingButton(), &QPushButton::pressed, m_setting,
+            &ISettingPage::show);
     connect(&SignalHub::instance(), &SignalHub::onNewChatButtonClicked, this,
             [this]() { m_pages->setCurrentWidget(m_welcome); });
     connect(m_left->exploreButton(), &QPushButton::pressed, this,
@@ -83,11 +84,13 @@ void MainWindow::setupConnections() {
         m_pages->setCurrentWidget(m_welcome);
     });
 
-    connect(
-        &SignalHub::instance(), &SignalHub::newChatAdded, this,
-        [this](IChatScrollArea *chat) { m_left->historyList()->addItem("test"); });
+    connect(&SignalHub::instance(), &SignalHub::newChatAdded, this,
+            [this](IChatScrollArea *chat) {
+                m_left->historyList()->addItem("test");});
     connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
             [this]() { m_left->setVisible(!m_left->isVisible()); });
+    connect(&SignalHub::instance(), &SignalHub::onUserButtonClicked, this,
+            [this]() { m_setting->show();});
 
     // connect(settingButton, &QPushButton::pressed,
     // [&](){pages->setCurrentWidget(chats);});

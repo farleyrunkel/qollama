@@ -40,7 +40,6 @@ private:
     void addCategory(const QString &categoryName);
     void navigateToCategory(const QString &categoryName);
     void setupCategories();
-    QPushButton *createButton(const QString &iconPath);
     void addCategoryItem(const QString &categoryName, IHPushCard *item);
 
 private:

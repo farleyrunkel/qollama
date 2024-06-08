@@ -2,13 +2,68 @@
 #include "imageloader.h"
 #include <QEvent>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QPainter>
 #include <QPainterPath>
 
-IHPushCard::IHPushCard(QWidget *parent) : QFrame(parent) {
-    setupUI();
+IHPushCard::IHPushCard(QWidget *parent) : QPushButton(parent) {
+    setupMainUI();
 
     installEventFilter(this);
+}
+
+void IHPushCard::setupMainUI() {
+    setMinimumWidth(120);
+    setFixedHeight(120);
+    setObjectName("bigButton");
+    // setStyleSheet("border: 1px hidden gray; border-radius: 10px;");
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    auto mainLayout = new QHBoxLayout(this);
+    mainLayout->setSpacing(10);
+    mainLayout->setContentsMargins(2, 2, 1, 2);
+
+    setupNumberUI(mainLayout);
+    setupIconUI(mainLayout);
+    setupTextUI(mainLayout);
+}
+
+void IHPushCard::setupNumberUI(QHBoxLayout *layout) {
+    itemNumberLabel = new QLabel(this);
+    itemNumberLabel->setFixedWidth(25);
+    itemNumberLabel->setStyleSheet(
+        "border:none; font-size: 20px; font-weight: bold; text-align: center;");
+    layout->addWidget(itemNumberLabel);
+}
+
+void IHPushCard::setupIconUI(QHBoxLayout *layout) {
+    itemIconLabel = new QLabel(this);
+    itemIconLabel->setFixedSize(QSize(42, 42));
+    itemIconLabel->setStyleSheet(
+        QString("border: 1px solid gray; border-radius: %1px;")
+            .arg(itemIconLabel->height() / 2));
+    layout->addWidget(itemIconLabel);
+
+    QObject::connect(new ImageLoader, &ImageLoader::imageLoaded, this,
+                     [this](QPixmap *pixmap) {
+                         if (pixmap) {
+                             itemIconLabel->setPixmap(
+                                 ImageLoader::circularPixmap(*pixmap));
+                             itemIconLabel->setScaledContents(true);
+                         }
+                         delete pixmap;
+                     });
+}
+
+void IHPushCard::setupTextUI(QHBoxLayout *layout) {
+    m_name = "Model";
+    m_intro = "Introducing to model";
+    itemTextLabel = new QLabel(this);
+    itemTextLabel->setText(
+        QString("<b>%1</b><p>%2</p>").arg(m_name).arg(m_intro));
+    itemTextLabel->setStyleSheet("border:none;");
+    itemTextLabel->setWordWrap(true);
+    layout->addWidget(itemTextLabel);
 }
 
 void IHPushCard::setNumber(int num) { itemNumberLabel->setNum(num); }
@@ -33,55 +88,17 @@ bool IHPushCard::eventFilter(QObject *watched, QEvent *event) {
                           "background-color: none;");
         }
     }
-    return QFrame::eventFilter(watched, event);
+    return QPushButton::eventFilter(watched, event);
 }
 
-void IHPushCard::setName(const QString& name) {
+void IHPushCard::setName(const QString &name) {
     m_name = name;
-
+    itemTextLabel->setText(
+        QString("<b>%1</b><p>%2</p>").arg(m_name).arg(m_intro));
 }
 
-void IHPushCard::setIntro(const QString& intro) {
+void IHPushCard::setIntro(const QString &intro) {
     m_intro = intro;
-
-}
-
-void IHPushCard::setupUI() {
-    setMinimumWidth(100);
-    setMinimumHeight(90);
-    setStyleSheet("border: 1px hidden gray; border-radius: 10px;");
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    itemNumberLabel = new QLabel(this);
-    itemNumberLabel->setFixedWidth(20);
-    itemNumberLabel->setStyleSheet(
-        "border:none; font-size: 20px; font-weight: bold;");
-
-    itemIconLabel = new QLabel(this);
-    itemIconLabel->setFixedSize(QSize(52, 52));
-    itemIconLabel->setStyleSheet("border: 1px solid gray; border-radius: 26px;");
-
-    QObject::connect(new ImageLoader, &ImageLoader::imageLoaded, this,
-                     [this](QPixmap *pixmap) {
-                         if (pixmap) {
-            itemIconLabel->setPixmap(
-                                 ImageLoader::circularPixmap(*pixmap));
-                             itemIconLabel->setScaledContents(true);
-                         }
-                         delete pixmap;
-    });
-    m_name = "Model";
-    m_intro = "Introducing to model";
-    itemTextLabel = new QLabel(this);
-    itemTextLabel->setText(QString("<b>%1</b><p>%2</p>").arg(m_name).arg(m_intro));
-    itemTextLabel->setStyleSheet("border:none;");
-
-    auto itemLayout = new QHBoxLayout;
-    itemLayout->addWidget(itemNumberLabel);
-    itemLayout->addWidget(itemIconLabel);
-    itemLayout->addWidget(itemTextLabel);
-    itemLayout->setSpacing(5);
-    itemLayout->setContentsMargins(10, 2, 1, 2);
-
-    setLayout(itemLayout);
+    itemTextLabel->setText(
+        QString("<b>%1</b><p>%2</p>").arg(m_name).arg(m_intro));
 }

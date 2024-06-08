@@ -1,11 +1,12 @@
 #ifndef IPUSHCARD_H
 #define IPUSHCARD_H
 
-#include <QFrame>
+#include <QPushButton>
 #include <QLabel>
 #include <QIcon>
+#include <QHBoxLayout>
 
-class IHPushCard : public QFrame {
+class IHPushCard : public QPushButton {
     Q_OBJECT
 
 public:
@@ -25,18 +26,18 @@ public:
     void setIntro(const QString &intro);
     void setName(const QString &name);
 protected:
-    // Event filter override
+//     // Event filter override
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 protected:
     void resizeEvent(QResizeEvent *event) override
     {
-        QFrame::resizeEvent(event);
-        QFontMetrics fontMetrics(font());
-        QString elidedText = fontMetrics.elidedText(m_intro, Qt::ElideRight, width() - 100); // 调整宽度
+        QPushButton::resizeEvent(event);
+        // QFontMetrics fontMetrics(font());
+        // QString elidedText = fontMetrics.elidedText(m_intro, Qt::ElideRight, width() - 100); // 调整宽度
 
-        itemTextLabel->setText(
-            QString("<b>%1</b><p>%2</p>").arg(m_name).arg(elidedText));
+        // itemTextLabel->setText(
+        //     QString("<b>%1</b><p>%2</p>").arg(m_name).arg(elidedText));
     }
 
 private:
@@ -56,8 +57,10 @@ private:
     // }
 
 private:
-    // Private method for UI setup
-    void setupUI();
+    void setupMainUI();
+    void setupTextUI(QHBoxLayout *layout);
+    void setupIconUI(QHBoxLayout *layout);
+    void setupNumberUI(QHBoxLayout *layout);
 
 private:
     // Member variables
@@ -67,6 +70,7 @@ private:
     QString m_name;
     QString m_intro;
     QString m_icon;
+
 };
 
 #endif // IPUSHCARD_H
