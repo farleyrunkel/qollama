@@ -81,11 +81,23 @@ jobs:
         cmake --build . --parallel
         cmake --install .
         
-    - name: Install dependencies on Windows
+    - name: Download and install Qt on Windows
       if: matrix.os == 'windows-latest'
       run: |
-        choco install qt --version=6.7.0
-        choco install opengl
+        mkdir C:\Qt
+        Invoke-WebRequest -Uri https://download.qt.io/official_releases/qt/6.7/6.7.0/single/qt-everywhere-src-6.7.0.zip -OutFile C:\Qt\qt-everywhere-src-6.7.0.zip
+        Expand-Archive -Path C:\Qt\qt-everywhere-src-6.7.0.zip -DestinationPath C:\Qt
+        cd C:\Qt\qt-everywhere-src-6.7.0
+        mkdir build
+        cd build
+        ..\configure.bat -prefix C:\Qt\6.7.0
+
+    - name: Build and install Qt on Windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        cd C:\Qt\qt-everywhere-src-6.7.0\build
+        cmake --build . --parallel
+        cmake --install .
       
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
