@@ -41,6 +41,6 @@ void ConfigManager::initializeDefaults() {
     setConfig("modeldir", "C:/Users/95439/Documents/Github/qollama/models");
 
     // Emit signals to notify about changes
-    emit avatarChanged(":/icon.png");
+    emit onAvatarChanged();
     emit usernameChanged(m_username);
 }

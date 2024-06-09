@@ -32,7 +32,6 @@ private:
     void retranslateUi();
     void updateMenu(const QList<QString> &list);
 
-    QPushButton *createButton(const QString &iconPath);
     IVPushCard *createPushCard(const QString &text, const QString &iconPath);
 
 private:

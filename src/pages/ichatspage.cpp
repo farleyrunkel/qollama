@@ -1,6 +1,7 @@
 #include "ichatspage.h"
 #include "configmanager.h"
 #include "signalhub.h"
+#include "stylemanager.h"
 
 IChatsPage::IChatsPage(QWidget *parent) : IWidget(parent) {
     // Setup the main layout and all components
@@ -42,11 +43,16 @@ void IChatsPage::setupConnections() {
     connect(&SignalHub::instance(), &SignalHub::listReceived, this,
             &IChatsPage::updateMenu);
 
+    connect(&ConfigManager::instance(), &ConfigManager::onAvatarChanged,
+            m_userButton, [this]() {
+                QPixmap avatar(
+                    ConfigManager::instance().config("avatar").toString());
+                m_userButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
+            });
+
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
-            &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
             &QPushButton::setVisible);
     connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onExpandButtonClicked);
@@ -70,16 +76,16 @@ void IChatsPage::setupTopArea() {
     m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
     m_newChatButton->setObjectName("smallButton");
 
-    m_userButton = new QPushButton(QIcon("://icon.png"), "");
+    QPixmap avatar(ConfigManager::instance().config("avatar").toString());
+    m_userButton =
+        new QPushButton(QIcon(StyleManager::roundedPixmap(avatar)), "");
     m_userButton->setObjectName("smallButton");
 
     m_langButton = new QPushButton("en");
     m_langButton->setObjectName("smallButton");
 
     m_expandButton->hide();
-    m_expandButton->hide();
     m_newChatButton->hide();
-    m_userButton->hide();
 
     m_topStack = new QStackedWidget;
     m_topLabel = new QLabel("llama3");

@@ -10,6 +10,7 @@
 #include <QJsonArray>
 #include <QDialog>
 #include "configmanager.h"
+#include "stylemanager.h"
 
 /**
  * @brief IMarketPage constructor
@@ -55,12 +56,13 @@ void IMarketPage::setupTopArea() {
     m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
     m_newChatButton->setObjectName("smallButton");
 
-    m_userButton = new QPushButton(QIcon("://icon.png"), "");
-    m_userButton->setObjectName("smallButton");
-
     m_expandButton->hide();
     m_newChatButton->hide();
-    m_userButton->hide();
+
+    QPixmap avatar(ConfigManager::instance().config("avatar").toString());
+    m_userButton =
+        new QPushButton(QIcon(StyleManager::roundedPixmap(avatar)), "");
+    m_userButton->setObjectName("smallButton");
 
     m_topStack = new QStackedWidget;
     m_topSearchLine = createSearchLineEdit();
@@ -133,12 +135,16 @@ void IMarketPage::setupConnections() {
             qDebug() << "Layout does not exist.";
         }
     });
+    connect(&ConfigManager::instance(), &ConfigManager::onAvatarChanged,
+            m_userButton, [this]() {
+                QPixmap avatar(
+                    ConfigManager::instance().config("avatar").toString());
+                m_userButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
+            });
 
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
-            &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
             &QPushButton::setVisible);
     connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onExpandButtonClicked);

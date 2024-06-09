@@ -1,5 +1,7 @@
 #include "iwelcomepage.h"
+#include "configmanager.h"
 #include "signalhub.h"
+#include "stylemanager.h"
 #include <QLCDNumber>
 #include <QMenu>
 #include <QMouseEvent>
@@ -37,13 +39,19 @@ void IWelcomePage::setupTopArea() {
     auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = createButton("://icon/sidebar-left.svg");
-    m_newChatButton = createButton(":/icon/create-new.svg");
-    m_userButton = createButton("://icon.png");
+    m_expandButton = new QPushButton(QIcon("://icon/sidebar-left.svg"), "");
+    m_expandButton->setObjectName("smallButton");
+
+    m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
+    m_newChatButton->setObjectName("smallButton");
+
+    QPixmap avatar(ConfigManager::instance().config("avatar").toString());
+    m_userButton =
+        new QPushButton(QIcon(StyleManager::roundedPixmap(avatar)), "");
+    m_userButton->setObjectName("smallButton");
 
     m_expandButton->hide();
     m_newChatButton->hide();
-    m_userButton->hide();
 
     topAreaLayout->addWidget(m_expandButton);
     topAreaLayout->addWidget(m_newChatButton);
@@ -61,7 +69,7 @@ void IWelcomePage::setupContentCards() {
     m_card1 = createPushCard("Why the sky is blue?", "://icon/heart-balloon.svg");
     m_card2 =
         createPushCard("Create a personal webpage for me, all in a single file. "
-                       "Ask me 3 questions first on whatever you need to know.",
+                             "Ask me 3 questions first on whatever you need to know.",
                              "://icon/art-palette.svg");
     m_card3 = createPushCard("Write a short-and-sweet text message inviting my "
                              "neighbor to a barbecue.",
@@ -130,8 +138,14 @@ void IWelcomePage::setupConnections() {
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
             &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_userButton,
-            &QPushButton::setVisible);
+
+    connect(&ConfigManager::instance(), &ConfigManager::onAvatarChanged,
+            m_userButton, [this]() {
+        QPixmap avatar(
+            ConfigManager::instance().config("avatar").toString());
+        m_userButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
+    });
+
     connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onExpandButtonClicked);
     connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
@@ -149,14 +163,6 @@ void IWelcomePage::updateMenu(const QList<QString> &list) {
             m_inputLine->setPlaceholderText("Message " + action->text() + " ...");
         });
     }
-}
-
-QPushButton *IWelcomePage::createButton(const QString &iconPath) {
-    auto button = new QPushButton;
-    button->setIcon(QIcon(iconPath));
-    button->setFixedSize(QSize(30, 30));
-    button->setObjectName("smallButton");
-    return button;
 }
 
 void IWelcomePage::retranslateUi() {

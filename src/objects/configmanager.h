@@ -33,7 +33,7 @@ public:
 
 signals:
     // Signal emitted when avatar changes
-    void avatarChanged(const QString &newAvatar);
+    void onAvatarChanged();
 
     // Signal emitted when username changes
     void usernameChanged(const QString &newUsername);

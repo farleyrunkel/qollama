@@ -172,14 +172,13 @@ void ISettingPage::setupSettingsAccount(QLayout *layout) {
     accountLayout->setAlignment(Qt::AlignTop);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
-    avatar = StyleManager::roundedPixmap(avatar);
 
     m_avatarButton = new QPushButton(this);
     m_avatarButton->setFixedSize(60, 60);
     m_avatarButton->setStyleSheet(
         QString("border: 2px solid black; border-radius: %1px;")
             .arg(m_avatarButton->width() / 2));
-    m_avatarButton->setIcon(QIcon(avatar));
+    m_avatarButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
     m_avatarButton->setIconSize(m_avatarButton->size());
 
     QHBoxLayout *lay = new QHBoxLayout;
@@ -212,5 +211,7 @@ void ISettingPage::changeAvatar() {
 
         m_avatarButton->setIcon(QIcon(newAvatar));
         ConfigManager::instance().setConfig("avatar", fileName);
+
+        emit ConfigManager::instance().onAvatarChanged();
     }
 }
