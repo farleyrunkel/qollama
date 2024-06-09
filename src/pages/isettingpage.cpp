@@ -166,6 +166,7 @@ void ISettingPage::setupSettingsAccount(QLayout* layout) {
 
     auto accountLayout = new QVBoxLayout(m_settings["account"]);
     accountLayout->setSpacing(10);
+    accountLayout->setAlignment(Qt::AlignTop);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
     avatar = StyleManager::roundedPixmap(avatar);
@@ -183,7 +184,7 @@ void ISettingPage::setupSettingsAccount(QLayout* layout) {
 
     accountLayout->addLayout(lay);
     accountLayout->addWidget(addSettingGroupBox("Model files directory", ConfigManager::instance().config("modeldir").toString(), "modeldir"));
-    accountLayout->setAlignment(Qt::AlignTop);
+    accountLayout->addWidget(addSettingGroupBox("Ollama port", "localhost:11434", "ollamaport"));
 }
 
 // Setup signal-slot connections

@@ -4,6 +4,8 @@
 #include <QFile>
 
 int main(int argc, char *argv[]) {
+
+
     QApplication app(argc, argv);
 
     Initializer initializer;
@@ -11,6 +13,7 @@ int main(int argc, char *argv[]) {
     MainWindow mainWindow;
 
     initializer.initialize(&mainWindow);
+
 
     return app.exec();
 }
