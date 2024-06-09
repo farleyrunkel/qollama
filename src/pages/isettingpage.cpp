@@ -16,10 +16,10 @@
 
 // Constructor
 ISettingPage::ISettingPage(QWidget *parent) : QDialog(parent) {
-    setupMainLayout();      // Setup the main layout
-    setupSideArea();        // Setup the top area
+    setupMainLayout();                     // Setup the main layout
+    setupSideArea();                       // Setup the top area
     setupSettingsAccount(m_settingLayout); // Setup the setting area
-    setupConnections();     // Setup signal-slot
+    setupConnections();                    // Setup signal-slot
 }
 
 void ISettingPage::showEvent(QShowEvent *event) {
@@ -125,33 +125,36 @@ void ISettingPage::setupSideArea() {
 
     sideAreaLayout->addWidget(new QLabel("Settings"));
 
-    m_accountButton = new QPushButton(QIcon("://icon/account.svg"), "Account");
+    auto m_accountButton = new QPushButton(QIcon("://icon/account.svg"), "Account");
     m_accountButton->setObjectName("bigButton");
-    m_accountButton->setFixedHeight(30);
     sideAreaLayout->addWidget(m_accountButton);
 }
 
-QGroupBox* ISettingPage::addSettingGroupBox(const QString& key, const QString& value, const QString& config) {
+QGroupBox *ISettingPage::addSettingGroupBox(const QString &key,
+                                            const QString &value,
+                                            const QString &config) {
     auto groupBox = new QGroupBox(key);
-    auto lineEdit  = new QLineEdit(value);
+    auto lineEdit = new QLineEdit(value);
     auto pushButton = new QPushButton("Edit");
 
     lineEdit->setDisabled(true);
     lineEdit->setFrame(false);
     pushButton->setObjectName("smallButton");
 
-    groupBox->setStyleSheet("QGroupBox { border: 0px; background-color: white; }");
+    groupBox->setStyleSheet(
+        "QGroupBox { border: 0px; background-color: white; }");
     groupBox->setLayout(new QHBoxLayout);
     groupBox->layout()->setContentsMargins(11, 21, 11, 21);
 
     groupBox->layout()->addWidget(lineEdit);
     groupBox->layout()->addWidget(pushButton);
 
-    connect(pushButton, &QPushButton::clicked, this, [lineEdit, pushButton, config]() {
+    connect(pushButton, &QPushButton::clicked, this,
+            [lineEdit, pushButton, config]() {
         lineEdit->setEnabled(!lineEdit->isEnabled());
         pushButton->setText(lineEdit->isEnabled() ? "Done" : "Edit");
         if (!config.isEmpty() && pushButton->text() == "Done") {
-            emit ConfigManager::instance().configChanged(config, lineEdit->text());
+            ConfigManager::instance().setConfig(config, lineEdit->text());
         }
     });
 
@@ -159,7 +162,7 @@ QGroupBox* ISettingPage::addSettingGroupBox(const QString& key, const QString& v
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupSettingsAccount(QLayout* layout) {
+void ISettingPage::setupSettingsAccount(QLayout *layout) {
     auto account = new QWidget;
     m_settings["account"] = account;
     layout->addWidget(m_settings["account"]);
@@ -171,36 +174,31 @@ void ISettingPage::setupSettingsAccount(QLayout* layout) {
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
     avatar = StyleManager::roundedPixmap(avatar);
 
-    m_changeAvatarButton = new QPushButton(this);
-    m_changeAvatarButton->setFixedSize(100, 100);
-    m_changeAvatarButton->setStyleSheet("border: 2px solid black; border-radius: 50px;");
-    m_changeAvatarButton->setIcon(QIcon(avatar));
-    m_changeAvatarButton->setIconSize(QSize(100, 100));
-
+    m_avatarButton = new QPushButton(this);
+    m_avatarButton->setFixedSize(60, 60);
+    m_avatarButton->setStyleSheet(
+        QString("border: 2px solid black; border-radius: %1px;")
+            .arg(m_avatarButton->width() / 2));
+    m_avatarButton->setIcon(QIcon(avatar));
+    m_avatarButton->setIconSize(m_avatarButton->size());
 
     QHBoxLayout *lay = new QHBoxLayout;
-    lay->addWidget(m_changeAvatarButton);
+    lay->addWidget(m_avatarButton);
     lay->addWidget(addSettingGroupBox("User name", "QOllama", "username"));
 
     accountLayout->addLayout(lay);
-    accountLayout->addWidget(addSettingGroupBox("Model files directory", ConfigManager::instance().config("modeldir").toString(), "modeldir"));
-    accountLayout->addWidget(addSettingGroupBox("Ollama port", "localhost:11434", "ollamaport"));
+    accountLayout->addWidget(addSettingGroupBox(
+        "Model files directory",
+        ConfigManager::instance().config("modeldir").toString(), "modeldir"));
+    accountLayout->addWidget(
+        addSettingGroupBox("Ollama port", "localhost:11434", "ollamaport"));
 }
 
 // Setup signal-slot connections
 void ISettingPage::setupConnections() {
-    connect(m_changeAvatarButton, &QPushButton::clicked, this,
+    connect(m_avatarButton, &QPushButton::clicked, this,
             &ISettingPage::changeAvatar); // Change avatar button clicked
-    // connect(m_saveButton, &QPushButton::clicked, this,
-    //         &ISettingPage::changeUsername); // Save button clicked
 
-    // connect(&ConfigManager::instance(), &ConfigManager::avatarChanged, this,
-    //         &ISettingPage::updateAvatarDisplay); // Avatar changed signal
-    // connect(&ConfigManager::instance(), &ConfigManager::usernameChanged, this,
-    //         &ISettingPage::updateUsernameDisplay); // Username changed signal
-
-    // connect(m_accountButton, &QPushButton::clicked, &SignalHub::instance(),
-    //         &SignalHub::onExpandButtonClicked);
 }
 
 // Slot to change avatar
@@ -208,46 +206,11 @@ void ISettingPage::changeAvatar() {
     QString fileName = QFileDialog::getOpenFileName(
         this, "Select Avatar", "", "Image Files (*.png *.jpg *.bmp)");
     if (!fileName.isEmpty()) {
+
         QPixmap newAvatar(fileName);
-        m_changeAvatarButton->setIcon(QIcon(newAvatar));
+        newAvatar = StyleManager::roundedPixmap(newAvatar);
+
+        m_avatarButton->setIcon(QIcon(newAvatar));
         ConfigManager::instance().setConfig("avatar", fileName);
     }
-}
-
-// Slot to change username
-void ISettingPage::changeUsername() {
-    QString newUsername = m_usernameLineEdit->text();
-    if (!newUsername.isEmpty()) {
-        ConfigManager::instance().setUsername(
-            newUsername); // Update username in config
-    }
-}
-
-// Slot to update avatar display
-void ISettingPage::updateAvatarDisplay(const QPixmap &newAvatar) {
-    // m_avatarLabel->setPixmap(newAvatar.scaled(100, 100,
-    // Qt::KeepAspectRatio,Qt::SmoothTransformation));
-}
-
-// Slot to update username display
-void ISettingPage::updateUsernameDisplay(const QString &newUsername) {
-    m_usernameLineEdit->setText(newUsername);
-}
-
-// Slot to handle expand button click
-void ISettingPage::expandSettings() {
-    // Handle expand button click
-    // Implement functionality here
-}
-
-// Slot to handle new setting button click
-void ISettingPage::addNewSetting() {
-    // Handle new setting button click
-    // Implement functionality here
-}
-
-// Slot to handle user button click
-void ISettingPage::userSettings() {
-    // Handle user button click
-    // Implement functionality here
 }

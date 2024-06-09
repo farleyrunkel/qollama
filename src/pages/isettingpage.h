@@ -32,29 +32,15 @@ private:
 
 private slots:
     void changeAvatar();
-    void changeUsername();
-    void updateAvatarDisplay(const QPixmap &newAvatar);
-    void updateUsernameDisplay(const QString &newUsername);
-    void expandSettings();
-    void addNewSetting();
-    void userSettings();
 
 private:
     QHBoxLayout *m_mainLayout;
     QWidget *m_sideArea;
     QStackedLayout *m_settingLayout;
 
-    QPushButton *m_accountButton;
-    QPushButton *m_newChatButton;
-    QPushButton *m_userButton;
-
-    QPushButton *m_avatarLabel;
-    QPushButton *m_changeAvatarButton;
-    QLineEdit *m_usernameLineEdit;
-    QPushButton *m_saveButton;
+    QPushButton *m_avatarButton;
 
     QMap<QString, QWidget*> m_settings;
-
 };
 
 #endif // ISETTINGPAGE_H

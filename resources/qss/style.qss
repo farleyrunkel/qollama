@@ -85,6 +85,7 @@ QPushButton#bigButton{
     border-radius: 10px;
     padding-left: 10px;
     text-align: left;
+    height: 30px;
 }
 QPushButton#settingButton:hover,
 QPushButton#exploreButton:hover,
