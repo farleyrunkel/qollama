@@ -81,7 +81,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/resources.qrc
-        src/scripts/webscraper.py
     )
 else()
     if(ANDROID)
@@ -115,10 +114,10 @@ set_target_properties(qollama PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-if(APPLE)
-    install(FILES ${app_icon_macos} DESTINATION ${CMAKE_INSTALL_PREFIX}/Contents/Resources)
-    install(FILES ${MACOSX_BUNDLE_INFO_PLIST} DESTINATION ${CMAKE_INSTALL_PREFIX}/Contents)
-endif()
+# if(APPLE)
+#     install(FILES ${app_icon_macos} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/Resources)
+#     install(FILES ${MACOSX_BUNDLE_INFO_PLIST} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
+# endif()
 
 include(GNUInstallDirs)
 install(TARGETS qollama
@@ -132,3 +131,18 @@ if(QT_VERSION_MAJOR EQUAL 6)
 endif()
 
 add_subdirectory(tests)
+
+# if(APPLE)
+#     install(FILES ${app_icon_macos} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/Resources)
+#     install(FILES ${MACOSX_BUNDLE_INFO_PLIST} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
+#     install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
+
+#     install(TARGETS qollama DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/MacOS)
+# else()
+#     install(TARGETS qollama
+#         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+#         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+#     )
+
+#     install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_DATADIR}/qollama)
+# endif()

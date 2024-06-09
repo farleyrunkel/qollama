@@ -140,7 +140,10 @@ QGroupBox* ISettingPage::addSettingGroupBox(const QString& key, const QString& v
     lineEdit->setFrame(false);
     pushButton->setObjectName("smallButton");
 
+    groupBox->setStyleSheet("QGroupBox { border: 0px; background-color: white; }");
     groupBox->setLayout(new QHBoxLayout);
+    groupBox->layout()->setContentsMargins(11, 21, 11, 21);
+
     groupBox->layout()->addWidget(lineEdit);
     groupBox->layout()->addWidget(pushButton);
 

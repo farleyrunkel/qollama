@@ -194,12 +194,14 @@ void MainWindow::setupStatusBar() {
     m_statusBar = new QStatusBar(this);
     m_statusBar->setObjectName("statusBar");
     setStatusBar(m_statusBar);
+    m_statusBar->setStyleSheet("border-style: hidden;");
 
     auto statusLabel =
         new QLabel("AI can make mistakes. Check important info.", this);
     statusLabel->setAlignment(Qt::AlignCenter);
     statusLabel->setObjectName("statusLabel");
-
+    statusLabel->setAutoFillBackground(true);
+    statusLabel->setFrameShape(QFrame::NoFrame);
     m_statusBar->addPermanentWidget(statusLabel, 1);
 }
 
