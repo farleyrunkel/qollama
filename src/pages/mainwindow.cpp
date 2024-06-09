@@ -17,16 +17,11 @@
 #include "signalhub.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), m_ollama(new ollama::Client(this)),
+    : QMainWindow(parent),
+    m_ollama(new ollama::Client(this)),
     test(new ITestWidget(this)) {
-    setObjectName("MainWindow");
-    setWindowModality(Qt::WindowModal);
-    setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
-    setContextMenuPolicy(Qt::ActionsContextMenu);
-    setAutoFillBackground(true);
-    resize(800, 500);
 
-    setupSplitter();
+    setupMainUi();
     setupStatusBar();
     setupPages();
 
@@ -95,9 +90,6 @@ void MainWindow::setupConnections() {
             [this]() { m_left->setVisible(!m_left->isVisible()); });
     connect(&SignalHub::instance(), &SignalHub::onUserButtonClicked, this,
             [this]() { m_setting->show();});
-
-    // connect(settingButton, &QPushButton::pressed,
-    // [&](){pages->setCurrentWidget(chats);});
 
     connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
             [&](const QString &) { m_pages->setCurrentWidget(m_chats); });
@@ -173,7 +165,14 @@ void MainWindow::onInputLineReturnPressed() {
     // inputLine->clear();
 }
 
-void MainWindow::setupSplitter() {
+void MainWindow::setupMainUi() {
+    setObjectName("MainWindow");
+    setWindowModality(Qt::WindowModal);
+    setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
+    setContextMenuPolicy(Qt::ActionsContextMenu);
+    setAutoFillBackground(true);
+    resize(800, 500);
+
     m_splitter = new QSplitter(this);
     m_splitter->setObjectName("splitter");
     m_splitter->setOrientation(Qt::Horizontal);
@@ -182,9 +181,9 @@ void MainWindow::setupSplitter() {
     m_splitter->setChildrenCollapsible(false);
 
     m_left = new ISideArea;
-    m_splitter->addWidget(m_left);
-
     m_pages = new QStackedWidget;
+
+    m_splitter->addWidget(m_left);
     m_splitter->addWidget(m_pages);
 
     setCentralWidget(m_splitter);
@@ -207,17 +206,16 @@ void MainWindow::setupStatusBar() {
 
 void MainWindow::setupPages() {
     m_chats = new IChatsPage;
-    m_pages->addWidget(m_chats);
-
     m_welcome = new IWelcomePage;
-    m_pages->addWidget(m_welcome);
-    m_pages->setCurrentWidget(m_welcome);
-
     m_market = new IMarketPage(this);
+
+    m_pages->addWidget(m_chats);
+    m_pages->addWidget(m_welcome);
     m_pages->addWidget(m_market);
 
+    m_pages->setCurrentWidget(m_welcome);
+
     m_setting = new ISettingPage(this);
-    m_setting->hide();
 }
 
 void MainWindow::retranslateUi() {

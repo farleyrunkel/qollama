@@ -42,7 +42,7 @@ private slots:
 private:
     void setupPages();
     void setupStatusBar();
-    void setupSplitter();
+    void setupMainUi();
     void setupConnections();
     void retranslateUi();
 
