@@ -49,12 +49,12 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
 
 ### Prerequisites
 
-- Qt 5 or higher
+- Qt 6.3 or higher
 - C++11 or higher
 - CMake
 - Git
 - Python 3 or higher
-- ollama-server
+- Ollama
   
 ### Steps
 

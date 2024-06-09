@@ -26,8 +26,9 @@ protected:
 private:
     void setupMainLayout();
     void setupSideArea();
-    void setupSettingsAccount();
     void setupConnections();
+    QGroupBox *addSettingGroupBox(const QString &key, const QString &value, const QString &config = "");
+    void setupSettingsAccount(QLayout *layout);
 
 private slots:
     void changeAvatar();
@@ -53,7 +54,7 @@ private:
     QPushButton *m_saveButton;
 
     QMap<QString, QWidget*> m_settings;
-    QGroupBox *addSettingGroupBox(const QString &key, const QString &value, const QString &config = "");
+
 };
 
 #endif // ISETTINGPAGE_H

@@ -18,7 +18,7 @@
 ISettingPage::ISettingPage(QWidget *parent) : QDialog(parent) {
     setupMainLayout();      // Setup the main layout
     setupSideArea();        // Setup the top area
-    setupSettingsAccount(); // Setup the setting area
+    setupSettingsAccount(m_settingLayout); // Setup the setting area
     setupConnections();     // Setup signal-slot
 }
 
@@ -156,10 +156,10 @@ QGroupBox* ISettingPage::addSettingGroupBox(const QString& key, const QString& v
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupSettingsAccount() {
+void ISettingPage::setupSettingsAccount(QLayout* layout) {
     auto account = new QWidget;
     m_settings["account"] = account;
-    m_settingLayout->addWidget(m_settings["account"]);
+    layout->addWidget(m_settings["account"]);
 
     auto accountLayout = new QVBoxLayout(m_settings["account"]);
     accountLayout->setSpacing(10);
@@ -181,7 +181,6 @@ void ISettingPage::setupSettingsAccount() {
     accountLayout->addLayout(lay);
     accountLayout->addWidget(addSettingGroupBox("Model files directory", ConfigManager::instance().config("modeldir").toString(), "modeldir"));
     accountLayout->setAlignment(Qt::AlignTop);
-
 }
 
 // Setup signal-slot connections
