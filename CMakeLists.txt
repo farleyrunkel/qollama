@@ -33,10 +33,6 @@ foreach(subdir ${SUBDIRS})
     endif()
 endforeach()
 
-include_directories("external/json/include")
-include_directories("external/asio/asio/include")
-include_directories("external/ollama/include")
-
 # Set the main file
 if(APPLE)
     # Set the application icon on macOS
@@ -63,10 +59,12 @@ else()
 endif()
 
 # Find all source and header files in all subdirectories under the src directory
-file(GLOB_RECURSE PROJECT_SOURCES
+file(GLOB PROJECT_SOURCES
     "${SRC_DIR}/*/*.cpp"
     "${SRC_DIR}/*/*.h"
 )
+
+message(STATUS "PROJECT_SOURCES:" ${PROJECT_SOURCES})
 
 # Add the main file to PROJECT_SOURCES
 list(APPEND PROJECT_SOURCES ${PROJECT_MAIN_FILE})
@@ -75,12 +73,16 @@ if(APPLE)
     list(APPEND PROJECT_SOURCES ${app_icon_macos})
 endif()
 
+
 # Create the executable
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(qollama
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         resources/resources.qrc
+
+        src/3rdParty/spinner/waitingspinnerwidget.cpp
+        src/3rdParty/spinner/waitingspinnerwidget.h
     )
 else()
     if(ANDROID)

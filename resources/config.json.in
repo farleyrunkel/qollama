@@ -1,7 +1,7 @@
 {
     "username": "You",
-    "appIcon": "://images/qollama-logo.png",
-    "avatar": "://images/farley.png",
+    "appIcon": ":/images/qollama-.png",
+    "avatar": ":/images/farley.png",
     "ollamaport": "localhost:11434",
     "modeldir": "@MODELDIR@"
 }

@@ -7,3 +7,6 @@
 [submodule "src/3rdParty/spinner"]
     path = src/3rdParty/spinner
 	url = https://github.com/snowwlex/QtWaitingSpinner.git
+[submodule "src/3rdParty/qgallerywidget"]
+	path = src/3rdParty/qgallerywidget
+	url = git@github.com:farleyrunkel/QGalleryWidget.git
