@@ -5,7 +5,6 @@
 
 int main(int argc, char *argv[]) {
 
-
     QApplication app(argc, argv);
 
     Initializer initializer;
@@ -13,9 +12,6 @@ int main(int argc, char *argv[]) {
     MainWindow mainWindow;
 
     initializer.initialize(&mainWindow);
-
-    ITestWidget test ;
-    test.show();
 
     return app.exec();
 }

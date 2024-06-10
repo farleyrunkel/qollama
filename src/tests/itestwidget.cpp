@@ -1,25 +1,27 @@
 #include "itestwidget.h"
+#include "galleryphotowidget.h"
+#include "gallerywidget.h"
 
 ITestWidget::ITestWidget(QWidget *parent) : QDialog(parent) {
 
     setAutoFillBackground(true);
-    setFixedSize(QSize(500, 500));
-    show();
-    // ollama::SyncClient client("localhost");
-    //     try {
-    //         auto res = client.chat("llama3",  nlohmann::json({
-    // {
-    //                                                          {"role",  "user"},
-    //                                                          {"content", "why
-    //                                                          is the sky blue?"}
-    //                                          }}
-    // ));
-    //     qDebug() << "res.dump()";
-    //     qDebug() << res.dump();
+    setLayout(new QVBoxLayout);
 
-    //     }
-    //     catch (std::exception& e)
-    //     {
-    //         std::cerr << e.what() << std::endl;
-    //     }
+    auto w= new GalleryWidget;
+
+    QList<GalleryPhotoData> list;
+    srand(time(0));
+    int count = rand() % 10 + 5;
+    for (int i = 0; i < 7; i++)
+    {
+        QPixmap pixmap(":/images/background.png");
+        QString title = "凤翎谱" + QString::number(i);
+        QString subTitle = "作者：北宫懒懒" + QString::number(i);
+        GalleryPhotoData data{pixmap, title, subTitle};
+        list.append(data);
+    }
+
+    w->loadData(list);
+
+    layout()->addWidget(w);
 }
