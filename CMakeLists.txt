@@ -132,17 +132,13 @@ endif()
 
 add_subdirectory(tests)
 
-# if(APPLE)
+if(APPLE)
 #     install(FILES ${app_icon_macos} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/Resources)
 #     install(FILES ${MACOSX_BUNDLE_INFO_PLIST} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
 #     install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
 
 #     install(TARGETS qollama DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/MacOS)
-# else()
-#     install(TARGETS qollama
-#         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#     )
+else()
 
-#     install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_DATADIR}/qollama)
-# endif()
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_PREFIX})
+endif()

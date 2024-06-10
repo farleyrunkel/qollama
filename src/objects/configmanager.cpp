@@ -39,6 +39,7 @@ void ConfigManager::initializeDefaults() {
     setConfig("appIcon", m_appIcon);
     setConfig("avatar", "://icon/farley.jpg");
     setConfig("modeldir", "C:/Users/95439/Documents/Github/qollama/models");
+    setConfig("ollamaport", "localhost:11434");
 
     // Emit signals to notify about changes
     emit onAvatarChanged();

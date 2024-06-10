@@ -113,7 +113,13 @@ void IChatsPage::setupBottomArea() {
     m_messageLineEdit->setPlaceholderText("Message llama3 ...");
     m_messageLineEdit->setFixedHeight(40);
     auto sendButton = m_messageLineEdit->rightButton();
-    sendButton->setIcon(QIcon(":/icon/send.svg"));
+
+    QIcon icon;
+    icon.addPixmap(QPixmap(":/icon/send.svg"), QIcon::Normal);
+    icon.addPixmap(QPixmap(":/icon/send.svg"), QIcon::Disabled);
+    icon.addPixmap(QPixmap(":/icon/stop.svg"), QIcon::Active);
+
+    sendButton->setIcon(icon);
 
     auto optionButton = m_messageLineEdit->leftButton();
     optionButton->setIcon(QIcon(":/icon/more-horiz.svg"));

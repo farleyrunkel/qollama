@@ -1,0 +1,19 @@
+{
+    "window": {
+        "width": 800,
+        "height": 600
+    },
+    "user": {
+        "name": "You",
+        "language": "en"
+    },
+    "settings": {
+        "theme": "dark",
+        "autoSave": true,
+        "models": "/models"
+    },
+    "ollama": {
+        "ip": "localhost",
+        "port": "11434"
+    }
+}

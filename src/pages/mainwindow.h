@@ -46,8 +46,6 @@ private:
     void setupConnections();
     void retranslateUi();
 
-    ollama::Client *m_ollama;
-
     ITestWidget *test;
 
     QStackedWidget *m_pages;

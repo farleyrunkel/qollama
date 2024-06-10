@@ -1,4 +1,5 @@
 #include "client.h"
+#include "configmanager.h"
 #include "signalhub.h"
 #include <QDebug>
 #include <QJsonDocument>
@@ -14,6 +15,8 @@ Client::Client(QObject *parent)
     connect(&SignalHub::instance(), &SignalHub::generateRequest, this,
             &Client::generate);
     connect(&SignalHub::instance(), &SignalHub::listRequest, this, &Client::list);
+    connect(&SignalHub::instance(), &SignalHub::disconnect, this,
+            &Client::disconnect);
 }
 
 Client::~Client() { qDebug() << "Client destroyed."; }
@@ -25,7 +28,10 @@ void Client::chat(const QJsonObject &json) {
 }
 
 void Client::generate(const QJsonObject &json) {
-    auto reply = sendRequest("http://localhost:11434/api/generate", json);
+    auto url =
+        QString("http://%1/api/generate")
+                   .arg(ConfigManager::instance().config("ollamaport").toString());
+    auto reply = sendRequest(url, json);
 
     QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
         m_status = Status::Receiving;
@@ -66,7 +72,7 @@ void Client::generate(const QJsonObject &json) {
     QObject::connect(reply, &QNetworkReply::errorOccurred, this,
                      [this](QNetworkReply::NetworkError error) {
                          qDebug() << "Network error occurred:" << error;
-        emit replyReceived("Network error occurred");
+        emit errorOccurred("Network error occurred");
     });
 }
 
@@ -119,6 +125,7 @@ Client::Status Client::status() const {
 
 QNetworkReply *Client::sendRequest(const QString &url,
                                    const QJsonObject &json) {
+    m_status = Status::Requesting;
     qDebug() << "Sending request to URL:" << url << "with JSON:"
              << QJsonDocument(json).toJson(QJsonDocument::Compact);
 
@@ -126,7 +133,6 @@ QNetworkReply *Client::sendRequest(const QString &url,
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setUrl(QUrl(url));
 
-    m_status = Status::Requesting;
     qDebug() << "Request status:" << m_status;
 
     auto reply = m_manager->post(request, QJsonDocument(json).toJson());

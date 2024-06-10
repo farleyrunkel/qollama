@@ -18,6 +18,7 @@ signals:
     void generateRequest(const QJsonObject &);
     void onMessageAdded(const QString &);
 
+    void disconnect();
     void listRequest();
     void listReceived(const QList<QString>);
     void on_message_sent(const QString &, bool isNewChat);

@@ -18,7 +18,6 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-    m_ollama(new ollama::Client(this)),
     test(new ITestWidget(this)) {
 
     setupMainUi();
@@ -44,9 +43,9 @@ void MainWindow::setupConnections() {
     // connect(newChatBtn, &QPushButton::pressed,
     // [&](){pages->setCurrentWidget(welcome);});
 
-    connect(m_ollama, &ollama::Client::replyReceived, this,
+    connect(&ollama::Client::instance(), &ollama::Client::replyReceived, this,
             &MainWindow::appendWordToActiveChat);
-    connect(m_ollama, &ollama::Client::finished, this,
+    connect(&ollama::Client::instance(), &ollama::Client::finished, this,
             &MainWindow::onChatbotFinish);
 
     // connect(sendButton, &QPushButton::clicked,[&](){

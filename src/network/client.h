@@ -14,8 +14,12 @@ class Client : public QObject {
 public:
     enum Status { Waiting, Requesting, Receiving, Finished };
 
-    explicit Client(QObject *parent = nullptr);
     ~Client();
+
+    static Client& instance() {
+        static Client instance;
+        return instance;
+    }
 
     void generate(const QJsonObject &json);
     void chat(const QJsonObject &json);
@@ -24,16 +28,19 @@ public:
     void push(const QJsonObject &json);
     void list();
 
-    void abort() { m_manager->disconnect(); }
+    void disconnect() { m_manager->disconnect(); }
     Status status() const;
 
 signals:
     void replyReceived(const QString &);
+    void errorOccurred(const QString &);
     void finished();
 
     void listReceived(const QList<QString> &);
 
 private:
+    explicit Client(QObject *parent = nullptr);
+
     QNetworkReply *sendRequest(const QString &url,
                                const QJsonObject &json = QJsonObject());
 
