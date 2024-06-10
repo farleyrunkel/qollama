@@ -9,7 +9,7 @@ QOllama is a powerful and feature-rich client application for Ollama. Built on t
 **What makes QOllama special?**
 
 - **Cross-platform compatibility**: Run QOllama on Windows, macOS, or Linux, without any hassle.
-- **Rich customization models**: Tailor your Ollama experience with our extensive library of customization options.
+- **Rich customization models**: Explore customization model and upload what you make.
 - **Intuitive user interface**: Easily navigate through QOllama's modern and responsive UI.
 - **Well-organized codebase**: Our project is designed to be easy to learn from and contribute to, making it perfect for developers of all levels.
   
