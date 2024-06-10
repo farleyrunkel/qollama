@@ -1,22 +1,27 @@
 # QOllama
 
-![image](./resources/images/qollama-text.png)
+![images](./resources/images/qollama-logo-name-slogan.png)
 
-QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The application provides a user-friendly interface for interacting with the model and managing chat history.
+## QOllama： A Cross-Platform Qt Client for [ollama](https://github.com/ollama/ollama)
+
+QOllama is a powerful and feature-rich client application for Ollama. Built on top of the popular Qt framework, QOllama provides a seamless cross-platform experience, allowing users to enjoy a rich set of customization options and an intuitive interface.
+
+**What makes QOllama special?**
+
+- **Cross-platform compatibility**: Run QOllama on Windows, macOS, or Linux, without any hassle.
+- **Rich customization models**: Tailor your Ollama experience with our extensive library of customization options.
+- **Intuitive user interface**: Easily navigate through QOllama's modern and responsive UI.
+- **Well-organized codebase**: Our project is designed to be easy to learn from and contribute to, making it perfect for developers of all levels.
+  
+Take a peek at what you can do with QOllama:
 
 ![gif](./resources/images/qollama.gif)
 
-## Features
-
-- **Chat Interface**: Send and receive messages through a simple chat interface.
-- **Multiple Chats**: Create and manage multiple chat sessions.
-- **Chat History**: Save and view chat history.
-
 ## Screenshots
 
-| Windows | MacOS |
-| :---: | :---: |
-| ![image](./resources/images/qollama.png) | ![image](./resources/images/qollama-mac.png) |
+| Windows | MacOS | Linux |
+| :---: | :---: | :---: |
+| ![image](./resources/images/qollama.png) | ![image](./resources/images/qollama-mac.png) | to be added |
 
 | Chats page | market page | settings page |
 | :---: | :---: | :---: |
@@ -28,10 +33,11 @@ QOllama is a Qt-based client for [ollama](https://github.com/ollama/ollama). The
 - **external**: Contains external libraries and dependencies.
 - **models**: Directory for custom models.
 - **resources**: Contains application resources such as icons, images, and stylesheets.
-  - **icon**: Icon files for the application.
+  - **icons**: Icon files for the application.
   - **images**: Image files used in the application.
   - **psd**: PSD files for design purposes.
   - **qss**: Qt Style Sheets for customizing the application's appearance.
+  - **config.json**: Configuration file for models path, ollama port, and ets.
 - **src**: Source code directory.
   - **3rdParty**: Third-party libraries and components.
   - **buttons**: Directory for button components.
