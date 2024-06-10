@@ -14,7 +14,7 @@ public:
     IChatScrollArea(QWidget *parent = nullptr);
 
     void addMessage(const QString &message, const QString &userName,
-                    const QString &avatar = "://icons/ollama.png");
+                    const QString &avatar);
     bool isNew() const;
     IMessageBox *getLatestMessageWidget() const;
     void scrollToBottom();

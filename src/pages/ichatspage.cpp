@@ -143,7 +143,7 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
 
     chat->addMessage(text, ConfigManager::instance().username(),
                      ConfigManager::instance().config("avatar").toString());
-    chat->addMessage("", "llama3");
+    chat->addMessage("", "llama3", "://images/ollama.png");
 
     QJsonObject json;
     json["prompt"] =
