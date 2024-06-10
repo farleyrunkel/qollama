@@ -39,10 +39,10 @@ void IWelcomePage::setupTopArea() {
     auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = new QPushButton(QIcon("://icon/sidebar-left.svg"), "");
+    m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
     m_expandButton->setObjectName("smallButton");
 
-    m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
+    m_newChatButton = new QPushButton(QIcon(":/icons/create-new.svg"), "");
     m_newChatButton->setObjectName("smallButton");
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
@@ -66,16 +66,16 @@ void IWelcomePage::setupContentArea() {
 }
 
 void IWelcomePage::setupContentCards() {
-    m_card1 = createPushCard("Why the sky is blue?", "://icon/heart-balloon.svg");
+    m_card1 = createPushCard("Why the sky is blue?", "://icons/heart-balloon.svg");
     m_card2 =
         createPushCard("Create a personal webpage for me, all in a single file. "
                              "Ask me 3 questions first on whatever you need to know.",
-                             "://icon/art-palette.svg");
+                             "://icons/art-palette.svg");
     m_card3 = createPushCard("Write a short-and-sweet text message inviting my "
                              "neighbor to a barbecue.",
-                             "://icon/electric-light-bulb.svg");
+                             "://icons/electric-light-bulb.svg");
     m_card4 = createPushCard("Tell me a random fun fact about the Roman Empire",
-                             "://icon/terminal.svg");
+                             "://icons/terminal.svg");
 
     m_contentLayout->addWidget(m_card1, 1, 1, 1, 1);
     m_contentLayout->addWidget(m_card2, 1, 2, 1, 1);
@@ -109,10 +109,10 @@ void IWelcomePage::setupContentLineEdit() {
     m_inputLine->setFixedHeight(40);
 
     auto rightButton = m_inputLine->rightButton();
-    rightButton->setIcon(QIcon(":/icon/send.svg"));
+    rightButton->setIcon(QIcon(":/icons/send.svg"));
 
     auto leftButton = m_inputLine->leftButton();
-    leftButton->setIcon(QIcon(":/icon/more-horiz.svg"));
+    leftButton->setIcon(QIcon(":/icons/more-horiz.svg"));
 
     m_menu = new QMenu(this);
     leftButton->setMenu(m_menu);

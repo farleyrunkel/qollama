@@ -130,15 +130,13 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(qollama)
 endif()
 
-add_subdirectory(tests)
-
 if(APPLE)
-#     install(FILES ${app_icon_macos} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/Resources)
-#     install(FILES ${MACOSX_BUNDLE_INFO_PLIST} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
-#     install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
-
-#     install(TARGETS qollama DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/MacOS)
+    # On macOS, install models folder and config file into the app bundle
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
 else()
-
+    # On other systems, install models folder and config file into the install prefix
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_PREFIX})
 endif()
+
+add_subdirectory(tests)
+add_subdirectory(resources)

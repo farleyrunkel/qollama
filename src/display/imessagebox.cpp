@@ -113,7 +113,7 @@ void IMessageBox::appendMessage(const QString &message) {
 
     // Adding a custom image to the HTML content
     QString circleSpan =
-        "<img src=':/icon/qtcircle.svg' height='11' width='11'/>";
+        "<img src=':/icons/qtcircle.svg' height='11' width='11'/>";
 
     if (html.contains("</p></body></html>")) {
         html.replace("</p></body></html>", circleSpan + "</p></body></html>");

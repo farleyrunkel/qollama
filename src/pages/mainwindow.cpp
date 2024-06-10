@@ -84,7 +84,8 @@ void MainWindow::setupConnections() {
     connect(&SignalHub::instance(), &SignalHub::onMessageAdded, this,
             [this](const QString & chat) {
                 int idx = m_chats->chats()->indexOf(m_chats->chats()->currentWidget());
-                m_left->historyList()->item(idx)->setText(chat);});
+            m_left->historyList()->item(idx)->setData(Qt::ToolTipRole, chat);
+    });
     connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
             [this]() { m_left->setVisible(!m_left->isVisible()); });
     connect(&SignalHub::instance(), &SignalHub::onUserButtonClicked, this,
@@ -137,7 +138,7 @@ void MainWindow::onInputLineTextChanged(const QString &arg1) {
     // if ( sendButton->statusTip() == "Pending") {
     //     return;
     // }
-    // sendButton->setIcon(QIcon(":/icon/arrow-up-circle.svg"));
+    // sendButton->setIcon(QIcon(":/icons/arrow-up-circle.svg"));
     // if (arg1.isEmpty()) {
     //     sendButton->setDisabled(true);
     //     sendButton->setStatusTip("Nothing");

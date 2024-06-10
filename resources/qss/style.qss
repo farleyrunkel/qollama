@@ -113,7 +113,7 @@ QComboBox::drop-down {
     border: hidden;
 }
 QComboBox::down-arrow {
-    image: url(:/icon/down.svg);
+    image: url(:/icons/down.svg);
 }
 QComboBox::menu-indicator {
     width: 0px;

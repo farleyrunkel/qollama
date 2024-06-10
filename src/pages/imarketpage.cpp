@@ -50,10 +50,10 @@ void IMarketPage::setupTopArea() {
     auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = new QPushButton(QIcon("://icon/sidebar-left.svg"), "");
+    m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
     m_expandButton->setObjectName("smallButton");
 
-    m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
+    m_newChatButton = new QPushButton(QIcon(":/icons/create-new.svg"), "");
     m_newChatButton->setObjectName("smallButton");
 
     m_expandButton->hide();
@@ -204,7 +204,7 @@ ILineEdit *IMarketPage::createSearchLineEdit() {
     lineEdit->rightButton()->hide();
     lineEdit->leftButton()->setFlat(true);
     QIcon searchIcon;
-    searchIcon.addPixmap(QPixmap("://icon/search.svg"), QIcon::Disabled,
+    searchIcon.addPixmap(QPixmap("://icons/search.svg"), QIcon::Disabled,
                          QIcon::On);
     lineEdit->leftButton()->setIcon(searchIcon);
     lineEdit->leftButton()->setDisabled(true);

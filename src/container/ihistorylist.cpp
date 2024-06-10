@@ -45,8 +45,8 @@ void IHistoryList::setupUI()
     setObjectName("historyList");
     setUniformItemSizes(true);
 
-    auto deleButton = addButton(":/icon/delete.svg", "Delete");
-    //auto moreButton = addButton(":/icon/more-horiz.svg", "More");
+    auto deleButton = addButton(":/icons/delete.svg", "Delete");
+    //auto moreButton = addButton(":/icons/more-horiz.svg", "More");
 
     //QMenu *menu = new QMenu(moreButton);
 

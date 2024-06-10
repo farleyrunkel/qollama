@@ -1,5 +1,8 @@
 #include "configmanager.h"
+#include <QDir>
 #include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 // Get the singleton instance of ConfigManager
 ConfigManager &ConfigManager::instance() {
@@ -27,21 +30,86 @@ void ConfigManager::setConfig(const QString &key, const QVariant &value) {
     emit configChanged(key, value);
 }
 
-// Initialize default configuration values
+// Initialize configuration values from config.json file
 void ConfigManager::initializeDefaults() {
     // Set default values
+    m_appIcon = QPixmap(":/images/icon.png");
+    m_username = "You"; // Default username
 
-    m_appIcon = QPixmap(":/icon.png");
-    m_username = "QOllama"; // Default username
+    // Search for config.json in current and parent directories
+    QString configPath = findConfigFile();
+    if (!configPath.isEmpty()) {
+        qDebug() << "configPath" << configPath;
 
-    // Store default configurations
-    setConfig("username", m_username);
-    setConfig("appIcon", m_appIcon);
-    setConfig("avatar", "://icon/farley.jpg");
-    setConfig("modeldir", "C:/Users/95439/Documents/Github/qollama/models");
-    setConfig("ollamaport", "localhost:11434");
+        readConfigFromFile(configPath);
+    }
 
     // Emit signals to notify about changes
     emit onAvatarChanged();
     emit usernameChanged(m_username);
+}
+
+// Helper function to search for config.json file
+QString ConfigManager::findConfigFile() const {
+    QDir currentDir = QDir::current();
+    QDir parentDir = currentDir;
+    qDebug() << "currentDir" << currentDir;
+    // Search in current directory and its parent
+    for (int i = 0; i < 2; ++i) {
+        if (currentDir.exists("config.json")) {
+            return currentDir.filePath("config.json");
+        }
+        parentDir.cdUp();
+        currentDir = parentDir;
+    }
+
+    return QString(); // Config file not found
+}
+
+// Helper function to read config.json file
+void ConfigManager::readConfigFromFile(const QString &filePath) {
+    QFile file(filePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QByteArray jsonData = file.readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+        if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+            QJsonObject jsonObj = jsonDoc.object();
+            qDebug() << "jsonObj" << jsonObj;
+
+            // Read username
+            if (jsonObj.contains("username")) {
+                QString username = jsonObj.value("username").toString();
+                m_username = username;
+                setConfig("username", username);
+            }
+
+            // Read app icon
+            if (jsonObj.contains("appIcon")) {
+                QString appIconPath = jsonObj.value("appIcon").toString();
+                m_appIcon = QPixmap(appIconPath);
+                setConfig("appIcon", appIconPath);
+            }
+
+            // Read avatar
+            if (jsonObj.contains("avatar")) {
+                QString avatarPath = jsonObj.value("avatar").toString();
+                setConfig("avatar", avatarPath);
+            }
+
+            // Read ollama port
+            if (jsonObj.contains("ollamaport")) {
+                QString ollamaPort = jsonObj.value("ollamaport").toString();
+                auto m_ollamaPort = ollamaPort;
+                setConfig("ollamaport", m_ollamaPort);
+            }
+
+            // Read model directory
+            if (jsonObj.contains("modeldir")) {
+                QString modelDir = jsonObj.value("modeldir").toString();
+                auto m_modelDir = modelDir;
+                setConfig("modeldir", m_modelDir);
+            }
+        }
+        file.close();
+    }
 }

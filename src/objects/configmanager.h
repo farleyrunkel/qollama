@@ -54,6 +54,8 @@ private:
     QPixmap m_appIcon;                 // Application icon
     QString m_username;                // Username
     QMap<QString, QVariant> m_configs; // Configuration key-value pairs
+    QString findConfigFile() const;
+    void readConfigFromFile(const QString &filePath);
 };
 
 #endif // ICONFIGMANAGER_H

@@ -70,10 +70,10 @@ void IChatsPage::setupTopArea() {
     auto topAreaLayout = new QHBoxLayout(m_topArea);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = new QPushButton(QIcon("://icon/sidebar-left.svg"), "");
+    m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
     m_expandButton->setObjectName("smallButton");
 
-    m_newChatButton = new QPushButton(QIcon(":/icon/create-new.svg"), "");
+    m_newChatButton = new QPushButton(QIcon(":/icons/create-new.svg"), "");
     m_newChatButton->setObjectName("smallButton");
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
@@ -115,14 +115,14 @@ void IChatsPage::setupBottomArea() {
     auto sendButton = m_messageLineEdit->rightButton();
 
     QIcon icon;
-    icon.addPixmap(QPixmap(":/icon/send.svg"), QIcon::Normal);
-    icon.addPixmap(QPixmap(":/icon/send.svg"), QIcon::Disabled);
-    icon.addPixmap(QPixmap(":/icon/stop.svg"), QIcon::Active);
+    icon.addPixmap(QPixmap(":/icons/send.svg"), QIcon::Normal);
+    icon.addPixmap(QPixmap(":/icons/send.svg"), QIcon::Disabled);
+    icon.addPixmap(QPixmap(":/icons/stop.svg"), QIcon::Active);
 
     sendButton->setIcon(icon);
 
     auto optionButton = m_messageLineEdit->leftButton();
-    optionButton->setIcon(QIcon(":/icon/more-horiz.svg"));
+    optionButton->setIcon(QIcon(":/icons/more-horiz.svg"));
 
     m_optionMenu = new QMenu(this);
     optionButton->setMenu(m_optionMenu);

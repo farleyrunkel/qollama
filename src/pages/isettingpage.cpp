@@ -16,7 +16,7 @@
 
 // Constructor
 ISettingPage::ISettingPage(QWidget *parent) : QDialog(parent) {
-    setupMainLayout();                     // Setup the main layout
+    setupMainUi();                     // Setup the main layout
     setupSideArea();                       // Setup the top area
     setupSettingsAccount(m_settingLayout); // Setup the setting area
     setupConnections();                    // Setup signal-slot
@@ -66,7 +66,7 @@ void ISettingPage::paintEvent(QPaintEvent *event) {
 }
 
 // Setup the main layout of the setting page
-void ISettingPage::setupMainLayout() {
+void ISettingPage::setupMainUi() {
     setObjectName("ISettingPage");
     setContentsMargins(80, 80, 80, 80);
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
@@ -86,7 +86,7 @@ void ISettingPage::setupMainLayout() {
     m_centerWidget->setLayout(m_centerLayout);
 
     m_sideArea = new QWidget(m_centerWidget);
-    m_sideArea->setFixedWidth(130);
+    m_sideArea->setFixedWidth(120);
 
     QFrame *line = new QFrame();
     line->setFrameShape(QFrame::VLine);
@@ -125,7 +125,7 @@ void ISettingPage::setupSideArea() {
 
     sideAreaLayout->addWidget(new QLabel("Settings"));
 
-    auto m_accountButton = new QPushButton(QIcon("://icon/account.svg"), "Account");
+    auto m_accountButton = new QPushButton(QIcon("://icons/account.svg"), "Account");
     m_accountButton->setObjectName("bigButton");
     sideAreaLayout->addWidget(m_accountButton);
 }
@@ -172,7 +172,7 @@ void ISettingPage::setupSettingsAccount(QLayout *layout) {
     accountLayout->setAlignment(Qt::AlignTop);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
-
+    qDebug() << "ConfigManager::instance().config(avatar).toString()" << ConfigManager::instance().config("avatar").toString();
     m_avatarButton = new QPushButton(this);
     m_avatarButton->setFixedSize(60, 60);
     m_avatarButton->setStyleSheet(

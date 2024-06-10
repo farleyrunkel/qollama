@@ -33,7 +33,7 @@ void IVPushCard::setupUI() {
     m_iconLabel->setStyleSheet("border: none;");
     m_iconLabel->setMaximumSize(QSize(30, 30));
     m_iconLabel->setAlignment(Qt::AlignCenter); // Center align the icon label
-    QPixmap pixmap(":/icon/electric-light-bulb.svg");
+    QPixmap pixmap(":/icons/electric-light-bulb.svg");
     m_iconLabel->setPixmap(pixmap.scaled(m_iconLabel->size()));
 
     // Setup text label

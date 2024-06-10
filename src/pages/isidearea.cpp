@@ -37,11 +37,11 @@ void ISideArea::setupConnections() {
 
 void ISideArea::setupTitleBar(QVBoxLayout *layout) {
     QWidget *titleBar = createButtonContainer(
-        this, "leftTitleBar", ":/icon/sidebar-left.svg", QSize(30, 30), layout);
+        this, "leftTitleBar", ":/icons/sidebar-left.svg", QSize(30, 30), layout);
     QHBoxLayout *titleBarLayout = qobject_cast<QHBoxLayout *>(titleBar->layout());
 
     m_expandButton = createButton(titleBar, "smallButton",
-                                  ":/icon/sidebar-left.svg", QSize(30, 30));
+                                  ":/icons/sidebar-left.svg", QSize(30, 30));
     titleBarLayout->addWidget(m_expandButton);
 
     QSpacerItem *spacer =
@@ -49,7 +49,7 @@ void ISideArea::setupTitleBar(QVBoxLayout *layout) {
     titleBarLayout->addItem(spacer);
 
     m_newChatButton = createButton(titleBar, "smallButton",
-                                   ":/icon/create-new.svg", QSize(30, 30));
+                                   ":/icons/create-new.svg", QSize(30, 30));
     titleBarLayout->addWidget(m_newChatButton);
 }
 
@@ -64,7 +64,7 @@ void ISideArea::setupButtons(QVBoxLayout *layout) {
     layout->addWidget(m_modelButton);
     m_modelButton->setText(tr("Llama3"));
 
-    m_exploreButton = createButton(this, "exploreButton", "://icon/grid.svg",
+    m_exploreButton = createButton(this, "exploreButton", "://icons/grid.svg",
                                    QSize(0, 34), false);
     m_exploreButton->setFont(buttonFont);
     layout->addWidget(m_exploreButton);
@@ -88,7 +88,7 @@ void ISideArea::setupSettingButton(QVBoxLayout *layout) {
     buttonFont.setPointSize(10);
     buttonFont.setWeight(QFont::Medium);
 
-    m_settingButton = createButton(this, "settingButton", ":/icon/gear.svg",
+    m_settingButton = createButton(this, "settingButton", ":/icons/gear.svg",
                                    QSize(0, 40), false);
     m_settingButton->setFont(buttonFont);
     m_settingButton->setIconSize(QSize(20, 20));
@@ -134,7 +134,7 @@ IOverlayButton *ISideArea::createOverlayButton(QWidget *parent,
                                                const QFont &font,
                                                const QSize &size) {
     IOverlayButton *button = new IOverlayButton(parent);
-    QPixmap pix = QPixmap("://icon/ollama.png");
+    QPixmap pix = QPixmap("://images/ollama.png");
     pix = StyleManager::roundedPixmap(pix);
     button->setIcon(QIcon(pix));
     button->setObjectName(objectName);
@@ -145,7 +145,7 @@ IOverlayButton *ISideArea::createOverlayButton(QWidget *parent,
     button->setFocusPolicy(Qt::NoFocus);
     button->setLayoutDirection(Qt::LeftToRight);
 
-    button->addSubButton(QIcon(":/icon/create-new.svg"));
+    button->addSubButton(QIcon(":/icons/create-new.svg"));
 
     m_newChatSubButton = button->getSubButtons().first();
     return button;

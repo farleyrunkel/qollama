@@ -24,7 +24,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    void setupMainLayout();
+    void setupMainUi();
     void setupSideArea();
     void setupConnections();
     QGroupBox *addSettingGroupBox(const QString &key, const QString &value, const QString &config = "");
