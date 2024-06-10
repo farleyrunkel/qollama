@@ -38,9 +38,9 @@ file(GLOB PROJECT_SOURCES
 )
 
 add_subdirectory(src/3rdParty/qgallerywidget)
-list(APPEND PROJECT_SOURCES ${PQGALLERYWIDGET_SOURCES})
-include_directories(${PQGALLERYWIDGET_INCLUDE}
-)
+include_directories(${QGALLERYWIDGET_INCLUDE})
+list(APPEND PROJECT_SOURCES ${QGALLERYWIDGET_SOURCES})
+
 # Set the main file
 if(APPLE)
     # Set the application icon on macOS

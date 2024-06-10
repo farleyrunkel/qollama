@@ -12,7 +12,7 @@ ITestWidget::ITestWidget(QWidget *parent) : QDialog(parent) {
     QList<GalleryPhotoData> list;
     srand(time(0));
     int count = rand() % 10 + 5;
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < count; i++)
     {
         QPixmap pixmap(":/images/background.png");
         QString title = "凤翎谱" + QString::number(i);
