@@ -14,6 +14,8 @@ int main(int argc, char *argv[]) {
 
     initializer.initialize(&mainWindow);
 
+    ITestWidget test ;
+    test.show();
 
     return app.exec();
 }

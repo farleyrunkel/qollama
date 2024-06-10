@@ -17,8 +17,7 @@
 #include "signalhub.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent),
-    test(new ITestWidget(this)) {
+    : QMainWindow(parent){
 
     setupMainUi();
     setupStatusBar();
@@ -126,7 +125,6 @@ void MainWindow::showEvent(QShowEvent *event) {
 
     // expandButton->hide();
     // comboBox->hide();
-    test->hide();
 }
 
 void MainWindow::onComboBoxActivated(int index) {

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(qollama VERSION 0.1 LANGUAGES CXX)
 
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
@@ -14,12 +15,9 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
 if (Python3_FOUND)
     message(STATUS "Python3 found")
-    message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
-    message(STATUS "Python3_LIBRARIES: ${Python3_LIBRARIES}")
-    message(STATUS "Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
     include_directories(${Python3_INCLUDE_DIRS})
 else()
-    message(FATAL_ERROR "Python3 not found")
+    message(STATUS "Python3 not found")
 endif()
 
 # Include the src directory and all its subdirectories
@@ -33,46 +31,45 @@ foreach(subdir ${SUBDIRS})
     endif()
 endforeach()
 
-# Set the main file
-if(APPLE)
-    # Set the application icon on macOS
-    set(MACOSX_BUNDLE_ICON_FILE icon.icns)
-    set(app_icon_macos ${CMAKE_SOURCE_DIR}/resources/icon.icns)
-    # Output icon path for debugging
-    message(STATUS "Icon file path: ${app_icon_macos}")
-
-    # Ensure the icon file path is correct
-    if(NOT EXISTS ${app_icon_macos})
-        message(FATAL_ERROR "Icon file not found: ${app_icon_macos}")
-    else()
-        message(STATUS "Icon file found: ${app_icon_macos}")
-    endif()
-
-    set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-
-    # Set the Info.plist file
-    set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist)
-
-    set(PROJECT_MAIN_FILE "src/main.mm")
-else()
-    set(PROJECT_MAIN_FILE "src/main.cpp")
-endif()
-
 # Find all source and header files in all subdirectories under the src directory
 file(GLOB PROJECT_SOURCES
     "${SRC_DIR}/*/*.cpp"
     "${SRC_DIR}/*/*.h"
 )
 
-message(STATUS "PROJECT_SOURCES:" ${PROJECT_SOURCES})
+add_subdirectory(src/3rdParty/qgallerywidget)
+list(APPEND PROJECT_SOURCES ${PQGALLERYWIDGET_SOURCES})
+
+# Set the main file
+if(APPLE)
+    # Set the application icon on macOS
+    set(MACOSX_BUNDLE_ICON_FILE icon.icns)
+    set(APP_ICON_PATH ${CMAKE_SOURCE_DIR}/resources/icon.icns)
+    # Output icon path for debugging
+    message(STATUS "Icon file path: ${APP_ICON_PATH}")
+
+    # Ensure the icon file path is correct
+    if(NOT EXISTS ${APP_ICON_PATH})
+        message(FATAL_ERROR "Icon file not found: ${APP_ICON_PATH}")
+    else()
+        message(STATUS "Icon file found: ${APP_ICON_PATH}")
+    endif()
+
+    set_source_files_properties(${APP_ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+    # Set the Info.plist file
+    set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/resources/Info.plist)
+    list(APPEND PROJECT_SOURCES ${APP_ICON_PATH})
+
+    set(PROJECT_MAIN_FILE "src/main.mm")
+
+else()
+    list(APPEND PROJECT_SOURCES ${CMAKE_SOURCE_DIR}/resources/resources.rc)
+    set(PROJECT_MAIN_FILE "src/main.cpp")
+endif()
 
 # Add the main file to PROJECT_SOURCES
 list(APPEND PROJECT_SOURCES ${PROJECT_MAIN_FILE})
-
-if(APPLE)
-    list(APPEND PROJECT_SOURCES ${app_icon_macos})
-endif()
-
 
 # Create the executable
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -117,7 +114,7 @@ set_target_properties(qollama PROPERTIES
 )
 
 # if(APPLE)
-#     install(FILES ${app_icon_macos} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/Resources)
+#     install(FILES ${APP_ICON_PATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents/Resources)
 #     install(FILES ${MACOSX_BUNDLE_INFO_PLIST} DESTINATION ${CMAKE_INSTALL_PREFIX}/qollama.app/Contents)
 # endif()
 

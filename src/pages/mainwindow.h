@@ -46,8 +46,6 @@ private:
     void setupConnections();
     void retranslateUi();
 
-    ITestWidget *test;
-
     QStackedWidget *m_pages;
 
     IMarketPage *m_market;
