@@ -17,7 +17,6 @@
 #include "imarketpage.h"
 #include "isettingpage.h"
 #include "isidearea.h"
-#include "itestwidget.h"
 #include "iwelcomepage.h"
 
 class MainWindow : public QMainWindow {
@@ -28,16 +27,6 @@ public:
     ~MainWindow();
 
 protected:
-    void showEvent(QShowEvent *event) override;
-
-public slots:
-    void appendWordToActiveChat(QString reply);
-
-private slots:
-    void onInputLineReturnPressed();
-    void onComboBoxActivated(int index);
-    void onInputLineTextChanged(const QString &arg1);
-    void onChatbotFinish();
 
 private:
     void setupPages();

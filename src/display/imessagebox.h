@@ -14,6 +14,7 @@ public:
     explicit IMessageBox(const QString& userName, const QString& avatar, const QString& message, QWidget* parent = nullptr);
 
     QString message() {return m_message;}
+    QString role() {return userLabel->text() == "llama3" ? "assistant" : "user";}
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

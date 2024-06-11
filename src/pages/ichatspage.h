@@ -25,19 +25,21 @@ public:
     QStackedWidget *chats() const;
     IChatScrollArea *currentChat();
 
+    void onOllamaFinished();
+    void appendWordToActiveChat(QString text);
 private slots:
     void sendMessage(const QString &text, bool isNewChat = false);
     void handleSendMessage();
     void updateMenu(const QList<QString> &list);
 
 private:
-    void setupMainLayout();
+    void setupMainUi();
     void setupTopArea();
     void setupChatArea();
     void setupBottomArea();
     void setupConnections();
 
-    IChatScrollArea *addChat();
+    IChatScrollArea *addNewChat();
 
 private:
     QVBoxLayout *m_mainLayout;

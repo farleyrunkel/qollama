@@ -15,15 +15,20 @@ public:
 
     void addMessage(const QString &message, const QString &userName,
                     const QString &avatar);
-    bool isNew() const;
+    bool isEmpty() const;
     IMessageBox *getLatestMessageWidget() const;
+
+    QList<IMessageBox*> allMessageBoxes() const {
+        return messageBoxes;
+    }
+
     void scrollToBottom();
 
 private:
-    void setupUI();
+    void setupMainUI();
 
 private:
-    IMessageBox *m_latestMessageWidget;
+    QList<IMessageBox*> messageBoxes;
     QWidget *m_chatContainer;
 };
 

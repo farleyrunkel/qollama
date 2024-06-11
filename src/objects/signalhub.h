@@ -16,6 +16,7 @@ public:
 
 signals:
     void generateRequest(const QJsonObject &);
+    void chatRequest(const QJsonObject &);
     void onMessageAdded(const QString &);
 
     void disconnect();

@@ -12,12 +12,10 @@
 #include "imarketpage.h"
 #include "isettingpage.h"
 #include "isidearea.h"
-#include "itestwidget.h"
 #include "iwelcomepage.h"
 #include "signalhub.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent){
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     setupMainUi();
     setupStatusBar();
@@ -30,7 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {}
 
 void MainWindow::setupConnections() {
-    // connect(chatPage, &IWidget::shown, comboBox, &QComboBox::setVisible);
 
     connect(m_left->settingButton(), &QPushButton::pressed, m_setting,
             &ISettingPage::show);
@@ -38,28 +35,6 @@ void MainWindow::setupConnections() {
             [this]() { m_pages->setCurrentWidget(m_welcome); });
     connect(m_left->exploreButton(), &QPushButton::pressed, this,
             [this]() { m_pages->setCurrentWidget(m_market); });
-
-    // connect(newChatBtn, &QPushButton::pressed,
-    // [&](){pages->setCurrentWidget(welcome);});
-
-    connect(&ollama::Client::instance(), &ollama::Client::replyReceived, this,
-            &MainWindow::appendWordToActiveChat);
-    connect(&ollama::Client::instance(), &ollama::Client::finished, this,
-            &MainWindow::onChatbotFinish);
-
-    // connect(sendButton, &QPushButton::clicked,[&](){
-    //     if (sendButton->statusTip() == "Pending") {
-    //         chatbot->abort();
-    //         sendButton->statusTip() = "Nothing";
-    //         return ;
-    //     }
-    //     else if (sendButton->statusTip() == "Waiting") {
-    //         on_inputLine_returnPressed();
-    //     }
-    // });
-
-    // connect(inputLine, &QLineEdit::returnPressed, sendButton,
-    // &QPushButton::pressed);
 
     connect(m_left->historyList(), &IHistoryList::itemClicked, this,
             [this](QListWidgetItem *item) {
@@ -77,90 +52,23 @@ void MainWindow::setupConnections() {
         m_pages->setCurrentWidget(m_welcome);
     });
 
-    connect(&SignalHub::instance(), &SignalHub::newChatAdded, this,
-            [this](IChatScrollArea *chat) {m_left->historyList()->addItem(""); });
+    connect(
+        &SignalHub::instance(), &SignalHub::newChatAdded, this,
+        [this](IChatScrollArea *chat) { m_left->historyList()->addItem(""); });
 
     connect(&SignalHub::instance(), &SignalHub::onMessageAdded, this,
-            [this](const QString & chat) {
-                int idx = m_chats->chats()->indexOf(m_chats->chats()->currentWidget());
+            [this](const QString &chat) {
+                int idx =
+            m_chats->chats()->indexOf(m_chats->chats()->currentWidget());
             m_left->historyList()->item(idx)->setData(Qt::ToolTipRole, chat);
     });
     connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
             [this]() { m_left->setVisible(!m_left->isVisible()); });
     connect(&SignalHub::instance(), &SignalHub::onUserButtonClicked, this,
-            [this]() { m_setting->show();});
+            [this]() { m_setting->show(); });
 
     connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
             [&](const QString &) { m_pages->setCurrentWidget(m_chats); });
-}
-
-void MainWindow::onChatbotFinish() {
-    // sendButton->setStatusTip("Nothing");
-    // on_inputLine_textChanged(inputLine->text());
-    auto *chatListView = m_chats->currentChat();
-    if (!chatListView) {
-        qDebug() << "Current chat list is null.";
-        return;
-    }
-
-    IMessageBox *curr = chatListView->getLatestMessageWidget();
-    curr->finish();
-}
-
-void MainWindow::appendWordToActiveChat(QString text) {
-    auto chatListView = m_chats->currentChat();
-    if (!chatListView) {
-        qDebug() << "Current chat list is null.";
-        return;
-    }
-
-    IMessageBox *curr = chatListView->getLatestMessageWidget();
-    curr->appendMessage(text);
-
-    chatListView->scrollToBottom();
-}
-
-void MainWindow::showEvent(QShowEvent *event) {
-    QMainWindow::showEvent(event);
-
-    // expandButton->hide();
-    // comboBox->hide();
-}
-
-void MainWindow::onComboBoxActivated(int index) {
-    // auto text = "";//comboBox->currentText();
-    // inputLine->setPlaceholderText(QString("Message ") + text + "...");
-}
-
-void MainWindow::onInputLineTextChanged(const QString &arg1) {
-    // if ( sendButton->statusTip() == "Pending") {
-    //     return;
-    // }
-    // sendButton->setIcon(QIcon(":/icons/arrow-up-circle.svg"));
-    // if (arg1.isEmpty()) {
-    //     sendButton->setDisabled(true);
-    //     sendButton->setStatusTip("Nothing");
-    // }
-    // else {
-    //     sendButton->setEnabled(true);
-    //     sendButton->setStatusTip("Waiting");
-    // }
-}
-
-void MainWindow::onInputLineReturnPressed() {
-    // if (chatbot->status() == ollama::Client::Receiving
-    //     || chatbot->status() == ollama::Client::Requesting
-    //     ) {return;}
-
-    // QString text = inputLine->text().trimmed();
-
-    // if (text.isEmpty()) {
-    //     qDebug() << "Input text is empty.";
-    //     return;
-    // }
-
-    // addMessage(text);
-    // inputLine->clear();
 }
 
 void MainWindow::setupMainUi() {
@@ -205,15 +113,14 @@ void MainWindow::setupStatusBar() {
 void MainWindow::setupPages() {
     m_chats = new IChatsPage;
     m_welcome = new IWelcomePage;
-    m_market = new IMarketPage(this);
+    m_market = new IMarketPage;
+    m_setting = new ISettingPage;
 
     m_pages->addWidget(m_chats);
     m_pages->addWidget(m_welcome);
     m_pages->addWidget(m_market);
 
     m_pages->setCurrentWidget(m_welcome);
-
-    m_setting = new ISettingPage(this);
 }
 
 void MainWindow::retranslateUi() {

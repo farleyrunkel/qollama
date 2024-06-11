@@ -49,6 +49,7 @@ private:
     Status m_status;
 
     QJsonObject m_modelList;
+    QString url();
 };
 } // namespace ollama
 #endif // OLLAMACLIENT_H

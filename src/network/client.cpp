@@ -5,7 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrl>
-
+#include <QJsonArray>
 namespace ollama {
 
 Client::Client(QObject *parent)
@@ -17,21 +17,65 @@ Client::Client(QObject *parent)
     connect(&SignalHub::instance(), &SignalHub::listRequest, this, &Client::list);
     connect(&SignalHub::instance(), &SignalHub::disconnect, this,
             &Client::disconnect);
+    connect(&SignalHub::instance(), &SignalHub::chatRequest, this,
+            &Client::chat);
 }
 
 Client::~Client() { qDebug() << "Client destroyed."; }
 
 void Client::chat(const QJsonObject &json) {
-    qDebug() << "Chat request with JSON:"
-             << QJsonDocument(json).toJson(QJsonDocument::Compact);
-    sendRequest("http://localhost:11434/api/chat", json);
+
+    auto reply = sendRequest(QString("http://%1/api").arg(url()) +"/chat", json);
+
+    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+        m_status = Status::Receiving;
+        qDebug() << "Receiving response. Status:" << m_status;
+
+        QByteArray buffer = reply->readAll();
+        if (buffer.isEmpty()) {
+            qDebug() << "Empty response from server";
+            return;
+        }
+
+        qDebug() << "Response buffer:" << buffer;
+
+        QJsonParseError error;
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(buffer, &error);
+
+        if (error.error != QJsonParseError::NoError) {
+            qDebug() << "Error parsing JSON:" << error.errorString();
+            return;
+        }
+
+        if (!jsonDoc.isObject()) {
+            qDebug() << "JSON data is not an object.";
+            return;
+        }
+
+        auto response = jsonDoc.object().value("message").toObject();
+        qDebug() << "Parsed response:" << response.value("content").toString();
+        emit replyReceived(response.value("content").toString());
+    });
+
+    QObject::connect(reply, &QNetworkReply::finished, this, [this]() {
+        m_status = Status::Finished;
+        qDebug() << "Request finished. Status:" << m_status;
+        emit finished();
+    });
+
+    QObject::connect(reply, &QNetworkReply::errorOccurred, this,
+                     [this](QNetworkReply::NetworkError error) {
+                         qDebug() << "Network error occurred:" << error;
+                         emit errorOccurred("Network error occurred");
+                     });
+}
+
+QString Client::url() {
+    return ConfigManager::instance().config("ollamaport").toString();
 }
 
 void Client::generate(const QJsonObject &json) {
-    auto url =
-        QString("http://%1/api/generate")
-                   .arg(ConfigManager::instance().config("ollamaport").toString());
-    auto reply = sendRequest(url, json);
+    auto reply = sendRequest(QString("http://%1/api").arg(url()) +"/generate", json);
 
     QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
         m_status = Status::Receiving;
