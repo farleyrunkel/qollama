@@ -33,6 +33,8 @@ void IWelcomePage::setupMainLayout() {
 
     m_mainLayout->addWidget(m_topArea);
     m_mainLayout->addLayout(m_contentLayout);
+
+    emit SignalHub::instance().listRequest();
 }
 
 void IWelcomePage::setupTopArea() {

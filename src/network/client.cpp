@@ -23,11 +23,48 @@ Client::Client(QObject *parent)
 
 Client::~Client() { qDebug() << "Client destroyed."; }
 
+QString Client::url() {
+    return ConfigManager::instance().config("ollamaport").toString();
+}
+
 void Client::chat(const QJsonObject &json) {
+    sendRequestAndProcessResponse("chat", json, [this](const QJsonObject &response) {
+        auto content = response.value("message").toObject().value("content").toString();
+        qDebug() << "Parsed chat response:" << content;
+        emit replyReceived(content);
+    });
+}
 
-    auto reply = sendRequest(QString("http://%1/api").arg(url()) +"/chat", json);
+void Client::generate(const QJsonObject &json) {
+    sendRequestAndProcessResponse("generate", json, [this](const QJsonObject &response) {
+        auto content = response.value("response").toString();
+        qDebug() << "Parsed generate response:" << content;
+        emit replyReceived(content);
+    });
+}
 
-    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+void Client::list() {
+    sendRequestAndProcessResponse("tags", QJsonObject(), [this](const QJsonObject &response) {
+        QJsonArray modelsArray = response.value("models").toArray();
+        QList<QString> list;
+
+        for (const QJsonValue &value : modelsArray) {
+            if (value.isObject()) {
+                QString name = value.toObject().value("name").toString();
+                if (!name.isEmpty()) {
+                    list.append(name);
+                }
+            }
+        }
+
+        emit SignalHub::instance().listReceived(list);
+    });
+}
+
+void Client::sendRequestAndProcessResponse(const QString &endpoint, const QJsonObject &json, std::function<void(const QJsonObject&)> processResponse) {
+    auto reply = sendRequest(QString("http://%1/api/%2").arg(url()).arg(endpoint), json);
+
+    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply, processResponse]() {
         m_status = Status::Receiving;
         qDebug() << "Receiving response. Status:" << m_status;
 
@@ -52,9 +89,9 @@ void Client::chat(const QJsonObject &json) {
             return;
         }
 
-        auto response = jsonDoc.object().value("message").toObject();
-        qDebug() << "Parsed response:" << response.value("content").toString();
-        emit replyReceived(response.value("content").toString());
+        auto response = jsonDoc.object();
+
+        processResponse(response);
     });
 
     QObject::connect(reply, &QNetworkReply::finished, this, [this]() {
@@ -70,55 +107,6 @@ void Client::chat(const QJsonObject &json) {
                      });
 }
 
-QString Client::url() {
-    return ConfigManager::instance().config("ollamaport").toString();
-}
-
-void Client::generate(const QJsonObject &json) {
-    auto reply = sendRequest(QString("http://%1/api").arg(url()) +"/generate", json);
-
-    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
-        m_status = Status::Receiving;
-        qDebug() << "Receiving response. Status:" << m_status;
-
-        QByteArray buffer = reply->readAll();
-        if (buffer.isEmpty()) {
-            qDebug() << "Empty response from server";
-            return;
-        }
-
-        qDebug() << "Response buffer:" << buffer;
-
-        QJsonParseError error;
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(buffer, &error);
-
-        if (error.error != QJsonParseError::NoError) {
-            qDebug() << "Error parsing JSON:" << error.errorString();
-            return;
-        }
-
-        if (!jsonDoc.isObject()) {
-            qDebug() << "JSON data is not an object.";
-            return;
-        }
-
-        auto response = jsonDoc.object().value("response");
-        qDebug() << "Parsed response:" << response.toString();
-        emit replyReceived(response.toString());
-    });
-
-    QObject::connect(reply, &QNetworkReply::finished, this, [this]() {
-        m_status = Status::Finished;
-        qDebug() << "Request finished. Status:" << m_status;
-        emit finished();
-    });
-
-    QObject::connect(reply, &QNetworkReply::errorOccurred, this,
-                     [this](QNetworkReply::NetworkError error) {
-                         qDebug() << "Network error occurred:" << error;
-        emit errorOccurred("Network error occurred");
-    });
-}
 
 void Client::embeddings(const QJsonObject &json) {
     qDebug() << "Embeddings request with JSON:"
@@ -138,30 +126,6 @@ void Client::push(const QJsonObject &json) {
     sendRequest("http://localhost:11434/api/push", json);
 }
 
-void Client::list() {
-    qDebug() << "Tags request.";
-    auto reply = sendRequest("http://localhost:11434/api/tags");
-    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
-        m_status = Status::Receiving;
-        // todo: finish get list from ollama
-
-        QList<QString> list = {"Gemma", "codellama", "ChatGPT-4o", "llama3"};
-        emit SignalHub::instance().listReceived(list);
-    });
-
-    QObject::connect(reply, &QNetworkReply::finished, this, [this]() {
-        m_status = Status::Finished;
-        qDebug() << "Request finished. Status:" << m_status;
-        emit finished();
-    });
-
-    QObject::connect(reply, &QNetworkReply::errorOccurred, this,
-                     [this](QNetworkReply::NetworkError error) {
-                         qDebug() << "Network error occurred:" << error;
-        emit replyReceived("Network error occurred");
-    });
-}
-
 Client::Status Client::status() const {
     qDebug() << "Status requested:" << m_status;
     return m_status;
@@ -174,12 +138,19 @@ QNetworkReply *Client::sendRequest(const QString &url,
              << QJsonDocument(json).toJson(QJsonDocument::Compact);
 
     QNetworkRequest request;
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setUrl(QUrl(url));
 
-    qDebug() << "Request status:" << m_status;
+    QNetworkReply* reply;
 
-    auto reply = m_manager->post(request, QJsonDocument(json).toJson());
+    if(!json.empty()) {
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        reply = m_manager->post(request, QJsonDocument(json).toJson());
+    }
+    else {
+        reply = m_manager->get(request);
+        qDebug() << " m_manager->get request:" << request.url() ;
+    }
+
     qDebug() << "Request sent.";
     return reply;
 }

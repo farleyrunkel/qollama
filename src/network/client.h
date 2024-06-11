@@ -50,6 +50,7 @@ private:
 
     QJsonObject m_modelList;
     QString url();
+    void sendRequestAndProcessResponse(const QString &endpoint, const QJsonObject &json, std::function<void (const QJsonObject &)> processResponse);
 };
 } // namespace ollama
 #endif // OLLAMACLIENT_H

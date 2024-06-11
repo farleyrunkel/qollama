@@ -14,8 +14,6 @@ void Initializer::initialize(QMainWindow *window) {
 
     onDataLoaded();
 
-    emit SignalHub::instance().listRequest();
-
     // dataLoader.loadData();
 }
 
