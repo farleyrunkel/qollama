@@ -111,10 +111,10 @@ void MainWindow::setupStatusBar() {
 }
 
 void MainWindow::setupPages() {
-    m_chats = new IChatsPage;
-    m_welcome = new IWelcomePage;
-    m_market = new IMarketPage;
-    m_setting = new ISettingPage;
+    m_chats = new IChatsPage(this);
+    m_welcome = new IWelcomePage(this);
+    m_market = new IMarketPage(this);
+    m_setting = new ISettingPage(this); // Setting a parent is necessary
 
     m_pages->addWidget(m_chats);
     m_pages->addWidget(m_welcome);
