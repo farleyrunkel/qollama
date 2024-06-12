@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Qt/6.7.1/llvm-mingw_64/include/",
+                "C:/Qt/6.7.1/llvm-mingw_64/include/QtCore",
+                "C:/Qt/6.7.1/llvm-mingw_64/include/QtWidgets",
+                "C:/Qt/6.7.1/llvm-mingw_64/include/Qt3DCore",
+                "C:/Qt/6.7.1/llvm-mingw_64/include/Qt3DRender",
+                "C:/Qt/6.7.1/llvm-mingw_64/include/QtTest",
+                "C:/Qt/6.7.1/llvm-mingw_64/include/QtOpenGL",
+                "C:/Qt/Tools/llvm-mingw1706_64/include",
+                "C:/Qt/Tools/llvm-mingw1706_64/lib/clang/17/include",
+                "C:/Qt/Tools/llvm-mingw1706_64/include/c++/v1",
+                "C:/Qt/Tools/llvm-mingw1706_64/include/c++/v1/__bit"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.22621.0",
+            "compilerPath": "",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-gcc-x64"
+        }
+    ],
+    "version": 4
+}
