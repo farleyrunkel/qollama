@@ -14,12 +14,13 @@
 #include <windows.h>
 #endif
 
-// Constructor
 ISettingPage::ISettingPage(QWidget *parent) : QDialog(parent) {
-    setupMainUi();                     // Setup the main layout
-    setupSideArea();                       // Setup the top area
-    setupSettingsAccount(m_settingLayout); // Setup the setting area
-    setupConnections();                    // Setup signal-slot
+    setupMainUi();          // Setup the main layout
+    setupSideArea();        // Setup the top area
+    setupAccountSettings(); // Setup the setting area
+    setupOllamaSettings();
+    setupPromptSettings();
+    setupConnections();     // Setup signal-slot
 }
 
 void ISettingPage::showEvent(QShowEvent *event) {
@@ -125,9 +126,17 @@ void ISettingPage::setupSideArea() {
 
     sideAreaLayout->addWidget(new QLabel("Settings"));
 
-    auto m_accountButton = new QPushButton(QIcon("://icons/account.svg"), "Account");
+    m_accountButton = new QPushButton(QIcon("://icons/account.svg"), "Account");
     m_accountButton->setObjectName("bigButton");
     sideAreaLayout->addWidget(m_accountButton);
+
+    m_ollamaButton = new QPushButton(QIcon("://images/ollama.png"), "Ollama");
+    m_ollamaButton->setObjectName("bigButton");
+    sideAreaLayout->addWidget(m_ollamaButton);
+
+    m_promptButton = new QPushButton(QIcon("://icons/prompt.svg"), "Prompt");
+    m_promptButton->setObjectName("bigButton");
+    sideAreaLayout->addWidget(m_promptButton);
 }
 
 QGroupBox *ISettingPage::addSettingGroupBox(const QString &key,
@@ -162,17 +171,52 @@ QGroupBox *ISettingPage::addSettingGroupBox(const QString &key,
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupSettingsAccount(QLayout *layout) {
+void ISettingPage::setupOllamaSettings() {
+    auto ollama = new QWidget;
+    m_settings["ollama"] = ollama;
+    m_settingLayout->addWidget(ollama);
+
+    auto ollamaLayout = new QVBoxLayout(ollama);
+    ollamaLayout->setSpacing(10);
+    ollamaLayout->setAlignment(Qt::AlignTop);
+
+    ollamaLayout->addWidget(addSettingGroupBox(
+        "Model files directory",
+        ConfigManager::instance().config("modeldir").toString(), "modeldir"));
+    ollamaLayout->addWidget(
+        addSettingGroupBox("Ollama port", "localhost:11434", "ollamaport"));
+    ollamaLayout->addWidget(
+        addSettingGroupBox("Ollama address", "localhost", "ollamadomain"));
+}
+
+// Setup the setting area of the setting page
+void ISettingPage::setupPromptSettings() {
+    auto widget = new QWidget;
+    m_settings["prompt"] = widget;
+    m_settingLayout->addWidget(widget);
+
+    auto layout = new QVBoxLayout(widget);
+    layout->setSpacing(10);
+    layout->setAlignment(Qt::AlignTop);
+
+    layout->addWidget(
+        addSettingGroupBox("Prompt", "Reply with English", "prompt"));
+
+}
+
+// Setup the setting area of the setting page
+void ISettingPage::setupAccountSettings() {
     auto account = new QWidget;
     m_settings["account"] = account;
-    layout->addWidget(m_settings["account"]);
+    m_settingLayout->addWidget(account);
 
-    auto accountLayout = new QVBoxLayout(m_settings["account"]);
+    auto accountLayout = new QVBoxLayout(account);
     accountLayout->setSpacing(10);
     accountLayout->setAlignment(Qt::AlignTop);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
-    qDebug() << "ConfigManager::instance().config(avatar).toString()" << ConfigManager::instance().config("avatar").toString();
+    qDebug() << "ConfigManager::instance().config(avatar).toString()"
+             << ConfigManager::instance().config("avatar").toString();
     m_avatarButton = new QPushButton(this);
     m_avatarButton->setFixedSize(60, 60);
     m_avatarButton->setStyleSheet(
@@ -186,11 +230,6 @@ void ISettingPage::setupSettingsAccount(QLayout *layout) {
     lay->addWidget(addSettingGroupBox("User name", "QOllama", "username"));
 
     accountLayout->addLayout(lay);
-    accountLayout->addWidget(addSettingGroupBox(
-        "Model files directory",
-        ConfigManager::instance().config("modeldir").toString(), "modeldir"));
-    accountLayout->addWidget(
-        addSettingGroupBox("Ollama port", "localhost:11434", "ollamaport"));
 }
 
 // Setup signal-slot connections
@@ -198,6 +237,15 @@ void ISettingPage::setupConnections() {
     connect(m_avatarButton, &QPushButton::clicked, this,
             &ISettingPage::changeAvatar); // Change avatar button clicked
 
+    connect(m_accountButton, &QPushButton::clicked, this, [this]() {
+        m_settingLayout->setCurrentWidget(m_settings["account"]);
+    });
+    connect(m_ollamaButton, &QPushButton::clicked, this, [this]() {
+        m_settingLayout->setCurrentWidget(m_settings["ollama"]);
+    });
+    connect(m_promptButton, &QPushButton::clicked, this, [this]() {
+        m_settingLayout->setCurrentWidget(m_settings["prompt"]);
+    });
 }
 
 // Slot to change avatar

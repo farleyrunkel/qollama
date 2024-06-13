@@ -57,5 +57,6 @@
         <file>images/settingspage.png</file>
         <file>images/welcomepage.png</file>
         <file>config.json.in</file>
+        <file>icons/prompt.svg</file>
     </qresource>
 </RCC>

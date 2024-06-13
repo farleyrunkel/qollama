@@ -17,6 +17,7 @@ class ISettingPage : public QDialog {
     Q_OBJECT
 
 public:
+    // Constructor
     explicit ISettingPage(QWidget *parent = nullptr);
 
 protected:
@@ -28,7 +29,7 @@ private:
     void setupSideArea();
     void setupConnections();
     QGroupBox *addSettingGroupBox(const QString &key, const QString &value, const QString &config = "");
-    void setupSettingsAccount(QLayout *layout);
+    void setupAccountSettings();
 
 private slots:
     void changeAvatar();
@@ -39,8 +40,13 @@ private:
     QStackedLayout *m_settingLayout;
 
     QPushButton *m_avatarButton;
+    QPushButton *m_accountButton;
+    QPushButton *m_ollamaButton;
+    QPushButton *m_promptButton;
 
     QMap<QString, QWidget*> m_settings;
+    void setupOllamaSettings();
+    void setupPromptSettings();
 };
 
 #endif // ISETTINGPAGE_H
