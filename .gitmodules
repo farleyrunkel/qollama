@@ -1,9 +1,4 @@
-[submodule "external/asio"]
-	path = external/asio
-	url = https://github.com/chriskohlhoff/asio
-[submodule "external/json"]
-	path = external/json
-	url = https://github.com/nlohmann/json
+
 [submodule "src/3rdParty/spinner"]
     path = src/3rdParty/spinner
 	url = https://github.com/snowwlex/QtWaitingSpinner.git
