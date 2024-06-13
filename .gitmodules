@@ -10,3 +10,6 @@
 [submodule "src/3rdParty/qgallerywidget"]
 	path = src/3rdParty/qgallerywidget
 	url = git@github.com:farleyrunkel/QGalleryWidget.git
+[submodule "external/gpts"]
+	path = external/gpts
+	url = https://github.com/ai-boost/Awesome-GPTs.git
