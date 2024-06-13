@@ -14,6 +14,7 @@
 #include "isidearea.h"
 #include "iwelcomepage.h"
 #include "signalhub.h"
+#include "stylemanager.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
@@ -78,6 +79,13 @@ void MainWindow::setupMainUi() {
     setContextMenuPolicy(Qt::ActionsContextMenu);
     setAutoFillBackground(true);
     resize(800, 500);
+
+    StyleManager::instance().loadStyleSheet(":/qss/style.qss");
+
+    // styleManager.enableBorders(true);
+
+    StyleManager::instance().applyStyleSheet(this);
+    StyleManager::instance().applyPalette(this);
 
     m_splitter = new QSplitter(this);
     m_splitter->setObjectName("splitter");

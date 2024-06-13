@@ -10,7 +10,10 @@ class StyleManager : public QObject {
     Q_OBJECT
 
 public:
-    explicit StyleManager(QObject *parent = nullptr);
+    static StyleManager& instance()  {
+        static StyleManager instance;
+        return instance;
+    }
 
     void loadStyleSheet(const QString &filePath);
     void applyStyleSheet(QWidget *widget);
@@ -27,6 +30,14 @@ private:
     QMap<QString, QString> colorPalette;
 
     bool showBorders;
+
+private:
+    // Private constructor to prevent direct instantiation
+    explicit StyleManager(QObject *parent = nullptr);
+
+    // Delete copy constructor and assignment operator to prevent copying
+    StyleManager(const StyleManager&) = delete;
+    StyleManager& operator=(const StyleManager&) = delete;
 };
 
 #endif // STYLEMANAGER_H

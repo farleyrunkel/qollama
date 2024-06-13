@@ -5,13 +5,16 @@
 
 int main(int argc, char *argv[]) {
 
-    QApplication app(argc, argv);
+    QApplication appliction(argc, argv);
 
     Initializer initializer;
+    initializer.initialize();
 
     MainWindow mainWindow;
 
-    initializer.initialize(&mainWindow);
+    mainWindow.load();
 
-    return app.exec();
+    mainWindow.show();
+
+    return appliction.exec();
 }

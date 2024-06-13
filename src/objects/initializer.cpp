@@ -1,14 +1,14 @@
 #include "initializer.h"
 #include "dataloader.h"
+#include "stylemanager.h"
 
 Initializer::Initializer(QObject *parent)
-    : QObject(parent), mainWindow(nullptr) {
+    : QObject(parent) {
     connect(&DataLoader::instance(), &DataLoader::dataLoaded, this,
             &Initializer::onDataLoaded);
 }
 
-void Initializer::initialize(QMainWindow *window) {
-    mainWindow = window;
+void Initializer::initialize() {
 
     ConfigManager::instance().initializeDefaults();
 
@@ -19,14 +19,6 @@ void Initializer::initialize(QMainWindow *window) {
 }
 
 void Initializer::onDataLoaded() {
-    styleManager.loadStyleSheet(":/qss/style.qss");
-
-    // styleManager.enableBorders(true);
-
-    styleManager.applyStyleSheet(mainWindow);
-    styleManager.applyPalette(mainWindow);
-
-    mainWindow->show();
 
     emit initializationComplete();
 }

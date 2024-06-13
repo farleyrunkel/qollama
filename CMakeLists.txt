@@ -82,6 +82,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/3rdParty/spinner/waitingspinnerwidget.cpp
         src/3rdParty/spinner/waitingspinnerwidget.h
         src/objects/dataloader.h src/objects/dataloader.cpp
+        src/display/igptswidget.h src/display/igptswidget.cpp
     )
 else()
     if(ANDROID)

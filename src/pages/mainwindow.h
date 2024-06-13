@@ -26,6 +26,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void load() {};
+
 protected:
 
 private:

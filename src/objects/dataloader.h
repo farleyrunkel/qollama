@@ -166,7 +166,7 @@ private:
           R"(^##\s*.+$\n(.+?)\n^By\s+.+$)",
           QRegularExpression::MultilineOption |
               QRegularExpression::DotMatchesEverythingOption);
-      QRegularExpressionMatch descriptionMatch = descriptionRegex.match(content);
+      static QRegularExpressionMatch descriptionMatch = descriptionRegex.match(content);
       if (descriptionMatch.hasMatch()) {
           mdContent.description = descriptionMatch.captured(1).trimmed();
       }
@@ -190,7 +190,7 @@ private:
       // 解析 prompt
       QRegularExpression promptRegex(R"(^```markdown\n([\s\S]+)\n```$)",
                                      QRegularExpression::MultilineOption);
-      QRegularExpressionMatch promptMatch = promptRegex.match(content);
+      static QRegularExpressionMatch promptMatch = promptRegex.match(content);
       if (promptMatch.hasMatch()) {
           mdContent.prompt = promptMatch.captured(1).trimmed();
       } else {
