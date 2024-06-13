@@ -320,7 +320,6 @@ void IMarketPage::setupCategories() {
     addCategory("writing");
     addCategory("life");
 
-
     auto modeldir = ConfigManager::instance().config("modeldir").toString();
     QDir modelsDir(modeldir);
 

@@ -109,6 +109,13 @@ void ConfigManager::readConfigFromFile(const QString &filePath) {
                 auto m_modelDir = modelDir;
                 setConfig("modeldir", m_modelDir);
             }
+
+            // Read gpts directory
+            if (jsonObj.contains("gptsdir")) {
+                QString modelDir = jsonObj.value("gptsdir").toString();
+                auto m_modelDir = modelDir;
+                setConfig("gptsdir", m_modelDir);
+            }
         }
         file.close();
     }

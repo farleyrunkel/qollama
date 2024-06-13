@@ -81,6 +81,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         src/3rdParty/spinner/waitingspinnerwidget.cpp
         src/3rdParty/spinner/waitingspinnerwidget.h
+        src/objects/dataloader.h src/objects/dataloader.cpp
     )
 else()
     if(ANDROID)
@@ -136,6 +137,8 @@ if(APPLE)
 else()
     # On other systems, install models folder and config file into the install prefix
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/models DESTINATION ${CMAKE_INSTALL_PREFIX})
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/external/gpts DESTINATION ${CMAKE_INSTALL_PREFIX})
+
 endif()
 
 add_subdirectory(tests)

@@ -3,5 +3,6 @@
     "appIcon": ":/images/qollama-.png",
     "avatar": ":/images/farley.png",
     "ollamaport": "localhost:11434",
-    "modeldir": "@MODELDIR@"
+    "modeldir": "@MODELDIR@",
+    "gptsdir": "@GPTSDIR@"
 }

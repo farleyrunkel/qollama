@@ -10,10 +10,16 @@ if (EXISTS ${CMAKE_INSTALL_PREFIX}/models)
     set(MODELDIR ${CMAKE_INSTALL_PREFIX}/models)
 endif()
 
+set(GPTSDIR ${CMAKE_SOURCE_DIR}/external/gpts)
+
+if (EXISTS ${CMAKE_INSTALL_PREFIX}/gpts)
+    set(GPTSDIR ${CMAKE_INSTALL_PREFIX}/gpts)
+endif()
+
 # Debug messages
 message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
 message(STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "MODELDIR: ${MODELDIR}")
+message(STATUS "GPTSDIR: ${GPTSDIR}")
 
 # Generate the config.json file
 configure_file(${CMAKE_SOURCE_DIR}/resources/config.json.in ${CMAKE_BINARY_DIR}/config.json @ONLY)

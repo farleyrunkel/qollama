@@ -1,7 +1,5 @@
 #include <QTest>
 
-#include <asio.hpp>
-#include <ollama.hpp>
 
 class TestAsio : public QObject {
     Q_OBJECT

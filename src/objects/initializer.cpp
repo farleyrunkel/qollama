@@ -1,10 +1,10 @@
 #include "initializer.h"
-#include "signalhub.h"
+#include "dataloader.h"
 
 Initializer::Initializer(QObject *parent)
     : QObject(parent), mainWindow(nullptr) {
-    // connect(&dataLoader, &DataLoader::dataLoaded, this,
-    // &Initializer::onDataLoaded);
+    connect(&DataLoader::instance(), &DataLoader::dataLoaded, this,
+            &Initializer::onDataLoaded);
 }
 
 void Initializer::initialize(QMainWindow *window) {
@@ -12,9 +12,10 @@ void Initializer::initialize(QMainWindow *window) {
 
     ConfigManager::instance().initializeDefaults();
 
-    onDataLoaded();
-
-    // dataLoader.loadData();
+    // 指定要加载的目录路径
+    QString directoryPath =
+        ConfigManager::instance().config("gptsdir").toString() + "/prompts";
+    DataLoader::instance().loadData(directoryPath);
 }
 
 void Initializer::onDataLoaded() {
