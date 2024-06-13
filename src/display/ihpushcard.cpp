@@ -1,11 +1,11 @@
 #include "ihpushcard.h"
 #include "imageloader.h"
+#include "signalhub.h"
 #include <QEvent>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPainter>
 #include <QPainterPath>
-#include "signalhub.h"
 
 IHPushCard::IHPushCard(QWidget *parent) : QPushButton(parent) {
     setupMainUI();
@@ -14,13 +14,14 @@ IHPushCard::IHPushCard(QWidget *parent) : QPushButton(parent) {
 
     // Connect the clicked signal to the SignalHub's on_message_sent signal
     connect(this, &IHPushCard::clicked, [&]() {
-        emit SignalHub::instance().on_message_sent(QString("You are：") + m_intro, true);
+        emit SignalHub::instance().on_message_sent(
+            this->property("prompt").toString(), true);
     });
 }
 
 void IHPushCard::setupMainUI() {
     setMinimumWidth(120);
-    setFixedHeight(120);
+    setFixedHeight(60);
     setObjectName("bigButton");
     // setStyleSheet("border: 1px hidden gray; border-radius: 10px;");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -36,7 +37,7 @@ void IHPushCard::setupMainUI() {
 
 void IHPushCard::setupNumberUI(QHBoxLayout *layout) {
     itemNumberLabel = new QLabel(this);
-    itemNumberLabel->setFixedWidth(25);
+    itemNumberLabel->setFixedWidth(40);
     itemNumberLabel->setStyleSheet(
         "border:none; font-size: 20px; font-weight: bold; text-align: center;");
     layout->addWidget(itemNumberLabel);
@@ -53,12 +54,12 @@ void IHPushCard::setupIconUI(QHBoxLayout *layout) {
     QObject::connect(new ImageLoader, &ImageLoader::imageLoaded, this,
                      [this](QPixmap *pixmap) {
                          if (pixmap) {
-                             itemIconLabel->setPixmap(
+            itemIconLabel->setPixmap(
                                  ImageLoader::circularPixmap(*pixmap));
                              itemIconLabel->setScaledContents(true);
                          }
                          delete pixmap;
-                     });
+    });
 }
 
 void IHPushCard::setupTextUI(QHBoxLayout *layout) {

@@ -24,6 +24,9 @@ class IMarketPage : public QWidget {
 
 public:
     explicit IMarketPage(QWidget *parent = nullptr);
+
+    void load();
+
     QPushButton *expandButton() const;
 
 private:
@@ -39,7 +42,7 @@ private:
     QWidget *createCategoryCard(const QString &categoryName);
     void addCategory(const QString &categoryName);
     void navigateToCategory(const QString &categoryName);
-    void setupCategories();
+
     void addCategoryItem(const QString &categoryName, IHPushCard *item);
 
 private:

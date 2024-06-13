@@ -11,6 +11,7 @@
 #include <QDialog>
 #include "configmanager.h"
 #include "stylemanager.h"
+#include "dataloader.h"
 
 /**
  * @brief IMarketPage constructor
@@ -106,7 +107,6 @@ void IMarketPage::setupScrollArea() {
     setupTitleLabel();
     setupSearchLine();
     setupNavigator();
-    setupCategories();
 }
 
 /**
@@ -245,7 +245,7 @@ QWidget *IMarketPage::createCategoryCard(const QString &categoryName) {
     auto categoryLayout = new QGridLayout(categoryWidget);
     categoryWidget->setLayout(categoryLayout);
     categoryLayout->setAlignment(Qt::AlignLeft);
-    categoryLayout->addItem(new QSpacerItem(0, 0), 0, 1);
+    categoryLayout->addItem(new QSpacerItem(0, 0), 0, 0);
     categoryLayout->setSpacing(10);
 
     return categoryWidget;
@@ -310,86 +310,28 @@ void IMarketPage::navigateToCategory(const QString &categoryName) {
 /**
  * @brief Set up all categories
  */
-void IMarketPage::setupCategories() {
+void IMarketPage::load() {
     qDebug() << "Setting up categories";
 
-    addCategory("programming");
-    addCategory("assistant");
-    addCategory("productivity");
-    addCategory("character");
-    addCategory("writing");
-    addCategory("life");
+    addCategory("Top");
 
-
-    auto modeldir = ConfigManager::instance().config("modeldir").toString();
-    QDir modelsDir(modeldir);
-
-    qDebug() << "modelsDir:" << modelsDir.dirName();
-    // List all JSON files in the directory
-    QStringList jsonFiles = modelsDir.entryList(QStringList() << "*.json", QDir::Files);
+    auto prompts = DataLoader::instance().prompts();
 
     // Iterate through each JSON file
-    foreach (const QString &jsonFile, jsonFiles) {
-        qDebug() << "jsonFile:" << jsonFile;
+    foreach (const auto &prompt, prompts) {
+
         auto item = new IHPushCard;
 
-        QFile file(modelsDir.absoluteFilePath(jsonFile));
+        QString name = prompt.title;
+        QString intro =  prompt.description;
+        QString content = prompt.prompt;
 
-        if (!file.open(QIODevice::ReadOnly)) {
-            qWarning() << "Could not open file" << jsonFile;
-            continue;
-        }
-
-        QByteArray fileData = file.readAll();
-        file.close();
-
-        QJsonParseError parseError;
-        QJsonDocument doc = QJsonDocument::fromJson(fileData, &parseError);
-
-        if (parseError.error != QJsonParseError::NoError) {
-            qWarning() << "Failed to parse JSON file" << jsonFile << ":" << parseError.errorString();
-            continue;
-        }
-
-        if (!doc.isObject()) {
-            qWarning() << "Invalid JSON structure in file" << jsonFile;
-            continue;
-        }
-
-        QJsonObject jsonObj = doc.object();
-
-        QString name = jsonObj.value("name").toString();
-        QString intro = jsonObj.value("intro").toString();
-
-        QString base64Image = jsonObj.value("image").toString();
-        qWarning() << "base64Image" << base64Image;
-
-        // 解码Base64字符串
-        QByteArray imageData = QByteArray::fromBase64(base64Image.toUtf8());
-
-        // 将图像数据加载到QPixmap中
-        QPixmap pixmap;
-        if (!pixmap.loadFromData(imageData)) {
-            qWarning("Failed to load image from data.");
-        }
-
-        QString content = jsonObj.value("content").toString();
-        QJsonArray categoriesArray = jsonObj.value("categories").toArray();
-
-        if (categoriesArray.isEmpty()) {
-            qWarning() << "No categories found in file" << jsonFile;
-            continue;
-        }
-
-        QString category = categoriesArray.at(0).toString();
-
+        QString category = "Top";
         item->setNumber(m_categories[category]->layout()->count());
         // item->setIcon(QIcon(pixmap));
         item->setName(name);
         item->setIntro(intro);
-        // item->setImage(image);
-        // item->setContent(content);
-
+        item->setProperty("prompt", prompt.prompt);
         if (!m_categories.contains(category)) {
             addCategory(category);
         }
@@ -397,8 +339,8 @@ void IMarketPage::setupCategories() {
         m_categories[category]->layout()->addWidget(item);
     }
 
-    m_navigator->showUnderline(m_navigator->getUnderlineLabel("programming"));
-    m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("programming"));
+    m_navigator->showUnderline(m_navigator->getUnderlineLabel("Top"));
+    m_topNavigator->showUnderline(m_topNavigator->getUnderlineLabel("Top"));
 }
 
 /**

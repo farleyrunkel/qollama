@@ -26,7 +26,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void load() {};
+    void load() {
+
+
+        m_market->load();
+    };
 
 protected:
 
