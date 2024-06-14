@@ -39,7 +39,7 @@ void MainWindow::setupMainUi(QSplitter *splitter) {
 
     StyleManager::instance().loadStyleSheet(":/qss/style.qss");
 
-    StyleManager::instance().enableBorders(true);
+    // StyleManager::instance().enableBorders(true);
 
     StyleManager::instance().applyStyleSheet(this);
     StyleManager::instance().applyPalette(this);
@@ -74,14 +74,16 @@ void MainWindow::setupStatusBar() {
 }
 
 void MainWindow::setupPages() {
-    m_chats = new IChatsPage(this);
-    m_welcome = new IWelcomePage(this);
-    m_market = new IMarketPage(this);
-    m_setting = new ISettingPage(this); // Setting a parent is necessary
+    m_chats = new IChatsPage;
+    m_welcome = new IWelcomePage;
+    m_market = new IMarketPage;
+    m_setting = new ISettingPage(this);
+    m_models = new IModelsPage;
 
     m_pages->addWidget(m_chats);
     m_pages->addWidget(m_welcome);
     m_pages->addWidget(m_market);
+    m_pages->addWidget(m_models);
 
     m_pages->setFrameShape(QFrame::NoFrame);
     m_pages->setCurrentWidget(m_welcome);
@@ -93,11 +95,15 @@ void MainWindow::retranslateUi() {
 
 void MainWindow::setupConnections() {
 
-    connect(m_left->settingButton(), &QPushButton::pressed, m_setting,
+    connect(m_left->settingButton(), &QPushButton::clicked, m_setting,
             &ISettingPage::show);
     connect(&SignalHub::instance(), &SignalHub::onNewChatButtonClicked, this,
             [this]() { m_pages->setCurrentWidget(m_welcome); });
-    connect(m_left->promptsButton(), &QPushButton::pressed, this,
+
+    connect(m_left->modelsButton(), &QPushButton::clicked, this,
+            [this]() { m_pages->setCurrentWidget(m_models); });
+
+    connect(m_left->promptsButton(), &QPushButton::clicked, this,
             [this]() { m_pages->setCurrentWidget(m_market); });
 
     connect(m_left->historyList(), &IHistoryList::itemClicked, this,

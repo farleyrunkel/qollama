@@ -1,14 +1,13 @@
 #ifndef IMODELSPAGE_H
 #define IMODELSPAGE_H
 
-
 #include "gallerywidget.h"
 
-class IModelsPage : GalleryWidget
+class IModelsPage : public GalleryWidget
 {
     Q_OBJECT
 public:
-    IModelsPage();
+    IModelsPage(QWidget* parent = nullptr);
 };
 
 #endif // IMODELSPAGE_H

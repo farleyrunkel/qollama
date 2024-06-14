@@ -17,6 +17,7 @@
 #include "isettingpage.h"
 #include "isidearea.h"
 #include "iwelcomepage.h"
+#include "imodelspage.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -46,6 +47,7 @@ private:
     IWelcomePage *m_welcome;
     IChatsPage *m_chats;
     ISettingPage *m_setting;
+    IModelsPage* m_models;
 
     ISideArea *m_left;
 
