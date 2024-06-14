@@ -196,7 +196,6 @@ void IChatsPage::toUpdateMenu(const QList<QString> &list) {
 }
 
 void IChatsPage::setupConnections() {
-
     connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
             &SignalHub::onExpandButtonClicked);
     connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),

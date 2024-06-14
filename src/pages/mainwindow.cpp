@@ -27,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 MainWindow::~MainWindow() {}
 
+void MainWindow::load() {
+    m_models->load();
+    m_market->load();
+}
+
 void MainWindow::setupMainUi(QSplitter *splitter) {
     setObjectName("MainWindow");
     setWindowModality(Qt::WindowModal);
