@@ -29,13 +29,13 @@ private:
     void setupCenterWidget(QWidget *);
 
     void setupSideWidget(QWidget* widget = nullptr);
-    void setupSettingsArea(QGridLayout *);
+    void setupRightLayout(QGridLayout *);
 
     void setupSettingsLayout(QStackedLayout *widget);
 
-    void setupOllamaSettings(QWidget* );
-    void setupPromptSettings(QWidget* );
-    void setupAccountSettings(QWidget* );
+    void setupOllamaWidget(QWidget* );
+    void setupPromptWidget(QWidget* );
+    void setupAccountWidget(QWidget* );
 
     void setupConnections();
 

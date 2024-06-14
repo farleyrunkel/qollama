@@ -60,10 +60,10 @@ void ISettingPage::setupCenterWidget(QWidget *widget) {
     centerLayout->addLayout(m_right);
 
     setupSideWidget(m_sideArea);
-    setupSettingsArea(m_right);
+    setupRightLayout(m_right);
 }
 
-void ISettingPage::setupSettingsArea(QGridLayout *right) {
+void ISettingPage::setupRightLayout(QGridLayout *right) {
     right->addWidget(new QLabel("Account"), 0, 0);
 
     m_closeButton = new QPushButton("x");
@@ -94,9 +94,9 @@ void ISettingPage::setupSettingsLayout(QStackedLayout *widget) {
     m_promptWidget = new QWidget;
     widget->addWidget(m_promptWidget);
 
-    setupAccountSettings(m_accountWidget); // Setup the setting area
-    setupOllamaSettings(m_ollamaWidget);
-    setupPromptSettings(m_promptWidget);
+    setupAccountWidget(m_accountWidget); // Setup the setting area
+    setupOllamaWidget(m_ollamaWidget);
+    setupPromptWidget(m_promptWidget);
 }
 
 // Setup the top area of the setting page
@@ -150,7 +150,7 @@ QGroupBox *ISettingPage::addSettingGroupBox(const QString &key,
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupOllamaSettings(QWidget *ollama) {
+void ISettingPage::setupOllamaWidget(QWidget *ollama) {
     auto layout = new QVBoxLayout(ollama);
     layout->setSpacing(10);
     layout->setAlignment(Qt::AlignTop);
@@ -165,7 +165,7 @@ void ISettingPage::setupOllamaSettings(QWidget *ollama) {
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupPromptSettings(QWidget *widget) {
+void ISettingPage::setupPromptWidget(QWidget *widget) {
     auto layout = new QVBoxLayout(widget);
     layout->setSpacing(10);
     layout->setAlignment(Qt::AlignTop);
@@ -175,7 +175,7 @@ void ISettingPage::setupPromptSettings(QWidget *widget) {
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupAccountSettings(QWidget *account) {
+void ISettingPage::setupAccountWidget(QWidget *account) {
     auto layout = new QVBoxLayout(account);
     layout->setSpacing(10);
     layout->setAlignment(Qt::AlignTop);
