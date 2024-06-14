@@ -24,14 +24,13 @@ public:
     QStackedWidget *chats() const;
     IChatScrollArea *currentChat();
 
-signals:
-    void onOllamaFinished();
     void appendWordToActiveChat(QString text);
 
 private slots:
-    void sendMessage(const QString &text, bool isNewChat = false);
-    void handleSendMessage();
-    void updateMenu(const QList<QString> &list);
+    void toSendMessage(const QString &text, bool isNewChat = false);
+    void toHandleMessage();
+    void toUpdateMenu(const QList<QString> &list);
+    void onOllamaFinished();
 
 private:
     void setupMainUi(QWidget* widget);

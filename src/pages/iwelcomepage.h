@@ -30,6 +30,7 @@ private:
     void setupContentLineEdit();
     void setupConnections();
     void retranslateUi();
+
     void updateMenu(const QList<QString> &list);
 
     IVPushCard *createPushCard(const QString &text, const QString &iconPath);

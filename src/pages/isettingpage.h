@@ -43,7 +43,7 @@ private:
                                   const QString &config = "");
 
 private slots:
-    void changeAvatar();
+    void toChangeAvatar();
 
 private:
     QHBoxLayout *m_mainLayout;

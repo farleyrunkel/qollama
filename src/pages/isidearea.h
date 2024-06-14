@@ -14,6 +14,8 @@ public:
     explicit ISideArea(QWidget *parent = nullptr);
     ~ISideArea();
 
+    void load();
+
     QPushButton *expandButton() const;
     QPushButton *newChatButton() const;
     IOverlayButton *modelsButton() const;
@@ -21,7 +23,6 @@ public:
     QPushButton *settingButton() const;
     IHistoryList *historyList() const;
 
-    void load();
 private:
 
     void setupMainLayout(QVBoxLayout* layout);

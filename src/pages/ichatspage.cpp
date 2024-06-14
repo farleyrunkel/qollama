@@ -96,7 +96,7 @@ void IChatsPage::setupBottomArea(QHBoxLayout *layout) {
     layout->addWidget(m_messageLineEdit);
 }
 
-void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
+void IChatsPage::toSendMessage(const QString &text, bool isNewChat) {
     // Send a message in the chat area
     if (text.isEmpty())
         return;
@@ -155,10 +155,10 @@ void IChatsPage::appendWordToActiveChat(QString text) {
     chatListView->scrollToBottom();
 }
 
-void IChatsPage::handleSendMessage() {
+void IChatsPage::toHandleMessage() {
     // Handle sending a message in the chat area
     QString text = m_messageLineEdit->text();
-    sendMessage(text);
+    toSendMessage(text);
     m_messageLineEdit->clear();
 }
 
@@ -182,7 +182,7 @@ QStackedWidget *IChatsPage::chats() const {
     return m_chatsStack;
 }
 
-void IChatsPage::updateMenu(const QList<QString> &list) {
+void IChatsPage::toUpdateMenu(const QList<QString> &list) {
     // Update the menu options
     m_optionMenu->clear();
     for (const QString &item : list) {
@@ -207,14 +207,14 @@ void IChatsPage::setupConnections() {
         m_langButton->setText(m_langButton->text() == "cn" ? "en" : "cn");
     });
     connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this,
-            &IChatsPage::handleSendMessage);
+            &IChatsPage::toHandleMessage);
     connect(m_messageLineEdit, &ILineEdit::returnPressed, this,
-            &IChatsPage::handleSendMessage);
+            &IChatsPage::toHandleMessage);
 
     connect(&SignalHub::instance(), &SignalHub::listReceived, this,
-            &IChatsPage::updateMenu);
+            &IChatsPage::toUpdateMenu);
     connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
-            &IChatsPage::sendMessage);
+            &IChatsPage::toSendMessage);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
             &QPushButton::setVisible);
     connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,

@@ -201,7 +201,7 @@ void ISettingPage::setupAccountWidget(QWidget *account) {
 // Setup signal-slot connections
 void ISettingPage::setupConnections() {
     connect(m_avatarButton, &QPushButton::clicked, this,
-            &ISettingPage::changeAvatar); // Change avatar button clicked
+            &ISettingPage::toChangeAvatar); // Change avatar button clicked
 
     connect(m_accountButton, &QPushButton::clicked, this,
             [this]() { m_settingLayout->setCurrentWidget(m_accountWidget); });
@@ -213,7 +213,7 @@ void ISettingPage::setupConnections() {
 }
 
 // Slot to change avatar
-void ISettingPage::changeAvatar() {
+void ISettingPage::toChangeAvatar() {
     QString fileName = QFileDialog::getOpenFileName(
         this, "Select Avatar", "", "Image Files (*.png *.jpg *.bmp)");
     if (!fileName.isEmpty()) {
