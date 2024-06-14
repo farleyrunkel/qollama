@@ -8,70 +8,73 @@
 
 ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
 
-    setMaximumSize(QSize(170, 16777215));
-    setObjectName("leftWindow");
+    setupMainUi(new QVBoxLayout);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setSpacing(2);
-
-    setupTitleBar(mainLayout);
-    setupButtons(mainLayout);
-    setupHistoryList(mainLayout);
-    setupSettingButton(mainLayout);
+    setupTitleBar(layout(0));
+    setupTopButtons(layout(1));
+    setupHistoryList(layout(2));
+    setupBottomButtons(layout(3));
 
     setupConnections();
 }
 
-void ISideArea::setupConnections() {
-    connect(this, &ISideArea::hidden, &SignalHub::instance(),
-            &SignalHub::onSideAreaHidden);
-    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onExpandButtonClicked);
-    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onNewChatButtonClicked);
-    connect(m_modelButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onNewChatButtonClicked);
-    connect(m_newChatSubButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onNewChatButtonClicked);
+void ISideArea::setupMainUi(QVBoxLayout *layout) {
+    setMaximumSize(QSize(170, 16777215));
+    setObjectName("leftWindow");
+    setLayout(layout);
+
+    m_mainLayout = layout;
+    m_mainLayout->setSpacing(2);
+
+    m_layouts.append(new QHBoxLayout);
+    m_layouts.append(new QVBoxLayout);
+    m_layouts.append(new QVBoxLayout);
+    m_layouts.append(new QVBoxLayout);
+
+    for (const auto a : m_layouts) {
+        m_mainLayout->addLayout(a);
+    }
 }
 
-void ISideArea::setupTitleBar(QVBoxLayout *layout) {
-    QWidget *titleBar = createButtonContainer(
-        this, "leftTitleBar", ":/icons/sidebar-left.svg", QSize(30, 30), layout);
-    QHBoxLayout *titleBarLayout = qobject_cast<QHBoxLayout *>(titleBar->layout());
+void ISideArea::setupTitleBar(QLayout *layout) {
+    QHBoxLayout *hLayout = qobject_cast<QHBoxLayout *>(layout);
+    hLayout->setSpacing(0);
+    hLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_expandButton = createButton(titleBar, "smallButton",
-                                  ":/icons/sidebar-left.svg", QSize(30, 30));
-    titleBarLayout->addWidget(m_expandButton);
+    m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
+    m_expandButton->setObjectName("smallButton");
 
-    QSpacerItem *spacer =
-        new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    titleBarLayout->addItem(spacer);
+    m_newChatButton = new QPushButton(QIcon(":/icons/create-new.svg"), "");
+    m_newChatButton->setObjectName("smallButton");
 
-    m_newChatButton = createButton(titleBar, "smallButton",
-                                   ":/icons/create-new.svg", QSize(30, 30));
-    titleBarLayout->addWidget(m_newChatButton);
+    hLayout->addWidget(m_expandButton);
+    hLayout->addStretch(1);
+    hLayout->addWidget(m_newChatButton);
 }
 
-void ISideArea::setupButtons(QVBoxLayout *layout) {
-    QFont buttonFont;
-    buttonFont.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
-    buttonFont.setPointSize(10);
-    buttonFont.setWeight(QFont::Medium);
+void ISideArea::setupTopButtons(QLayout *layout) {
 
-    m_modelButton =
-        createOverlayButton(this, "newChatButton", buttonFont, QSize(0, 34));
-    layout->addWidget(m_modelButton);
-    m_modelButton->setText(tr("Llama3"));
+    QPixmap pix = StyleManager::roundedPixmap(QPixmap("://images/ollama.png"));
 
-    m_exploreButton = createButton(this, "exploreButton", "://icons/grid.svg",
-                                   QSize(0, 34), false);
-    m_exploreButton->setFont(buttonFont);
-    layout->addWidget(m_exploreButton);
-    m_exploreButton->setText(tr("Explore"));
+    m_modelsButton = new IOverlayButton;
+    m_modelsButton->setIcon(QIcon(pix));
+    m_modelsButton->setObjectName("bigButton");
+    m_modelsButton->setText(tr("Ollama"));
+    m_modelsButton->setIconSize(QSize(20, 20));
+    m_modelsButton->addSubButton(QIcon(":/icons/create-new.svg"));
+
+    m_messageButton = m_modelsButton->subButton(0);
+
+    m_promptsButton = new QPushButton(QIcon(":/icons/grid.svg"), "");
+    m_promptsButton->setObjectName("bigButton");
+    m_promptsButton->setText(tr("Explore"));
+    m_promptsButton->setIconSize(QSize(20, 20));
+
+    layout->addWidget(m_modelsButton);
+    layout->addWidget(m_promptsButton);
 }
 
-void ISideArea::setupHistoryList(QVBoxLayout *layout) {
+void ISideArea::setupHistoryList(QLayout *layout) {
     m_historyList = new IHistoryList(this);
     m_historyList->setObjectName("historyList");
     m_historyList->setFocusPolicy(Qt::NoFocus);
@@ -79,76 +82,39 @@ void ISideArea::setupHistoryList(QVBoxLayout *layout) {
     m_historyList->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_historyList->setProperty("showDropIndicator", QVariant(false));
     m_historyList->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
     layout->addWidget(m_historyList);
 }
 
-void ISideArea::setupSettingButton(QVBoxLayout *layout) {
-    QFont buttonFont;
-    buttonFont.setFamilies({QString::fromUtf8("Microsoft YaHei UI")});
-    buttonFont.setPointSize(10);
-    buttonFont.setWeight(QFont::Medium);
+void ISideArea::setupBottomButtons(QLayout *layout) {
 
-    m_settingButton = createButton(this, "settingButton", ":/icons/gear.svg",
-                                   QSize(0, 40), false);
-    m_settingButton->setFont(buttonFont);
+    m_settingButton = new QPushButton(QIcon(":/icons/gear.svg"), "");
+    m_settingButton->setObjectName("bigButton");
     m_settingButton->setIconSize(QSize(20, 20));
-    layout->addWidget(m_settingButton);
     m_settingButton->setText(tr("Settings"));
+
+    layout->addWidget(m_settingButton);
 }
 
-QWidget *ISideArea::createButtonContainer(QWidget *parent,
-                                          const QString &objectName,
-                                          const QString &iconPath,
-                                          const QSize &size,
-                                          QVBoxLayout *layout) {
-    QWidget *container = new QWidget(parent);
-    container->setObjectName(objectName);
-    QHBoxLayout *containerLayout = new QHBoxLayout(container);
-    containerLayout->setSpacing(0);
-    containerLayout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(container);
-    container->setFixedHeight(35);
-    return container;
-}
-
-QPushButton *ISideArea::createButton(QWidget *parent, const QString &objectName,
-                                     const QString &iconPath, const QSize &size,
-                                     bool isFixedSize) {
-    QPushButton *button = new QPushButton(parent);
-    button->setObjectName(objectName);
-    button->setIcon(QIcon(iconPath));
-    if (isFixedSize) {
-        button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        button->setMinimumSize(size);
-        button->setMaximumSize(size);
-    } else {
-        button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        button->setMinimumSize(size);
-        button->setMaximumSize(QSize(16777215, size.height()));
+QLayout *ISideArea::layout(int i) const {
+    if (i < 0 || i >= m_layouts.size()) {
+        throw std::out_of_range("Index out of range in ISideArea::layouts");
     }
-    return button;
+    return m_layouts[i];
 }
 
-IOverlayButton *ISideArea::createOverlayButton(QWidget *parent,
-                                               const QString &objectName,
-                                               const QFont &font,
-                                               const QSize &size) {
-    IOverlayButton *button = new IOverlayButton(parent);
-    QPixmap pix = QPixmap("://images/ollama.png");
-    pix = StyleManager::roundedPixmap(pix);
-    button->setIcon(QIcon(pix));
-    button->setObjectName(objectName);
-    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    button->setMinimumSize(size);
-    button->setMaximumSize(QSize(16777215, size.height()));
-    button->setFont(font);
-    button->setFocusPolicy(Qt::NoFocus);
-    button->setLayoutDirection(Qt::LeftToRight);
+void ISideArea::setupConnections() {
+    connect(this, &ISideArea::hidden, &SignalHub::instance(),
+            &SignalHub::onSideAreaHidden);
 
-    button->addSubButton(QIcon(":/icons/create-new.svg"));
-
-    m_newChatSubButton = button->getSubButtons().first();
-    return button;
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onExpandButtonClicked);
+    connect(m_messageButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
+    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
+    connect(m_modelsButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
 }
 
 IHistoryList *ISideArea::historyList() const { return m_historyList; }
@@ -157,6 +123,6 @@ QPushButton *ISideArea::settingButton() const { return m_settingButton; }
 
 QPushButton *ISideArea::expandButton() const { return m_expandButton; }
 
-IOverlayButton *ISideArea::newChatButton() const { return m_modelButton; }
+IOverlayButton *ISideArea::modelsButton() const { return m_modelsButton; }
 
-QPushButton *ISideArea::exploreButton() const { return m_exploreButton; }
+QPushButton *ISideArea::promptsButton() const { return m_promptsButton; }

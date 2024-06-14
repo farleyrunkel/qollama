@@ -6,7 +6,7 @@
 #include "iwidget.h"
 #include <QHBoxLayout>
 #include <QMenu>
-#include <QPushButton>
+#include <QToolButton>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -53,7 +53,7 @@ private:
     QPushButton *m_langButton;
     QMenu *m_optionMenu;
 
-    QLabel* m_topLabel;
+    QToolButton* m_topLabel;
     QStackedWidget* m_topStack;
 };
 

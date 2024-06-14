@@ -16,8 +16,15 @@ void IOverlayButton::addSubButton(QIcon icon) {
     m_subButtons.append(button); // Add the button to the list of sub-buttons
 }
 
-QList<QPushButton *> IOverlayButton::getSubButtons() const {
+QList<QPushButton *> IOverlayButton::subButtons() const {
     return m_subButtons;
+}
+
+QPushButton * IOverlayButton::subButton(int i) const {
+    if (i < 0 || i >= m_subButtons.size()) {
+        throw std::out_of_range("Index out of range in IOverlayButton::subButton");
+    }
+    return m_subButtons[i];
 }
 
 QPushButton *IOverlayButton::getSubButton(int index) const {

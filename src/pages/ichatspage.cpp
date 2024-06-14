@@ -94,14 +94,14 @@ void IChatsPage::setupTopArea() {
     m_expandButton->hide();
     m_newChatButton->hide();
 
-    m_topStack = new QStackedWidget;
-    m_topLabel = new QLabel("llama3");
-    m_topStack->addWidget(m_topLabel);
-    m_topStack->setCurrentWidget(m_topLabel);
+    m_topLabel = new QToolButton;
+    m_topLabel->setText("llama3");
+    m_topLabel->setObjectName("bigButton");
 
     topAreaLayout->addWidget(m_expandButton);
     topAreaLayout->addWidget(m_newChatButton);
-    topAreaLayout->addWidget(m_topStack);
+    topAreaLayout->addWidget(m_topLabel);
+    topAreaLayout->addStretch(1);
     topAreaLayout->addWidget(m_langButton);
     topAreaLayout->addWidget(m_userButton);
 }

@@ -174,9 +174,9 @@ void IMarketPage::setupTitleLabel() {
     titleWidget->setWordWrap(true);
     titleWidget->setText(
         "<p style='text-align: center; font-size: 32px; font-weight: bold; "
-        "color: black; margin-bottom: 1px; '>GPT</p>"
+        "color: black; margin-bottom: 1px; '>Prompts</p>"
         "<p style='text-align: center; font-size: 10px; color: gray;margin-top: 1px;  '>Explore "
-        "and create a customized version of GPT.</p>");
+        "and create a customized version of prompts.</p>");
 
     m_scrollWidgetLayout->addWidget(titleWidget);
 }
@@ -200,7 +200,7 @@ void IMarketPage::setupSearchLine() {
 ILineEdit *IMarketPage::createSearchLineEdit() {
     auto lineEdit = new ILineEdit;
     lineEdit->setObjectName("marketPageSearchLine");
-    lineEdit->setPlaceholderText("Search GPT");
+    lineEdit->setPlaceholderText("Search prompts");
     lineEdit->rightButton()->hide();
     lineEdit->leftButton()->setFlat(true);
     QIcon searchIcon;

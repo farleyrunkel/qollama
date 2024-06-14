@@ -33,8 +33,9 @@ public:
     explicit IOverlayButton(QWidget *parent = nullptr);
 
     void addSubButton(QIcon icon);
-    QList<QPushButton *> getSubButtons() const;
+    QList<QPushButton *> subButtons() const;
     QPushButton *getSubButton(int index) const;
+    QPushButton *subButton(int i) const;
 
 protected:
     bool event(QEvent *e) override;

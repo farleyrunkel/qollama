@@ -34,7 +34,7 @@ void MainWindow::setupConnections() {
             &ISettingPage::show);
     connect(&SignalHub::instance(), &SignalHub::onNewChatButtonClicked, this,
             [this]() { m_pages->setCurrentWidget(m_welcome); });
-    connect(m_left->exploreButton(), &QPushButton::pressed, this,
+    connect(m_left->promptsButton(), &QPushButton::pressed, this,
             [this]() { m_pages->setCurrentWidget(m_market); });
 
     connect(m_left->historyList(), &IHistoryList::itemClicked, this,

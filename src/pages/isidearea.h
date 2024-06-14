@@ -14,38 +14,34 @@ public:
     explicit ISideArea(QWidget *parent = nullptr);
 
     QPushButton *expandButton() const;
-    IOverlayButton *newChatButton() const;
-    QPushButton *exploreButton() const;
+    IOverlayButton *modelsButton() const;
+    QPushButton *promptsButton() const;
     QPushButton *settingButton() const;
     IHistoryList *historyList() const;
 
 private:
     void setupConnections();
-    void setupTitleBar(QVBoxLayout *layout);
-    void setupButtons(QVBoxLayout *layout);
-    void setupHistoryList(QVBoxLayout *layout);
-    void setupSettingButton(QVBoxLayout *layout);
-
-    QWidget *createButtonContainer(QWidget *parent, const QString &objectName,
-                                   const QString &iconPath, const QSize &size,
-                                   QVBoxLayout *layout);
-    QPushButton *createButton(QWidget *parent, const QString &objectName,
-                              const QString &iconPath, const QSize &size,
-                              bool isFixedSize = true);
-    IOverlayButton *createOverlayButton(QWidget *parent,
-                                        const QString &objectName,
-                                        const QFont &font, const QSize &size);
+    void setupTitleBar(QLayout *layout);
+    void setupTopButtons(QLayout *layout);
+    void setupHistoryList(QLayout *layout);
+    void setupBottomButtons(QLayout *layout);
 
 private:
     QPushButton *m_expandButton;
     QPushButton *m_newChatButton;
-    IOverlayButton *m_modelButton;
-    QPushButton *m_exploreButton;
+    IOverlayButton *m_modelsButton;
+    QPushButton *m_promptsButton;
     QPushButton *m_settingButton;
 
-    QPushButton* m_newChatSubButton;
+    QPushButton* m_messageButton;
 
     IHistoryList *m_historyList;
+
+    QVBoxLayout* m_mainLayout;
+    QList<QLayout*>  m_layouts;
+    void setupMainUi(QVBoxLayout* layout);
+
+    QLayout *layout(int i) const;
 };
 
 #endif // ILEFTWINDOW_H

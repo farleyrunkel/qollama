@@ -63,6 +63,7 @@ QLabel#statusLabel {
     font-size: 9px;
     qproperty-alignment: 'AlignCenter';
 }
+
 QPushButton#smallButton {
     border: 1px hidden gray;
     border-radius: 5px;
@@ -77,6 +78,19 @@ QPushButton#smallButton:pressed {
     border-style: outset;
 }
 
+QToolButton {
+    border: 1px hidden gray;
+    border-radius: 5px;
+    text-align: center;
+    height: 30px;
+}
+QToolButton:hover {
+    background-color: #ececec;  /*@NeutralBackground*/
+}
+QToolButton:pressed {
+    border-style: outset;
+}
+
 QPushButton#exploreButton,
 QPushButton#settingButton,
 QPushButton#newChatButton,
@@ -86,6 +100,8 @@ QPushButton#bigButton{
     padding-left: 10px;
     text-align: left;
     height: 30px;
+    font: 10pt ;
+    font-weight: 500; /* Medium */
 }
 QPushButton#settingButton:hover,
 QPushButton#exploreButton:hover,
