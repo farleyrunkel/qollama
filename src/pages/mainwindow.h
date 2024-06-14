@@ -12,7 +12,6 @@
 #include <QStatusBar>
 #include <QVBoxLayout>
 
-#include "client.h"
 #include "ichatspage.h"
 #include "imarketpage.h"
 #include "isettingpage.h"

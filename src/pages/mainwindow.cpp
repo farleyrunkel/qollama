@@ -1,12 +1,5 @@
 #include "mainwindow.h"
 
-#include <QDialog>
-#include <QGraphicsDropShadowEffect>
-#include <QJsonObject>
-#include <QLabel>
-#include <QStandardItemModel>
-#include <QVBoxLayout>
-
 #include "configmanager.h"
 #include "ichatscrollarea.h"
 #include "imarketpage.h"
@@ -15,6 +8,12 @@
 #include "iwelcomepage.h"
 #include "signalhub.h"
 #include "stylemanager.h"
+#include <QDialog>
+#include <QGraphicsDropShadowEffect>
+#include <QJsonObject>
+#include <QLabel>
+#include <QStandardItemModel>
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
@@ -28,51 +27,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::setupConnections() {
-
-    connect(m_left->settingButton(), &QPushButton::pressed, m_setting,
-            &ISettingPage::show);
-    connect(&SignalHub::instance(), &SignalHub::onNewChatButtonClicked, this,
-            [this]() { m_pages->setCurrentWidget(m_welcome); });
-    connect(m_left->promptsButton(), &QPushButton::pressed, this,
-            [this]() { m_pages->setCurrentWidget(m_market); });
-
-    connect(m_left->historyList(), &IHistoryList::itemClicked, this,
-            [this](QListWidgetItem *item) {
-                if (item) {
-            m_pages->setCurrentWidget(m_chats);
-                    m_chats->chats()->setCurrentIndex(
-                m_left->historyList()->row(item));
-                } else {
-                    qDebug() << "Clicked history list item is null.";
-                }
-    });
-    connect(m_left->historyList(), &IHistoryList::itemDeleted, this,
-            [&](int row) {
-                m_chats->chats()->removeWidget(m_chats->chats()->widget(row));
-        m_pages->setCurrentWidget(m_welcome);
-    });
-
-    connect(
-        &SignalHub::instance(), &SignalHub::newChatAdded, this,
-        [this](IChatScrollArea *chat) { m_left->historyList()->addItem(""); });
-
-    connect(&SignalHub::instance(), &SignalHub::onMessageAdded, this,
-            [this](const QString &chat) {
-                int idx =
-            m_chats->chats()->indexOf(m_chats->chats()->currentWidget());
-            m_left->historyList()->item(idx)->setData(Qt::ToolTipRole, chat);
-    });
-    connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
-            [this]() { m_left->setVisible(!m_left->isVisible()); });
-    connect(&SignalHub::instance(), &SignalHub::onUserButtonClicked, this,
-            [this]() { m_setting->show(); });
-
-    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
-            [&](const QString &) { m_pages->setCurrentWidget(m_chats); });
-}
-
-void MainWindow::setupMainUi(QSplitter* splitter) {
+void MainWindow::setupMainUi(QSplitter *splitter) {
     setObjectName("MainWindow");
     setWindowModality(Qt::WindowModal);
     setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
@@ -84,7 +39,7 @@ void MainWindow::setupMainUi(QSplitter* splitter) {
 
     StyleManager::instance().loadStyleSheet(":/qss/style.qss");
 
-    // StyleManager::instance().enableBorders(true);
+    StyleManager::instance().enableBorders(true);
 
     StyleManager::instance().applyStyleSheet(this);
     StyleManager::instance().applyPalette(this);
@@ -134,4 +89,48 @@ void MainWindow::setupPages() {
 
 void MainWindow::retranslateUi() {
     setWindowTitle(QCoreApplication::translate("MainWindow", "QOllama", nullptr));
+}
+
+void MainWindow::setupConnections() {
+
+    connect(m_left->settingButton(), &QPushButton::pressed, m_setting,
+            &ISettingPage::show);
+    connect(&SignalHub::instance(), &SignalHub::onNewChatButtonClicked, this,
+            [this]() { m_pages->setCurrentWidget(m_welcome); });
+    connect(m_left->promptsButton(), &QPushButton::pressed, this,
+            [this]() { m_pages->setCurrentWidget(m_market); });
+
+    connect(m_left->historyList(), &IHistoryList::itemClicked, this,
+            [this](QListWidgetItem *item) {
+                if (item) {
+                    m_pages->setCurrentWidget(m_chats);
+                    m_chats->chats()->setCurrentIndex(
+                        m_left->historyList()->row(item));
+                } else {
+                    qDebug() << "Clicked history list item is null.";
+                }
+            });
+    connect(m_left->historyList(), &IHistoryList::itemDeleted, this,
+            [&](int row) {
+                m_chats->chats()->removeWidget(m_chats->chats()->widget(row));
+                m_pages->setCurrentWidget(m_welcome);
+            });
+
+    connect(
+        &SignalHub::instance(), &SignalHub::newChatAdded, this,
+        [this](IChatScrollArea *chat) { m_left->historyList()->addItem(""); });
+
+    connect(&SignalHub::instance(), &SignalHub::onMessageAdded, this,
+            [this](const QString &chat) {
+                int idx =
+                    m_chats->chats()->indexOf(m_chats->chats()->currentWidget());
+                m_left->historyList()->item(idx)->setData(Qt::ToolTipRole, chat);
+            });
+    connect(&SignalHub::instance(), &SignalHub::onExpandButtonClicked, this,
+            [this]() { m_left->setVisible(!m_left->isVisible()); });
+    connect(&SignalHub::instance(), &SignalHub::onUserButtonClicked, this,
+            [this]() { m_setting->show(); });
+
+    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
+            [&](const QString &) { m_pages->setCurrentWidget(m_chats); });
 }
