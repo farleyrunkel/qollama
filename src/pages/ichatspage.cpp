@@ -7,20 +7,16 @@
 
 IChatsPage::IChatsPage(QWidget *parent) : IWidget(parent) {
     // Setup the main layout and all components
-    setupMainUi(new QVBoxLayout);
-    setupTopArea();
-    setupChatArea();
-    setupBottomArea();
+    setupMainUi(this);
     setupConnections();
 }
 
-void IChatsPage::setupMainUi(QVBoxLayout* layout) {
+void IChatsPage::setupMainUi(QWidget *widget) {
     // Set up the main layout of the chats page
     setObjectName("iChatsPage");
     setContentsMargins(0, 0, 0, 0);
-    setLayout(layout);
 
-    m_mainLayout = layout;
+    m_mainLayout = new QVBoxLayout(widget);
 
     m_topArea = new QWidget;
     m_chatsStack = new QStackedWidget;
@@ -29,49 +25,15 @@ void IChatsPage::setupMainUi(QVBoxLayout* layout) {
     m_mainLayout->addWidget(m_topArea);
     m_mainLayout->addWidget(m_chatsStack);
     m_mainLayout->addLayout(m_bottomLayout);
+
+    setupTopArea(m_topArea);
+    setupChatArea(m_chatsStack);
+    setupBottomArea(m_bottomLayout);
 }
 
-void IChatsPage::setupConnections() {
-
-    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onExpandButtonClicked);
-    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onNewChatButtonClicked);
-    connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onUserButtonClicked);
-    connect(m_langButton, &QPushButton::clicked, this, [this]() {
-        m_langButton->setText(m_langButton->text() == "cn" ? "en" : "cn");
-    });
-    connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this,
-            &IChatsPage::handleSendMessage);
-    connect(m_messageLineEdit, &ILineEdit::returnPressed, this,
-            &IChatsPage::handleSendMessage);
-
-    connect(&SignalHub::instance(), &SignalHub::listReceived, this,
-            &IChatsPage::updateMenu);
-    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
-            &IChatsPage::sendMessage);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
-            &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
-            &QPushButton::setVisible);
-
-    connect(&ConfigManager::instance(), &ConfigManager::onAvatarChanged,
-            m_userButton, [this]() {
-        QPixmap avatar(
-            ConfigManager::instance().config("avatar").toString());
-        m_userButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
-    });
-
-    connect(&ollama::Client::instance(), &ollama::Client::replyReceived, this,
-            &IChatsPage::appendWordToActiveChat);
-    connect(&ollama::Client::instance(), &ollama::Client::finished, this,
-            &IChatsPage::onOllamaFinished);
-}
-
-void IChatsPage::setupTopArea() {
+void IChatsPage::setupTopArea(QWidget *widget) {
     // Set up the top area of the chats page
-    auto topAreaLayout = new QHBoxLayout(m_topArea);
+    auto topAreaLayout = new QHBoxLayout(widget);
     topAreaLayout->setContentsMargins(0, 0, 0, 0);
 
     m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
@@ -103,7 +65,7 @@ void IChatsPage::setupTopArea() {
     topAreaLayout->addWidget(m_userButton);
 }
 
-void IChatsPage::setupChatArea() {
+void IChatsPage::setupChatArea(QStackedWidget *widget) {
     // Set up the chat area of the chats page
     // Not implemented in this snippet
 
@@ -111,7 +73,7 @@ void IChatsPage::setupChatArea() {
     m_chatsStack->setStyleSheet("border: red;");
 }
 
-void IChatsPage::setupBottomArea() {
+void IChatsPage::setupBottomArea(QHBoxLayout *layout) {
     // Set up the bottom area of the chats page
     m_messageLineEdit = new ILineEdit(this);
     m_messageLineEdit->setPlaceholderText("Message llama3 ...");
@@ -131,7 +93,7 @@ void IChatsPage::setupBottomArea() {
     m_optionMenu = new QMenu(this);
     optionButton->setMenu(m_optionMenu);
 
-    m_bottomLayout->addWidget(m_messageLineEdit);
+    layout->addWidget(m_messageLineEdit);
 }
 
 void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
@@ -148,8 +110,6 @@ void IChatsPage::sendMessage(const QString &text, bool isNewChat) {
     chat->addMessage(text, ConfigManager::instance().username(),
                      ConfigManager::instance().config("avatar").toString());
     chat->addMessage("", "llama3", "://images/ollama.png");
-
-
 
     // fresh main ui and add new history list item in left side area.
     emit SignalHub::instance().onMessageAdded(text);
@@ -202,8 +162,6 @@ void IChatsPage::handleSendMessage() {
     m_messageLineEdit->clear();
 }
 
-QPushButton *IChatsPage::expandButton() const { return m_expandButton; }
-
 IChatScrollArea *IChatsPage::addNewChat() {
     // Add a new chat widget
     IChatScrollArea *chat = new IChatScrollArea;
@@ -235,4 +193,42 @@ void IChatsPage::updateMenu(const QList<QString> &list) {
                                                   " ...");
         });
     }
+}
+
+void IChatsPage::setupConnections() {
+
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onExpandButtonClicked);
+    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
+    connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onUserButtonClicked);
+    connect(m_langButton, &QPushButton::clicked, this, [this]() {
+        m_langButton->setText(m_langButton->text() == "cn" ? "en" : "cn");
+    });
+    connect(m_messageLineEdit->rightButton(), &QPushButton::clicked, this,
+            &IChatsPage::handleSendMessage);
+    connect(m_messageLineEdit, &ILineEdit::returnPressed, this,
+            &IChatsPage::handleSendMessage);
+
+    connect(&SignalHub::instance(), &SignalHub::listReceived, this,
+            &IChatsPage::updateMenu);
+    connect(&SignalHub::instance(), &SignalHub::on_message_sent, this,
+            &IChatsPage::sendMessage);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
+            &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
+            &QPushButton::setVisible);
+
+    connect(&ConfigManager::instance(), &ConfigManager::onAvatarChanged,
+            m_userButton, [this]() {
+        QPixmap avatar(
+            ConfigManager::instance().config("avatar").toString());
+        m_userButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
+    });
+
+    connect(&ollama::Client::instance(), &ollama::Client::replyReceived, this,
+            &IChatsPage::appendWordToActiveChat);
+    connect(&ollama::Client::instance(), &ollama::Client::finished, this,
+            &IChatsPage::onOllamaFinished);
 }

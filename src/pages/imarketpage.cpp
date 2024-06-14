@@ -20,37 +20,28 @@
  */
 IMarketPage::IMarketPage(QWidget *parent) : IWidget(parent) {
 
-    setupMainLayout(new QVBoxLayout);
-
-    setupTopBar(widget(0));
-    setupScrollArea(widget(1));
+    setupMainUi(this);
     setupConnections();
 }
 
 /**
  * @brief Set up the main layout of the market page
  */
-void IMarketPage::setupMainLayout(QVBoxLayout *layout) {
+void IMarketPage::setupMainUi(QWidget *widget) {
     setObjectName("IMarketPage");
-    setLayout(layout);
 
-    m_mainLayout = layout;
+    m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setSpacing(2);
     m_mainLayout->setAlignment(Qt::AlignTop);
 
-    m_widgets.append(new QWidget);
-    m_widgets.append(new IScrollArea);
+    auto topBar = new QWidget;
+    auto scrollArea = new IScrollArea;
 
-    for (const auto w : m_widgets) {
-        m_mainLayout->addWidget(w);
-    }
-}
+    m_mainLayout->addWidget(topBar);
+    m_mainLayout->addWidget(scrollArea);
 
-QWidget *IMarketPage::widget(int i) const {
-    if (i < 0 || i >= m_widgets.size()) {
-        throw std::out_of_range("Index out of range in IMarketPage::widget");
-    }
-    return m_widgets[i];
+    setupTopBar(topBar);
+    setupScrollArea(scrollArea);
 }
 
 /**

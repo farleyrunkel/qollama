@@ -21,22 +21,23 @@ class IChatsPage : public IWidget {
 
 public:
     explicit IChatsPage(QWidget *parent = nullptr);
-    QPushButton *expandButton() const;
     QStackedWidget *chats() const;
     IChatScrollArea *currentChat();
 
+signals:
     void onOllamaFinished();
     void appendWordToActiveChat(QString text);
+
 private slots:
     void sendMessage(const QString &text, bool isNewChat = false);
     void handleSendMessage();
     void updateMenu(const QList<QString> &list);
 
 private:
-    void setupMainUi(QVBoxLayout* layout);
-    void setupTopArea();
-    void setupChatArea();
-    void setupBottomArea();
+    void setupMainUi(QWidget* widget);
+    void setupTopArea(QWidget* widget);
+    void setupChatArea(QStackedWidget* widget);
+    void setupBottomArea(QHBoxLayout* layout);
     void setupConnections();
 
     IChatScrollArea *addNewChat();
@@ -47,10 +48,12 @@ private:
     QStackedWidget *m_chatsStack;
     QHBoxLayout *m_bottomLayout;
     ILineEdit *m_messageLineEdit;
+
     QPushButton *m_expandButton;
     QPushButton *m_newChatButton;
     QPushButton *m_userButton;
     QPushButton *m_langButton;
+
     QMenu *m_optionMenu;
 
     QToolButton* m_topLabel;

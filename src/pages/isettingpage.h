@@ -2,6 +2,7 @@
 #define ISETTINGPAGE_H
 
 #include <QFileDialog>
+#include <QGroupBox>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QLabel>
@@ -11,7 +12,6 @@
 #include <QStackedLayout>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QGroupBox>
 
 class ISettingPage : public QDialog {
     Q_OBJECT
@@ -25,28 +25,29 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    void setupMainUi(QWidget* widget = nullptr);
-    void setupCenterWidget(QWidget *);
+    void setupMainUi(QWidget *widget);
+    void setupCenterWidget(QWidget *widget);
 
-    void setupSideWidget(QWidget* widget = nullptr);
-    void setupRightLayout(QGridLayout *);
+    void setupSideWidget(QWidget *widget);
+    void setupRightLayout(QGridLayout *layout);
 
-    void setupSettingsLayout(QStackedLayout *widget);
+    void setupSettingsLayout(QStackedLayout *layout);
 
-    void setupOllamaWidget(QWidget* );
-    void setupPromptWidget(QWidget* );
-    void setupAccountWidget(QWidget* );
+    void setupOllamaWidget(QWidget *widget);
+    void setupPromptWidget(QWidget *widget);
+    void setupAccountWidget(QWidget *widget);
 
     void setupConnections();
 
-    QGroupBox *addSettingGroupBox(const QString &key, const QString &value, const QString &config = "");
+    QGroupBox *addSettingGroupBox(const QString &key, const QString &value,
+                                  const QString &config = "");
 
 private slots:
     void changeAvatar();
 
 private:
     QHBoxLayout *m_mainLayout;
-    QWidget* m_centerWidget;
+    QWidget *m_centerWidget;
     QWidget *m_sideArea;
     QStackedLayout *m_settingLayout;
 
@@ -56,9 +57,9 @@ private:
     QPushButton *m_promptButton;
     QPushButton *m_closeButton;
 
-    QWidget* m_accountWidget;
-    QWidget* m_ollamaWidget;
-    QWidget* m_promptWidget;
+    QWidget *m_accountWidget;
+    QWidget *m_ollamaWidget;
+    QWidget *m_promptWidget;
 };
 
 #endif // ISETTINGPAGE_H

@@ -29,7 +29,7 @@ public:
     void load();
 
 private:
-    void setupMainLayout(QVBoxLayout* layout);
+    void setupMainUi(QWidget *widget);
     void setupTopBar(QWidget* layout);
     void setupScrollArea(QWidget* layout);
     void setupTopNavigator(QLayout* layout);
@@ -66,8 +66,6 @@ private:
     ILineEdit *searchLineEdit;
 
     QMap<QString, QWidget *> m_categories;
-    QWidget *widget(int i) const;
-        QList<QWidget*>  m_widgets;
 };
 
 #endif // IMARKETPAGE_H
