@@ -41,6 +41,9 @@ Example#Usage {
    border: 1px solid transparent; /*@LightBorder*/
 }
 
+QWidget {
+    border: none;
+}
 
 QWidget#settingCenterWidget {
 background-color: white;
@@ -50,12 +53,10 @@ background-color: white;
 ISideArea,
 IHistoryList {
     background-color: #78D999; /*@LightBackground*/
-    border: none;
 }
 
 QSplitter::handle {
     background-color: gray;
-    border: none;
 }
 
 QLabel#statusLabel {

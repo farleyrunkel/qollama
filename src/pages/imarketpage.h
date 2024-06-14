@@ -20,7 +20,7 @@
  * @class IMarketPage
  * @brief Market page widget
  */
-class IMarketPage : public QWidget {
+class IMarketPage : public IWidget {
     Q_OBJECT
 
 public:
@@ -28,23 +28,24 @@ public:
 
     void load();
 
-    QPushButton *expandButton() const;
-
 private:
     void setupMainLayout(QVBoxLayout* layout);
-    void setupTopArea(QLayout* layout);
-    void setupScrollArea(QLayout* layout);
-    void setupConnections();
-    void setupTopNavigator();
-    void setupTitleLabel();
-    void setupSearchLine();
-    ILineEdit *createSearchLineEdit();
-    void setupNavigator();
-    QWidget *createCategoryCard(const QString &categoryName);
-    void addCategory(const QString &categoryName);
-    void navigateToCategory(const QString &categoryName);
+    void setupTopBar(QWidget* layout);
+    void setupScrollArea(QWidget* layout);
+    void setupTopNavigator(QLayout* layout);
+    void setupTitleLabel(QLayout* layout);
+    void setupSearchLine(QLayout* layout);
+    void setupNavigator(QLayout* layout);
 
+    void setupConnections();
+
+    ILineEdit *createSearchLineEdit();
+    QWidget *createCategoryCard(const QString &categoryName);
+
+    void addCategory(const QString &categoryName);
     void addCategoryItem(const QString &categoryName, IHPushCard *item);
+
+    void navigateToCategory(const QString &categoryName);
 
 private:
     QVBoxLayout *m_mainLayout;
@@ -65,8 +66,8 @@ private:
     ILineEdit *searchLineEdit;
 
     QMap<QString, QWidget *> m_categories;
-    QLayout *layout(int i) const;
-        QList<QLayout*>  m_layouts;
+    QWidget *widget(int i) const;
+        QList<QWidget*>  m_widgets;
 };
 
 #endif // IMARKETPAGE_H

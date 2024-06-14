@@ -18,7 +18,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
-    setupMainUi();
+    setupMainUi(new QSplitter);
     setupStatusBar();
     setupPages();
 
@@ -72,35 +72,35 @@ void MainWindow::setupConnections() {
             [&](const QString &) { m_pages->setCurrentWidget(m_chats); });
 }
 
-void MainWindow::setupMainUi() {
+void MainWindow::setupMainUi(QSplitter* splitter) {
     setObjectName("MainWindow");
     setWindowModality(Qt::WindowModal);
     setWindowIcon(QIcon(ConfigManager::instance().appIcon()));
     setContextMenuPolicy(Qt::ActionsContextMenu);
     setAutoFillBackground(true);
+    setCentralWidget(splitter);
+
     resize(800, 500);
 
     StyleManager::instance().loadStyleSheet(":/qss/style.qss");
 
-    StyleManager::instance().enableBorders(true);
+    // StyleManager::instance().enableBorders(true);
 
     StyleManager::instance().applyStyleSheet(this);
     StyleManager::instance().applyPalette(this);
 
-    m_splitter = new QSplitter(this);
+    m_left = new ISideArea;
+    m_pages = new QStackedWidget;
+
+    m_splitter = splitter;
     m_splitter->setObjectName("splitter");
     m_splitter->setOrientation(Qt::Horizontal);
     m_splitter->setOpaqueResize(false);
     m_splitter->setHandleWidth(0);
     m_splitter->setChildrenCollapsible(false);
 
-    m_left = new ISideArea;
-    m_pages = new QStackedWidget;
-
     m_splitter->addWidget(m_left);
     m_splitter->addWidget(m_pages);
-
-    setCentralWidget(m_splitter);
 }
 
 void MainWindow::setupStatusBar() {
@@ -128,6 +128,7 @@ void MainWindow::setupPages() {
     m_pages->addWidget(m_welcome);
     m_pages->addWidget(m_market);
 
+    m_pages->setFrameShape(QFrame::NoFrame);
     m_pages->setCurrentWidget(m_welcome);
 }
 

@@ -92,29 +92,27 @@ void ConfigManager::readConfigFromFile(const QString &filePath) {
 
             // Read avatar
             if (jsonObj.contains("avatar")) {
-                QString avatarPath = jsonObj.value("avatar").toString();
-                setConfig("avatar", avatarPath);
+                setConfig("avatar", jsonObj.value("avatar").toString());
             }
 
             // Read ollama port
             if (jsonObj.contains("ollamaport")) {
-                QString ollamaPort = jsonObj.value("ollamaport").toString();
-                auto m_ollamaPort = ollamaPort;
-                setConfig("ollamaport", m_ollamaPort);
+                setConfig("ollamaport", jsonObj.value("ollamaport").toString());
             }
 
             // Read model directory
             if (jsonObj.contains("modeldir")) {
-                QString modelDir = jsonObj.value("modeldir").toString();
-                auto m_modelDir = modelDir;
-                setConfig("modeldir", m_modelDir);
+                setConfig("modeldir", jsonObj.value("modeldir").toString());
             }
 
             // Read gpts directory
             if (jsonObj.contains("gptsdir")) {
-                QString modelDir = jsonObj.value("gptsdir").toString();
-                auto m_modelDir = modelDir;
-                setConfig("gptsdir", m_modelDir);
+                setConfig("gptsdir", jsonObj.value("gptsdir").toString());
+            }
+
+            // Read gpts directory
+            if (jsonObj.contains("topBar")) {
+                setConfig("topBar", jsonObj.value("topBar").toObject());
             }
         }
         file.close();

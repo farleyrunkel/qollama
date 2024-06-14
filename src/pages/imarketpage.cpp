@@ -1,66 +1,71 @@
 #include "imarketpage.h"
+#include "configmanager.h"
+#include "dataloader.h"
 #include "ihpushcard.h"
 #include "ilineedit.h"
 #include "signalhub.h"
+#include "stylemanager.h"
+#include <QDialog>
+#include <QDir>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonParseError>
 #include <QStackedLayout>
 #include <QStackedWidget>
-#include <QFile>
-#include <QDir>
-#include <QJsonParseError>
-#include <QJsonArray>
-#include <QDialog>
-#include "configmanager.h"
-#include "stylemanager.h"
-#include "dataloader.h"
 
 /**
  * @brief IMarketPage constructor
  *
  * @param parent Parent widget
  */
-IMarketPage::IMarketPage(QWidget *parent) : QWidget(parent) {
+IMarketPage::IMarketPage(QWidget *parent) : IWidget(parent) {
 
     setupMainLayout(new QVBoxLayout);
-    setupTopArea(layout(0));
-    setupScrollArea(layout(1));
+
+    setupTopBar(widget(0));
+    setupScrollArea(widget(1));
     setupConnections();
 }
 
 /**
  * @brief Set up the main layout of the market page
  */
-void IMarketPage::setupMainLayout(QVBoxLayout* layout) {
+void IMarketPage::setupMainLayout(QVBoxLayout *layout) {
     setObjectName("IMarketPage");
-    setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
     m_mainLayout = layout;
     m_mainLayout->setSpacing(2);
     m_mainLayout->setAlignment(Qt::AlignTop);
 
-    m_layouts.append(new QHBoxLayout);
-    m_layouts.append(new QVBoxLayout);
+    m_widgets.append(new QWidget);
+    m_widgets.append(new IScrollArea);
 
-    for (const auto a : m_layouts) {
-        m_mainLayout->addLayout(a);
+    for (const auto w : m_widgets) {
+        m_mainLayout->addWidget(w);
     }
 }
 
-QLayout *IMarketPage::layout(int i) const {
-    if (i < 0 || i >= m_layouts.size()) {
-        throw std::out_of_range("Index out of range in ISideArea::layouts");
+QWidget *IMarketPage::widget(int i) const {
+    if (i < 0 || i >= m_widgets.size()) {
+        throw std::out_of_range("Index out of range in IMarketPage::widget");
     }
-    return m_layouts[i];
+    return m_widgets[i];
 }
-
 
 /**
  * @brief Set up the top area of the market page
  */
-void IMarketPage::setupTopArea(QLayout* layout) {
-    auto hLayout = qobject_cast<QHBoxLayout *>(layout);
-    hLayout->setAlignment(Qt::AlignVCenter);
-    hLayout->setContentsMargins(0, 0, 0, 0);
+void IMarketPage::setupTopBar(QWidget *widget) {
+    widget->setFixedHeight(ConfigManager::instance()
+                               .config("topBar")
+                               .toJsonObject()
+                               .value("height")
+                               .toInt());
+    auto layout = new QHBoxLayout(widget);
+    layout->setAlignment(Qt::AlignVCenter);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
 
     m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
     m_expandButton->setObjectName("smallButton");
@@ -70,39 +75,32 @@ void IMarketPage::setupTopArea(QLayout* layout) {
 
     m_expandButton->hide();
     m_newChatButton->hide();
-    m_newChatButton->setFixedHeight(35);
-    m_expandButton->setFixedHeight(35);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
     m_userButton =
         new QPushButton(QIcon(StyleManager::roundedPixmap(avatar)), "");
     m_userButton->setObjectName("smallButton");
-    m_userButton->setFixedHeight(35);
 
     m_topStack = new QStackedLayout;
     m_topSearchLine = createSearchLineEdit();
     m_topSpace = new QWidget;
 
-    m_topSpace->setFixedHeight(35);
-    m_topSearchLine->setFixedHeight(35);
-
     m_topStack->addWidget(m_topSearchLine);
     m_topStack->addWidget(m_topSpace);
     m_topStack->setCurrentWidget(m_topSpace);
 
-    hLayout->addWidget(m_expandButton);
-    hLayout->addWidget(m_newChatButton);
-    hLayout->addLayout(m_topStack);
-    hLayout->addWidget(m_userButton);
+    layout->addWidget(m_expandButton);
+    layout->addWidget(m_newChatButton);
+    layout->addLayout(m_topStack);
+    layout->addWidget(m_userButton);
 }
 
 /**
  * @brief Set up the scroll area of the market page
  */
-void IMarketPage::setupScrollArea(QLayout* layout) {
+void IMarketPage::setupScrollArea(QWidget *widget) {
 
-    m_scrollArea = new IScrollArea(this);
-    layout->addWidget(m_scrollArea);
+    m_scrollArea = qobject_cast<IScrollArea *>(widget);
 
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setAlignment(Qt::AlignTop);
@@ -125,71 +123,26 @@ void IMarketPage::setupScrollArea(QLayout* layout) {
     m_scrollWidget->setLayout(m_scrollWidgetLayout);
     m_scrollWidgetLayout->setContentsMargins(margin, 0, margin, 0);
 
-    setupTopNavigator();
-    setupTitleLabel();
-    setupSearchLine();
-    setupNavigator();
-}
-
-/**
- * @brief Set up connections for signals and slots
- */
-void IMarketPage::setupConnections() {
-    connect(m_topNavigator, &INavigetrorBar::buttonClicked, this,
-            [this](QPushButton * button ) {
-                qDebug() << "INavigetrorBar button clicked:" << button->text();
-                m_navigator->showUnderline(
-                m_navigator->getUnderlineLabel(button->text()));
-                navigateToCategory(button->text());
-    });
-
-    connect(m_scrollArea, &IScrollArea::scrolledToValue, this, [this](int y) {
-        if (m_scrollLayout) {
-            bool showWidgets = (y >= m_navigator->y());
-            if (showWidgets) {
-                m_topNavigator->show();
-                m_topStack->setCurrentWidget(m_topSearchLine);
-            } else {
-                m_topNavigator->hide();
-                m_topStack->setCurrentWidget(m_topSpace);
-            }
-        } else {
-            qDebug() << "Layout does not exist.";
-        }
-    });
-    connect(&ConfigManager::instance(), &ConfigManager::onAvatarChanged,
-            m_userButton, [this]() {
-                QPixmap avatar(
-                    ConfigManager::instance().config("avatar").toString());
-                m_userButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
-            });
-
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
-            &QPushButton::setVisible);
-    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
-            &QPushButton::setVisible);
-    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onExpandButtonClicked);
-    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onNewChatButtonClicked);
-    connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
-            &SignalHub::onUserButtonClicked);
+    setupTopNavigator(m_scrollLayout);
+    setupTitleLabel(m_scrollWidgetLayout);
+    setupSearchLine(m_scrollWidgetLayout);
+    setupNavigator(m_scrollWidgetLayout);
 }
 
 /**
  * @brief Set up the top navigator bar
  */
-void IMarketPage::setupTopNavigator() {
+void IMarketPage::setupTopNavigator(QLayout *layout) {
     m_topNavigator = new INavigetrorBar(this);
-    m_scrollLayout->addWidget(m_topNavigator);
-    m_scrollLayout->setAlignment(Qt::AlignTop);
     m_topNavigator->hide();
+    layout->addWidget(m_topNavigator);
+    layout->setAlignment(Qt::AlignTop);
 }
 
 /**
  * @brief Set up the title label
  */
-void IMarketPage::setupTitleLabel() {
+void IMarketPage::setupTitleLabel(QLayout *layout) {
     qDebug() << "Setting up title";
 
     auto titleWidget = new QLabel;
@@ -197,21 +150,22 @@ void IMarketPage::setupTitleLabel() {
     titleWidget->setText(
         "<p style='text-align: center; font-size: 32px; font-weight: bold; "
         "color: black; margin-bottom: 1px; '>Prompts</p>"
-        "<p style='text-align: center; font-size: 10px; color: gray;margin-top: 1px;  '>Explore "
+        "<p style='text-align: center; font-size: 10px; color: gray;margin-top: "
+        "1px;  '>Explore "
         "and create a customized version of prompts.</p>");
 
-    m_scrollWidgetLayout->addWidget(titleWidget);
+    layout->addWidget(titleWidget);
 }
 
 /**
  * @brief Set up the search line edit
  */
-void IMarketPage::setupSearchLine() {
+void IMarketPage::setupSearchLine(QLayout *layout) {
     qDebug() << "Setting up search line";
 
     searchLineEdit = createSearchLineEdit();
     searchLineEdit->setFixedHeight(40);
-    m_scrollWidgetLayout->addWidget(searchLineEdit);
+    layout->addWidget(searchLineEdit);
 }
 
 /**
@@ -237,11 +191,11 @@ ILineEdit *IMarketPage::createSearchLineEdit() {
 /**
  * @brief Set up the navigator bar
  */
-void IMarketPage::setupNavigator() {
+void IMarketPage::setupNavigator(QLayout *layout) {
     qDebug() << "Setting up navigator";
 
     m_navigator = new INavigetrorBar;
-    m_scrollWidgetLayout->addWidget(m_navigator);
+    layout->addWidget(m_navigator);
 
     connect(m_navigator, &INavigetrorBar::buttonClicked, this,
             [this](QPushButton *button) {
@@ -297,7 +251,8 @@ void IMarketPage::addCategory(const QString &categoryName) {
     m_topNavigator->addButton(categoryName);
 }
 
-void IMarketPage::addCategoryItem(const QString &categoryName, IHPushCard* item) {
+void IMarketPage::addCategoryItem(const QString &categoryName,
+                                  IHPushCard *item) {
     qDebug() << "Adding category item:" << categoryName;
 
     // Check if the category already exists in m_categories
@@ -345,7 +300,7 @@ void IMarketPage::load() {
         auto item = new IHPushCard;
 
         QString name = prompt.title;
-        QString intro =  prompt.description;
+        QString intro = prompt.description;
         QString content = prompt.prompt;
 
         QString category = "Top";
@@ -366,8 +321,46 @@ void IMarketPage::load() {
 }
 
 /**
- * @brief Get the expand button
- *
- * @return QPushButton* Pointer to the expand button
+ * @brief Set up connections for signals and slots
  */
-QPushButton *IMarketPage::expandButton() const { return m_expandButton; }
+void IMarketPage::setupConnections() {
+    connect(m_topNavigator, &INavigetrorBar::buttonClicked, this,
+            [this](QPushButton *button) {
+                qDebug() << "INavigetrorBar button clicked:" << button->text();
+        m_navigator->showUnderline(
+                    m_navigator->getUnderlineLabel(button->text()));
+                navigateToCategory(button->text());
+    });
+
+    connect(m_scrollArea, &IScrollArea::scrolledToValue, this, [this](int y) {
+        if (m_scrollLayout) {
+            bool showWidgets = (y >= m_navigator->y());
+            if (showWidgets) {
+                m_topNavigator->show();
+                m_topStack->setCurrentWidget(m_topSearchLine);
+            } else {
+                m_topNavigator->hide();
+                m_topStack->setCurrentWidget(m_topSpace);
+            }
+        } else {
+            qDebug() << "Layout does not exist.";
+        }
+    });
+    connect(&ConfigManager::instance(), &ConfigManager::onAvatarChanged,
+            m_userButton, [this]() {
+        QPixmap avatar(
+            ConfigManager::instance().config("avatar").toString());
+        m_userButton->setIcon(QIcon(StyleManager::roundedPixmap(avatar)));
+    });
+
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_expandButton,
+            &QPushButton::setVisible);
+    connect(&SignalHub::instance(), &SignalHub::onSideAreaHidden, m_newChatButton,
+            &QPushButton::setVisible);
+    connect(m_expandButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onExpandButtonClicked);
+    connect(m_newChatButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onNewChatButtonClicked);
+    connect(m_userButton, &QPushButton::clicked, &SignalHub::instance(),
+            &SignalHub::onUserButtonClicked);
+}

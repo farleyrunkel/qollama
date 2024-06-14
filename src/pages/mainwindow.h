@@ -37,7 +37,7 @@ protected:
 private:
     void setupPages();
     void setupStatusBar();
-    void setupMainUi();
+    void setupMainUi(QSplitter* splitter);
     void setupConnections();
     void retranslateUi();
 

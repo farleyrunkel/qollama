@@ -20,6 +20,7 @@ IWelcomePage::IWelcomePage(QWidget *parent) : IWidget(parent) {
 void IWelcomePage::setupMainLayout() {
     setObjectName("IWelcomePage");
     setContentsMargins(0, 0, 0, 0);
+    setStyleSheet("border: 1px solid green;");
 
     m_mainLayout = new QVBoxLayout(this);
 

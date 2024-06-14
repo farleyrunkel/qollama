@@ -4,5 +4,8 @@
     "avatar": ":/images/farley.png",
     "ollamaport": "localhost:11434",
     "modeldir": "@MODELDIR@",
-    "gptsdir": "@GPTSDIR@"
+    "gptsdir": "@GPTSDIR@",
+    "topBar" : {
+        "height" : 30
+    }
 }

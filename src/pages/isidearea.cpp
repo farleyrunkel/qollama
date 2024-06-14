@@ -1,4 +1,5 @@
 #include "isidearea.h"
+#include "configmanager.h"
 #include "signalhub.h"
 #include "stylemanager.h"
 #include <QFile>
@@ -10,7 +11,7 @@ ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
 
     setupMainLayout(new QVBoxLayout);
 
-    setupTitleBar(widget(0));
+    setupTopBar(widget(0));
     setupTopButtons(widget(1));
     setupHistoryList(widget(2));
     setupBottomButtons(widget(3));
@@ -36,10 +37,15 @@ void ISideArea::setupMainLayout(QVBoxLayout *layout) {
     }
 }
 
-void ISideArea::setupTitleBar(QWidget *widget) {
-    QHBoxLayout *hLayout = new QHBoxLayout(widget);
-    hLayout->setSpacing(0);
-    hLayout->setContentsMargins(0, 0, 0, 0);
+void ISideArea::setupTopBar(QWidget *widget) {
+    widget->setFixedHeight(ConfigManager::instance()
+                               .config("topBar")
+                               .toJsonObject()
+                               .value("height")
+                               .toInt());
+    QHBoxLayout *layout = new QHBoxLayout(widget);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
     m_expandButton->setObjectName("smallButton");
@@ -47,9 +53,9 @@ void ISideArea::setupTitleBar(QWidget *widget) {
     m_newChatButton = new QPushButton(QIcon(":/icons/create-new.svg"), "");
     m_newChatButton->setObjectName("smallButton");
 
-    hLayout->addWidget(m_expandButton);
-    hLayout->addStretch(1);
-    hLayout->addWidget(m_newChatButton);
+    layout->addWidget(m_expandButton);
+    layout->addStretch(1);
+    layout->addWidget(m_newChatButton);
 }
 
 void ISideArea::setupTopButtons(QWidget *widget) {
@@ -128,6 +134,8 @@ ISideArea::~ISideArea() {
     }
     m_widgets.clear();
 }
+
+void ISideArea::load() {}
 
 IHistoryList *ISideArea::historyList() const { return m_historyList; }
 

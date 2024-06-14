@@ -21,11 +21,12 @@ public:
     QPushButton *settingButton() const;
     IHistoryList *historyList() const;
 
+    void load();
 private:
 
     void setupMainLayout(QVBoxLayout* layout);
 
-    void setupTitleBar(QWidget *layout);
+    void setupTopBar(QWidget *layout);
     void setupTopButtons(QWidget *layout);
     void setupHistoryList(QWidget *layout);
     void setupBottomButtons(QWidget *layout);
