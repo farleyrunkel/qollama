@@ -117,12 +117,21 @@ void ISideArea::setupConnections() {
             &SignalHub::onNewChatButtonClicked);
 }
 
+ISideArea::~ISideArea() {
+    for (auto layout : m_layouts) {
+        delete layout;
+    }
+    m_layouts.clear();
+}
+
 IHistoryList *ISideArea::historyList() const { return m_historyList; }
 
-QPushButton *ISideArea::settingButton() const { return m_settingButton; }
-
 QPushButton *ISideArea::expandButton() const { return m_expandButton; }
+
+QPushButton *ISideArea::newChatButton() const { return m_newChatButton; }
 
 IOverlayButton *ISideArea::modelsButton() const { return m_modelsButton; }
 
 QPushButton *ISideArea::promptsButton() const { return m_promptsButton; }
+
+QPushButton *ISideArea::settingButton() const { return m_settingButton; }

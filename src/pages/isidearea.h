@@ -12,19 +12,27 @@ class ISideArea : public IWidget {
 
 public:
     explicit ISideArea(QWidget *parent = nullptr);
+    ~ISideArea();
 
     QPushButton *expandButton() const;
+    QPushButton *newChatButton() const;
     IOverlayButton *modelsButton() const;
     QPushButton *promptsButton() const;
     QPushButton *settingButton() const;
     IHistoryList *historyList() const;
 
 private:
-    void setupConnections();
+
+    void setupMainUi(QVBoxLayout* layout);
+
     void setupTitleBar(QLayout *layout);
     void setupTopButtons(QLayout *layout);
     void setupHistoryList(QLayout *layout);
     void setupBottomButtons(QLayout *layout);
+
+    void setupConnections();
+
+    QLayout *layout(int i) const;
 
 private:
     QPushButton *m_expandButton;
@@ -39,9 +47,6 @@ private:
 
     QVBoxLayout* m_mainLayout;
     QList<QLayout*>  m_layouts;
-    void setupMainUi(QVBoxLayout* layout);
-
-    QLayout *layout(int i) const;
 };
 
 #endif // ILEFTWINDOW_H

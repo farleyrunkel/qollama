@@ -19,6 +19,7 @@
  * @param parent Parent widget
  */
 IMarketPage::IMarketPage(QWidget *parent) : QWidget(parent) {
+
     setupMainLayout();
     setupTopArea();
     setupScrollArea();
