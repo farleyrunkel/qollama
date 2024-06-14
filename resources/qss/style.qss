@@ -41,10 +41,6 @@ Example#Usage {
    border: 1px solid transparent; /*@LightBorder*/
 }
 
-QWidget {
-    border: none;
-}
-
 QWidget#settingCenterWidget {
 background-color: white;
     border-radius: 20px;

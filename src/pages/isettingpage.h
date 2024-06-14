@@ -25,17 +25,28 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    void setupMainUi();
-    void setupSideArea();
+    void setupMainUi(QWidget* widget = nullptr);
+    void setupCenterWidget(QWidget *);
+
+    void setupSideWidget(QWidget* widget = nullptr);
+    void setupSettingsArea(QGridLayout *);
+
+    void setupSettingsLayout(QStackedLayout *widget);
+
+    void setupOllamaSettings(QWidget* );
+    void setupPromptSettings(QWidget* );
+    void setupAccountSettings(QWidget* );
+
     void setupConnections();
+
     QGroupBox *addSettingGroupBox(const QString &key, const QString &value, const QString &config = "");
-    void setupAccountSettings();
 
 private slots:
     void changeAvatar();
 
 private:
     QHBoxLayout *m_mainLayout;
+    QWidget* m_centerWidget;
     QWidget *m_sideArea;
     QStackedLayout *m_settingLayout;
 
@@ -43,10 +54,11 @@ private:
     QPushButton *m_accountButton;
     QPushButton *m_ollamaButton;
     QPushButton *m_promptButton;
+    QPushButton *m_closeButton;
 
-    QMap<QString, QWidget*> m_settings;
-    void setupOllamaSettings();
-    void setupPromptSettings();
+    QWidget* m_accountWidget;
+    QWidget* m_ollamaWidget;
+    QWidget* m_promptWidget;
 };
 
 #endif // ISETTINGPAGE_H

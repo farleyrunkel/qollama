@@ -1,10 +1,10 @@
 #include "isettingpage.h"
 #include "configmanager.h"
-#include "signalhub.h"
 #include <QApplication>
 #include <QCalendarWidget>
 #include <QHBoxLayout>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QPainter>
 #include <QStackedWidget>
 #include <QTabWidget>
@@ -15,140 +15,119 @@
 #endif
 
 ISettingPage::ISettingPage(QWidget *parent) : QDialog(parent) {
-    setupMainUi();          // Setup the main layout
-    setupSideArea();        // Setup the top area
-    setupAccountSettings(); // Setup the setting area
-    setupOllamaSettings();
-    setupPromptSettings();
-    setupConnections();     // Setup signal-slot
-}
-
-void ISettingPage::showEvent(QShowEvent *event) {
-    QDialog::showEvent(event);
-    QWidget *parent = qobject_cast<QWidget *>(this->parent());
-
-    if (parent) {
-        // 获取父窗口的全局屏幕坐标
-        QPoint globalPos = parent->mapToGlobal(QPoint(0, 0));
-
-        // 父窗口的宽度和高度
-        int parentWidth = parent->width();
-        int parentHeight = parent->height();
-
-        // ISettingPage 的宽度和高度（为父窗口的 80%）
-        int width = parentWidth * 1;
-        int height = parentHeight * 1;
-
-        // 计算 ISettingPage 的左上角坐标，使其居中于父窗口
-        int x = globalPos.x() + (parentWidth - width) / 2;
-        int y = globalPos.y() + (parentHeight - height) / 2;
-
-#ifdef Q_OS_WIN
-        // 获取系统标题栏高度
-        int titleBarHeight = GetSystemMetrics(SM_CYCAPTION);
-        y -= titleBarHeight;
-        height += titleBarHeight;
-#endif
-
-        // 设置 ISettingPage 的位置和大小
-        setGeometry(x, y, width, height);
-    }
-}
-
-void ISettingPage::paintEvent(QPaintEvent *event) {
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    // 设置灰色半透明背景
-    QColor backgroundColor(128, 128, 128,
-                           128); // RGB(128, 128, 128) 是灰色，最后一个参数 128
-        // 是透明度，范围是 0-255
-    painter.fillRect(this->rect(), backgroundColor);
+    setupMainUi(this);  // Setup the main Ui
+    setupConnections(); // Setup signal-slot
 }
 
 // Setup the main layout of the setting page
-void ISettingPage::setupMainUi() {
+void ISettingPage::setupMainUi(QWidget *widget) {
+    // Set object name and properties
     setObjectName("ISettingPage");
     setContentsMargins(80, 80, 80, 80);
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    m_mainLayout = new QHBoxLayout(this);
-    setLayout(m_mainLayout);
-    auto m_centerWidget = new QWidget;
-    m_centerWidget->setObjectName("settingCenterWidget");
-    m_centerWidget->setAutoFillBackground(true);
+    // Create main layout
+    m_mainLayout = new QHBoxLayout(widget);
 
-    StyleManager::applyPalette(m_centerWidget);
-
+    // Create center widget
+    m_centerWidget = new QWidget;
     m_mainLayout->addWidget(m_centerWidget);
 
-    auto m_centerLayout = new QHBoxLayout;
-    m_centerWidget->setLayout(m_centerLayout);
+    // Setup center widget layout and components
+    setupCenterWidget(m_centerWidget);
+}
 
-    m_sideArea = new QWidget(m_centerWidget);
+void ISettingPage::setupCenterWidget(QWidget *widget) {
+    widget->setObjectName("settingCenterWidget");
+    widget->setAutoFillBackground(true);
+
+    StyleManager::applyPalette(widget);
+
+    auto centerLayout = new QHBoxLayout(widget);
+
+    m_sideArea = new QWidget(widget);
     m_sideArea->setFixedWidth(120);
 
-    QFrame *line = new QFrame();
+    auto line = new QFrame;
     line->setFrameShape(QFrame::VLine);
     line->setFrameShadow(QFrame::Sunken);
 
-    m_settingLayout = new QStackedLayout;
-
     auto m_right = new QGridLayout;
-    m_right->addWidget(new QLabel("Account"), 0, 0);
 
-    QPushButton *closeButton = new QPushButton("x");
-    closeButton->setFixedSize(QSize(30, 30));
-    closeButton->setObjectName("smallButton");
-    m_right->addWidget(closeButton, 0, 1);
-    connect(closeButton, &QPushButton::clicked, this, &QWidget::close);
+    centerLayout->addWidget(m_sideArea);
+    centerLayout->addWidget(line);
+    centerLayout->addLayout(m_right);
 
-    // 添加分隔线
-    QFrame *line1 = new QFrame();
+    setupSideWidget(m_sideArea);
+    setupSettingsArea(m_right);
+}
+
+void ISettingPage::setupSettingsArea(QGridLayout *right) {
+    right->addWidget(new QLabel("Account"), 0, 0);
+
+    m_closeButton = new QPushButton("x");
+    m_closeButton->setFixedSize(QSize(30, 30));
+    m_closeButton->setObjectName("smallButton");
+    right->addWidget(m_closeButton, 0, 1);
+
+    auto line1 = new QFrame();
     line1->setFrameShape(QFrame::HLine);
     line1->setFrameShadow(QFrame::Sunken);
 
-    m_right->addWidget(line1, 1, 0, 1, 2);
-    m_right->addLayout(m_settingLayout, 2, 0, 1, 2);
+    m_settingLayout = new QStackedLayout;
 
-    m_centerLayout->addWidget(m_sideArea);
-    m_centerLayout->addWidget(line);
+    right->addWidget(line1, 1, 0, 1, 2);
+    right->addLayout(m_settingLayout, 2, 0, 1, 2);
 
-    m_centerLayout->addLayout(m_right);
+    setupSettingsLayout(m_settingLayout);
+}
+
+void ISettingPage::setupSettingsLayout(QStackedLayout *widget) {
+
+    m_accountWidget = new QWidget;
+    widget->addWidget(m_accountWidget);
+
+    m_ollamaWidget = new QWidget;
+    widget->addWidget(m_ollamaWidget);
+
+    m_promptWidget = new QWidget;
+    widget->addWidget(m_promptWidget);
+
+    setupAccountSettings(m_accountWidget); // Setup the setting area
+    setupOllamaSettings(m_ollamaWidget);
+    setupPromptSettings(m_promptWidget);
 }
 
 // Setup the top area of the setting page
-void ISettingPage::setupSideArea() {
-    auto sideAreaLayout = new QVBoxLayout(m_sideArea);
-    sideAreaLayout->setContentsMargins(5, 8, 5, 10);
-    sideAreaLayout->setAlignment(Qt::AlignTop);
-
-    sideAreaLayout->addWidget(new QLabel("Settings"));
+void ISettingPage::setupSideWidget(QWidget *widget) {
+    auto layout = new QVBoxLayout(widget);
+    layout->setContentsMargins(5, 8, 5, 10);
+    layout->setAlignment(Qt::AlignTop);
 
     m_accountButton = new QPushButton(QIcon("://icons/account.svg"), "Account");
     m_accountButton->setObjectName("bigButton");
-    sideAreaLayout->addWidget(m_accountButton);
-
     m_ollamaButton = new QPushButton(QIcon("://images/ollama.png"), "Ollama");
     m_ollamaButton->setObjectName("bigButton");
-    sideAreaLayout->addWidget(m_ollamaButton);
-
     m_promptButton = new QPushButton(QIcon("://icons/prompt.svg"), "Prompt");
     m_promptButton->setObjectName("bigButton");
-    sideAreaLayout->addWidget(m_promptButton);
+
+    layout->addWidget(new QLabel("Settings"));
+    layout->addWidget(m_accountButton);
+    layout->addWidget(m_ollamaButton);
+    layout->addWidget(m_promptButton);
 }
 
 QGroupBox *ISettingPage::addSettingGroupBox(const QString &key,
                                             const QString &value,
-                                            const QString &config) {
+                                            const QString &configKey) {
     auto groupBox = new QGroupBox(key);
     auto lineEdit = new QLineEdit(value);
-    auto pushButton = new QPushButton("Edit");
+    auto editButton = new QPushButton("Edit");
 
     lineEdit->setDisabled(true);
     lineEdit->setFrame(false);
-    pushButton->setObjectName("smallButton");
+    editButton->setObjectName("smallButton");
 
     groupBox->setStyleSheet(
         "QGroupBox { border: 0px; background-color: white; }");
@@ -156,14 +135,14 @@ QGroupBox *ISettingPage::addSettingGroupBox(const QString &key,
     groupBox->layout()->setContentsMargins(11, 21, 11, 21);
 
     groupBox->layout()->addWidget(lineEdit);
-    groupBox->layout()->addWidget(pushButton);
+    groupBox->layout()->addWidget(editButton);
 
-    connect(pushButton, &QPushButton::clicked, this,
-            [lineEdit, pushButton, config]() {
+    connect(editButton, &QPushButton::clicked, this,
+            [lineEdit, editButton, configKey]() {
         lineEdit->setEnabled(!lineEdit->isEnabled());
-        pushButton->setText(lineEdit->isEnabled() ? "Done" : "Edit");
-        if (!config.isEmpty() && pushButton->text() == "Done") {
-            ConfigManager::instance().setConfig(config, lineEdit->text());
+        editButton->setText(lineEdit->isEnabled() ? "Done" : "Edit");
+        if (!configKey.isEmpty() && editButton->text() == "Done") {
+            ConfigManager::instance().setConfig(configKey, lineEdit->text());
         }
     });
 
@@ -171,48 +150,35 @@ QGroupBox *ISettingPage::addSettingGroupBox(const QString &key,
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupOllamaSettings() {
-    auto ollama = new QWidget;
-    m_settings["ollama"] = ollama;
-    m_settingLayout->addWidget(ollama);
+void ISettingPage::setupOllamaSettings(QWidget *ollama) {
+    auto layout = new QVBoxLayout(ollama);
+    layout->setSpacing(10);
+    layout->setAlignment(Qt::AlignTop);
 
-    auto ollamaLayout = new QVBoxLayout(ollama);
-    ollamaLayout->setSpacing(10);
-    ollamaLayout->setAlignment(Qt::AlignTop);
-
-    ollamaLayout->addWidget(addSettingGroupBox(
+    layout->addWidget(addSettingGroupBox(
         "Model files directory",
         ConfigManager::instance().config("modeldir").toString(), "modeldir"));
-    ollamaLayout->addWidget(
+    layout->addWidget(
         addSettingGroupBox("Ollama port", "localhost:11434", "ollamaport"));
-    ollamaLayout->addWidget(
+    layout->addWidget(
         addSettingGroupBox("Ollama address", "localhost", "ollamadomain"));
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupPromptSettings() {
-    auto widget = new QWidget;
-    m_settings["prompt"] = widget;
-    m_settingLayout->addWidget(widget);
-
+void ISettingPage::setupPromptSettings(QWidget *widget) {
     auto layout = new QVBoxLayout(widget);
     layout->setSpacing(10);
     layout->setAlignment(Qt::AlignTop);
 
     layout->addWidget(
         addSettingGroupBox("Prompt", "Reply with English", "prompt"));
-
 }
 
 // Setup the setting area of the setting page
-void ISettingPage::setupAccountSettings() {
-    auto account = new QWidget;
-    m_settings["account"] = account;
-    m_settingLayout->addWidget(account);
-
-    auto accountLayout = new QVBoxLayout(account);
-    accountLayout->setSpacing(10);
-    accountLayout->setAlignment(Qt::AlignTop);
+void ISettingPage::setupAccountSettings(QWidget *account) {
+    auto layout = new QVBoxLayout(account);
+    layout->setSpacing(10);
+    layout->setAlignment(Qt::AlignTop);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
     qDebug() << "ConfigManager::instance().config(avatar).toString()"
@@ -229,7 +195,7 @@ void ISettingPage::setupAccountSettings() {
     lay->addWidget(m_avatarButton);
     lay->addWidget(addSettingGroupBox("User name", "QOllama", "username"));
 
-    accountLayout->addLayout(lay);
+    layout->addLayout(lay);
 }
 
 // Setup signal-slot connections
@@ -237,15 +203,13 @@ void ISettingPage::setupConnections() {
     connect(m_avatarButton, &QPushButton::clicked, this,
             &ISettingPage::changeAvatar); // Change avatar button clicked
 
-    connect(m_accountButton, &QPushButton::clicked, this, [this]() {
-        m_settingLayout->setCurrentWidget(m_settings["account"]);
-    });
-    connect(m_ollamaButton, &QPushButton::clicked, this, [this]() {
-        m_settingLayout->setCurrentWidget(m_settings["ollama"]);
-    });
-    connect(m_promptButton, &QPushButton::clicked, this, [this]() {
-        m_settingLayout->setCurrentWidget(m_settings["prompt"]);
-    });
+    connect(m_accountButton, &QPushButton::clicked, this,
+            [this]() { m_settingLayout->setCurrentWidget(m_accountWidget); });
+    connect(m_ollamaButton, &QPushButton::clicked, this,
+            [this]() { m_settingLayout->setCurrentWidget(m_ollamaWidget); });
+    connect(m_promptButton, &QPushButton::clicked, this,
+            [this]() { m_settingLayout->setCurrentWidget(m_promptWidget); });
+    connect(m_closeButton, &QPushButton::clicked, this, &QWidget::close);
 }
 
 // Slot to change avatar
@@ -253,8 +217,11 @@ void ISettingPage::changeAvatar() {
     QString fileName = QFileDialog::getOpenFileName(
         this, "Select Avatar", "", "Image Files (*.png *.jpg *.bmp)");
     if (!fileName.isEmpty()) {
-
         QPixmap newAvatar(fileName);
+        if (newAvatar.isNull()) {
+            QMessageBox::warning(this, "Error", "Failed to load the image.");
+            return;
+        }
         newAvatar = StyleManager::roundedPixmap(newAvatar);
 
         m_avatarButton->setIcon(QIcon(newAvatar));
@@ -262,4 +229,48 @@ void ISettingPage::changeAvatar() {
 
         emit ConfigManager::instance().onAvatarChanged();
     }
+}
+
+void ISettingPage::showEvent(QShowEvent *event) {
+    QDialog::showEvent(event);
+    QWidget *parent = qobject_cast<QWidget *>(this->parent());
+
+    if (parent) {
+        // Get the global screen coordinates of the parent window
+        QPoint globalPos = parent->mapToGlobal(QPoint(0, 0));
+
+        // Parent window's width and height
+        int parentWidth = parent->width();
+        int parentHeight = parent->height();
+
+        // Width and height of ISettingPage (same as parent window's size)
+        int width = parentWidth * 1;
+        int height = parentHeight * 1;
+
+        // Calculate the top-left coordinates of ISettingPage to center it in the
+        // parent window
+        int x = globalPos.x() + (parentWidth - width) / 2;
+        int y = globalPos.y() + (parentHeight - height) / 2;
+
+#ifdef Q_OS_WIN
+        // Get the system title bar height
+        int titleBarHeight = GetSystemMetrics(SM_CYCAPTION);
+        y -= titleBarHeight;
+        height += titleBarHeight;
+#endif
+
+        // Set the position and size of ISettingPage
+        setGeometry(x, y, width, height);
+    }
+}
+
+void ISettingPage::paintEvent(QPaintEvent *event) {
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    // Set gray semi-transparent background
+    QColor backgroundColor(128, 128, 128,
+                           128); // RGB(128, 128, 128) is gray, the last parameter
+        // 128 is the transparency (range 0-255)
+    painter.fillRect(this->rect(), backgroundColor);
 }

@@ -7,26 +7,23 @@
 
 IChatsPage::IChatsPage(QWidget *parent) : IWidget(parent) {
     // Setup the main layout and all components
-    setupMainUi();
+    setupMainUi(new QVBoxLayout);
     setupTopArea();
     setupChatArea();
     setupBottomArea();
     setupConnections();
 }
 
-void IChatsPage::setupMainUi() {
+void IChatsPage::setupMainUi(QVBoxLayout* layout) {
     // Set up the main layout of the chats page
     setObjectName("iChatsPage");
     setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
 
-    m_mainLayout = new QVBoxLayout(this);
-    setLayout(m_mainLayout);
+    m_mainLayout = layout;
 
-    m_topArea = new QWidget(this);
-    m_topArea->setFixedHeight(35);
-
+    m_topArea = new QWidget;
     m_chatsStack = new QStackedWidget;
-
     m_bottomLayout = new QHBoxLayout;
 
     m_mainLayout->addWidget(m_topArea);

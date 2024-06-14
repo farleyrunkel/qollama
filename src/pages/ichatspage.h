@@ -33,7 +33,7 @@ private slots:
     void updateMenu(const QList<QString> &list);
 
 private:
-    void setupMainUi();
+    void setupMainUi(QVBoxLayout* layout);
     void setupTopArea();
     void setupChatArea();
     void setupBottomArea();
