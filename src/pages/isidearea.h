@@ -23,7 +23,7 @@ public:
 
 private:
 
-    void setupMainUi(QVBoxLayout* layout);
+    void setupMainLayout(QVBoxLayout* layout);
 
     void setupTitleBar(QLayout *layout);
     void setupTopButtons(QLayout *layout);

@@ -8,7 +8,7 @@
 
 ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
 
-    setupMainUi(new QVBoxLayout);
+    setupMainLayout(new QVBoxLayout);
 
     setupTitleBar(layout(0));
     setupTopButtons(layout(1));
@@ -18,7 +18,7 @@ ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
     setupConnections();
 }
 
-void ISideArea::setupMainUi(QVBoxLayout *layout) {
+void ISideArea::setupMainLayout(QVBoxLayout *layout) {
     setMaximumSize(QSize(170, 16777215));
     setObjectName("leftWindow");
     setLayout(layout);
