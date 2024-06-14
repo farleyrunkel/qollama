@@ -20,37 +20,47 @@
  */
 IMarketPage::IMarketPage(QWidget *parent) : QWidget(parent) {
 
-    setupMainLayout();
-    setupTopArea();
-    setupScrollArea();
+    setupMainLayout(new QVBoxLayout);
+    setupTopArea(layout(0));
+    setupScrollArea(layout(1));
     setupConnections();
 }
 
 /**
  * @brief Set up the main layout of the market page
  */
-void IMarketPage::setupMainLayout() {
+void IMarketPage::setupMainLayout(QVBoxLayout* layout) {
     setObjectName("IMarketPage");
     setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
 
-    m_mainLayout = new QVBoxLayout(this);
-    setLayout(m_mainLayout);
+    m_mainLayout = layout;
+    m_mainLayout->setSpacing(2);
+    m_mainLayout->setAlignment(Qt::AlignTop);
 
-    m_topArea = new QWidget(this);
-    m_topArea->setFixedHeight(35);
+    m_layouts.append(new QHBoxLayout);
+    m_layouts.append(new QVBoxLayout);
 
-    m_scrollArea = new IScrollArea(this);
-
-    m_mainLayout->addWidget(m_topArea);
-    m_mainLayout->addWidget(m_scrollArea);
+    for (const auto a : m_layouts) {
+        m_mainLayout->addLayout(a);
+    }
 }
+
+QLayout *IMarketPage::layout(int i) const {
+    if (i < 0 || i >= m_layouts.size()) {
+        throw std::out_of_range("Index out of range in ISideArea::layouts");
+    }
+    return m_layouts[i];
+}
+
 
 /**
  * @brief Set up the top area of the market page
  */
-void IMarketPage::setupTopArea() {
-    auto topAreaLayout = new QHBoxLayout(m_topArea);
-    topAreaLayout->setContentsMargins(0, 0, 0, 0);
+void IMarketPage::setupTopArea(QLayout* layout) {
+    auto hLayout = qobject_cast<QHBoxLayout *>(layout);
+    hLayout->setAlignment(Qt::AlignVCenter);
+    hLayout->setContentsMargins(0, 0, 0, 0);
 
     m_expandButton = new QPushButton(QIcon("://icons/sidebar-left.svg"), "");
     m_expandButton->setObjectName("smallButton");
@@ -60,29 +70,40 @@ void IMarketPage::setupTopArea() {
 
     m_expandButton->hide();
     m_newChatButton->hide();
+    m_newChatButton->setFixedHeight(35);
+    m_expandButton->setFixedHeight(35);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
     m_userButton =
         new QPushButton(QIcon(StyleManager::roundedPixmap(avatar)), "");
     m_userButton->setObjectName("smallButton");
+    m_userButton->setFixedHeight(35);
 
-    m_topStack = new QStackedWidget;
+    m_topStack = new QStackedLayout;
     m_topSearchLine = createSearchLineEdit();
     m_topSpace = new QWidget;
+
+    m_topSpace->setFixedHeight(35);
+    m_topSearchLine->setFixedHeight(35);
+
     m_topStack->addWidget(m_topSearchLine);
     m_topStack->addWidget(m_topSpace);
     m_topStack->setCurrentWidget(m_topSpace);
 
-    topAreaLayout->addWidget(m_expandButton);
-    topAreaLayout->addWidget(m_newChatButton);
-    topAreaLayout->addWidget(m_topStack);
-    topAreaLayout->addWidget(m_userButton);
+    hLayout->addWidget(m_expandButton);
+    hLayout->addWidget(m_newChatButton);
+    hLayout->addLayout(m_topStack);
+    hLayout->addWidget(m_userButton);
 }
 
 /**
  * @brief Set up the scroll area of the market page
  */
-void IMarketPage::setupScrollArea() {
+void IMarketPage::setupScrollArea(QLayout* layout) {
+
+    m_scrollArea = new IScrollArea(this);
+    layout->addWidget(m_scrollArea);
+
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setAlignment(Qt::AlignTop);
     m_scrollArea->setFrameShape(QFrame::NoFrame);

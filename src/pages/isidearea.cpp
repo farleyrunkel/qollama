@@ -10,10 +10,10 @@ ISideArea::ISideArea(QWidget *parent) : IWidget(parent) {
 
     setupMainLayout(new QVBoxLayout);
 
-    setupTitleBar(layout(0));
-    setupTopButtons(layout(1));
-    setupHistoryList(layout(2));
-    setupBottomButtons(layout(3));
+    setupTitleBar(widget(0));
+    setupTopButtons(widget(1));
+    setupHistoryList(widget(2));
+    setupBottomButtons(widget(3));
 
     setupConnections();
 }
@@ -26,18 +26,18 @@ void ISideArea::setupMainLayout(QVBoxLayout *layout) {
     m_mainLayout = layout;
     m_mainLayout->setSpacing(2);
 
-    m_layouts.append(new QHBoxLayout);
-    m_layouts.append(new QVBoxLayout);
-    m_layouts.append(new QVBoxLayout);
-    m_layouts.append(new QVBoxLayout);
+    m_widgets.append(new QWidget);
+    m_widgets.append(new QWidget);
+    m_widgets.append(new QWidget);
+    m_widgets.append(new QWidget);
 
-    for (const auto a : m_layouts) {
-        m_mainLayout->addLayout(a);
+    for (const auto a : m_widgets) {
+        m_mainLayout->addWidget(a);
     }
 }
 
-void ISideArea::setupTitleBar(QLayout *layout) {
-    QHBoxLayout *hLayout = qobject_cast<QHBoxLayout *>(layout);
+void ISideArea::setupTitleBar(QWidget *widget) {
+    QHBoxLayout *hLayout = new QHBoxLayout(widget);
     hLayout->setSpacing(0);
     hLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -52,7 +52,9 @@ void ISideArea::setupTitleBar(QLayout *layout) {
     hLayout->addWidget(m_newChatButton);
 }
 
-void ISideArea::setupTopButtons(QLayout *layout) {
+void ISideArea::setupTopButtons(QWidget *widget) {
+
+    QVBoxLayout *layout = new QVBoxLayout(widget);
 
     QPixmap pix = StyleManager::roundedPixmap(QPixmap("://images/ollama.png"));
 
@@ -74,7 +76,9 @@ void ISideArea::setupTopButtons(QLayout *layout) {
     layout->addWidget(m_promptsButton);
 }
 
-void ISideArea::setupHistoryList(QLayout *layout) {
+void ISideArea::setupHistoryList(QWidget *widget) {
+    QVBoxLayout *layout = new QVBoxLayout(widget);
+
     m_historyList = new IHistoryList(this);
     m_historyList->setObjectName("historyList");
     m_historyList->setFocusPolicy(Qt::NoFocus);
@@ -86,7 +90,8 @@ void ISideArea::setupHistoryList(QLayout *layout) {
     layout->addWidget(m_historyList);
 }
 
-void ISideArea::setupBottomButtons(QLayout *layout) {
+void ISideArea::setupBottomButtons(QWidget *widget) {
+    QVBoxLayout *layout = new QVBoxLayout(widget);
 
     m_settingButton = new QPushButton(QIcon(":/icons/gear.svg"), "");
     m_settingButton->setObjectName("bigButton");
@@ -96,11 +101,11 @@ void ISideArea::setupBottomButtons(QLayout *layout) {
     layout->addWidget(m_settingButton);
 }
 
-QLayout *ISideArea::layout(int i) const {
-    if (i < 0 || i >= m_layouts.size()) {
+QWidget *ISideArea::widget(int i) const {
+    if (i < 0 || i >= m_widgets.size()) {
         throw std::out_of_range("Index out of range in ISideArea::layouts");
     }
-    return m_layouts[i];
+    return m_widgets[i];
 }
 
 void ISideArea::setupConnections() {
@@ -118,10 +123,10 @@ void ISideArea::setupConnections() {
 }
 
 ISideArea::~ISideArea() {
-    for (auto layout : m_layouts) {
+    for (auto layout : m_widgets) {
         delete layout;
     }
-    m_layouts.clear();
+    m_widgets.clear();
 }
 
 IHistoryList *ISideArea::historyList() const { return m_historyList; }

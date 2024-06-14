@@ -82,7 +82,7 @@ void MainWindow::setupMainUi() {
 
     StyleManager::instance().loadStyleSheet(":/qss/style.qss");
 
-    // styleManager.enableBorders(true);
+    StyleManager::instance().enableBorders(true);
 
     StyleManager::instance().applyStyleSheet(this);
     StyleManager::instance().applyPalette(this);

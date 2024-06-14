@@ -25,14 +25,14 @@ private:
 
     void setupMainLayout(QVBoxLayout* layout);
 
-    void setupTitleBar(QLayout *layout);
-    void setupTopButtons(QLayout *layout);
-    void setupHistoryList(QLayout *layout);
-    void setupBottomButtons(QLayout *layout);
+    void setupTitleBar(QWidget *layout);
+    void setupTopButtons(QWidget *layout);
+    void setupHistoryList(QWidget *layout);
+    void setupBottomButtons(QWidget *layout);
 
     void setupConnections();
 
-    QLayout *layout(int i) const;
+    QWidget *widget(int i) const;
 
 private:
     QPushButton *m_expandButton;
@@ -46,7 +46,7 @@ private:
     IHistoryList *m_historyList;
 
     QVBoxLayout* m_mainLayout;
-    QList<QLayout*>  m_layouts;
+    QList<QWidget*>  m_widgets;
 };
 
 #endif // ILEFTWINDOW_H

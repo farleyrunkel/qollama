@@ -14,6 +14,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QStackedLayout>
 
 /**
  * @class IMarketPage
@@ -30,9 +31,9 @@ public:
     QPushButton *expandButton() const;
 
 private:
-    void setupMainLayout();
-    void setupTopArea();
-    void setupScrollArea();
+    void setupMainLayout(QVBoxLayout* layout);
+    void setupTopArea(QLayout* layout);
+    void setupScrollArea(QLayout* layout);
     void setupConnections();
     void setupTopNavigator();
     void setupTitleLabel();
@@ -52,7 +53,7 @@ private:
     QVBoxLayout *m_scrollLayout;
     QWidget *m_scrollWidget;
     QVBoxLayout *m_scrollWidgetLayout;
-    QStackedWidget *m_topStack;
+    QStackedLayout *m_topStack;
     ILineEdit *m_topSearchLine;
     QWidget *m_topSpace;
     INavigetrorBar *m_topNavigator;
@@ -64,6 +65,8 @@ private:
     ILineEdit *searchLineEdit;
 
     QMap<QString, QWidget *> m_categories;
+    QLayout *layout(int i) const;
+        QList<QLayout*>  m_layouts;
 };
 
 #endif // IMARKETPAGE_H
