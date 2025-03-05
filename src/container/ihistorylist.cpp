@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QMenu>
+#include <QDebug>
 #include <QSpacerItem>
 #include <QShowEvent>
 #include <QAction>
@@ -15,7 +16,6 @@ IHistoryList::IHistoryList(QWidget *parent) : QListWidget(parent)
 void IHistoryList::deleteChat(bool checked)
 {
     delete this->takeItem(curr_index.row());
-    qDebug() << "itemDeleted(curr_index.row()) " << curr_index.row();
     emit itemDeleted(curr_index.row());
 }
 

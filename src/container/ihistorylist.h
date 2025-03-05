@@ -9,7 +9,6 @@
 class IHistoryItemDelegate : public QStyledItemDelegate {
 public:
     IHistoryItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {
-        qDebug() << "CustomItemDelegate created";
     }
 
     inline QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override {
@@ -21,7 +20,6 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
         QStyledItemDelegate::paint(painter, option, index);
         if (!painter || !index.isValid()) {
-            qDebug() << "Invalid painter or model index.";
             return;
         }
 

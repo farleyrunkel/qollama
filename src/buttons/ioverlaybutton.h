@@ -15,7 +15,7 @@ public:
     }
 
 protected:
-    void enterEvent(QEnterEvent *event) override {
+    void enterEvent(QEvent *event) override {
         QPushButton::enterEvent(event);
         setEnabled(true); // Enable the button on hover enter
     }

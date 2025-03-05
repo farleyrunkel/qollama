@@ -181,8 +181,6 @@ void ISettingPage::setupAccountWidget(QWidget *account) {
     layout->setAlignment(Qt::AlignTop);
 
     QPixmap avatar(ConfigManager::instance().config("avatar").toString());
-    qDebug() << "ConfigManager::instance().config(avatar).toString()"
-             << ConfigManager::instance().config("avatar").toString();
     m_avatarButton = new QPushButton(this);
     m_avatarButton->setFixedSize(60, 60);
     m_avatarButton->setStyleSheet(

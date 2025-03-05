@@ -12,7 +12,7 @@ IMessageBox::IMessageBox(const QString &userName, const QString &avatar,
                          const QString &message, QWidget *parent)
     : QWidget(parent), avatarLabel(new QLabel(this)),
     userLabel(new QLabel(userName, this)),
-    messageBrowser(new IAutoResizeTextBrowser(this)), spinner(nullptr),
+    messageBrowser(new IAutoResizeTextBrowser(this)),
     m_message() {
     setupUI();
     setAvatar(avatar);
@@ -57,34 +57,11 @@ void IMessageBox::setupUI() {
 }
 
 void IMessageBox::setAnimation() {
-    // Setting up the spinner animation
-    QFrame *spinFrame = new QFrame(this);
-    spinFrame->setFixedSize(QSize(20, 20));
-    QVBoxLayout *layout = new QVBoxLayout(spinFrame);
-    spinner = new WaitingSpinnerWidget(spinFrame);
-
-    // Configuring the spinner properties
-    spinner->setFixedSize(QSize(10, 10));
-    spinner->setRoundness(100.0);
-    spinner->setMinimumTrailOpacity(15.0);
-    spinner->setTrailFadePercentage(10.0);
-    spinner->setNumberOfLines(10);
-    spinner->setLineLength(10);
-    spinner->setLineWidth(10);
-    spinner->setInnerRadius(0);
-    spinner->setRevolutionsPerSecond(1);
-    spinner->setColor(QColor(84, 210, 99));
-
-    layout->addWidget(spinner);
-    spinFrame->setLayout(layout);
-
-    spinner->start();
 }
 
 void IMessageBox::resizeEvent(QResizeEvent *event) {
     // Handling resize events to adjust spinner position
     QWidget::resizeEvent(event);
-    spinner->parentWidget()->setGeometry(messageBrowser->geometry());
 }
 
 void IMessageBox::setMarkdown(const QString &markdown) {
@@ -103,8 +80,6 @@ void IMessageBox::appendMessage(const QString &message) {
         return;
 
     // Stopping and hiding the spinner
-    spinner->stop();
-    spinner->parentWidget()->close();
 
     // Caching and displaying the message
     m_message += message;

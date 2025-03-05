@@ -10,7 +10,6 @@ StyleManager::StyleManager(QObject *parent)
 void StyleManager::loadStyleSheet(const QString &filePath) {
     QFile file(filePath);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        qDebug() << "Failed to open file for reading:" << filePath;
         return;
     }
 
